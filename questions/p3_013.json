@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_013",
+  "domain": "Tool Design & Human-in-the-Loop (Thiết kế Tool & Cơ chế xác nhận của người dùng)",
+  "topic": "Câu P3.13: Disambiguating Similar CRM Records Before Deletion with Single-Click Confirmation",
+  "question": "Your CRM agent's delete_contact tool handles requests like \"delete the duplicate entry for Acme Corp.\" The database contains similarly named records (e.g., \"Acme Corp,\" \"Acme Corporation,\" \"ACME Corp Inc.\"), and analytics show 8% of deletions are reversed within 24 hours due to misidentified records. Users have also complained that the current multi-step confirmation flow adds too much friction to routine cleanup tasks.\nWhich approach most effectively reduces the error rate while maintaining workflow efficiency?",
+  "options": {
+    "A": "Present matched records with differentiating fields and require single-click confirmation of the intended target before executing deletion.",
+    "B": "Require users to supply the exact record ID from the CRM Interface rather than using natural language references to contact names.",
+    "C": "Deploy automated duplicate detection that identifies and merges probable duplicates, removing the need for manual deletion requests.",
+    "D": "Implement soft-delete with a 30-day recovery window so users can undo mistakes without slowing down the deletion workflow."
+  },
+  "correct_answer": "A. Present matched records with differentiating fields and require single-click confirmation of the intended target before executing deletion.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Bài toán có hai mục tiêu cần cân bằng:",
+    "points": [
+      "Giảm tỷ lệ 8% xóa nhầm do các bản ghi tên gần giống nhau ('Acme Corp', 'Acme Corporation', 'ACME Corp Inc.') — nguyên nhân gốc là bước xác định đúng bản ghi (entity disambiguation) chứ không phải bước thực thi xóa.",
+      "Giảm friction: người dùng phàn nàn luồng xác nhận nhiều bước quá rườm rà.",
+      "Trình bày các bản ghi khớp kèm differentiating fields (ví dụ địa chỉ, email domain, ngày tạo, số deal) và yêu cầu một cú click xác nhận đúng target giải quyết cả hai: người dùng nhìn thấy sự khác biệt để chọn đúng, và chỉ cần một bước duy nhất thay vì luồng nhiều bước."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Bắt người dùng cung cấp record ID chính xác):",
+        "trap": "Bẫy phá vỡ trải nghiệm ngôn ngữ tự nhiên (Usability regression trap)",
+        "explanation": "Buộc người dùng tra ID trong CRM interface làm tăng friction nhiều hơn, đi ngược mục tiêu duy trì workflow efficiency và mất đi giá trị của agent ngôn ngữ tự nhiên."
+      },
+      "C": {
+        "title": "C sai (Tự động phát hiện và merge duplicates):",
+        "trap": "Bẫy tự động hóa rủi ro cao (Risky automation trap)",
+        "explanation": "Tự động merge 'probable duplicates' khi các tên gần giống nhau chính là nguồn gây nhầm lẫn có thể gây sai lệch dữ liệu ở quy mô lớn hơn, và không xử lý các yêu cầu xóa có chủ đích của người dùng."
+      },
+      "D": {
+        "title": "D sai (Soft-delete với recovery window 30 ngày):",
+        "trap": "Bẫy giảm thiệt hại thay vì ngăn lỗi (Mitigation instead of prevention trap)",
+        "explanation": "Soft-delete giúp khôi phục sau khi sai nhưng không giảm error rate — vẫn xóa nhầm 8%, chỉ là có thể hoàn tác. Câu hỏi yêu cầu 'reduces the error rate'."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – \"Writing effective tools for agents\" & Building Effective Agents (human-in-the-loop):",
+    "points": [
+      "Tool nên trả về thông tin có ý nghĩa (meaningful context), giúp agent và người dùng phân biệt các thực thể dễ nhầm lẫn trước khi thực hiện hành động không thể đảo ngược.",
+      "Với các hành động phá hủy (destructive actions), đặt checkpoint xác nhận của con người tại đúng điểm quyết định, giữ ở mức tối thiểu cần thiết để không gây friction."
+    ]
+  }
+}

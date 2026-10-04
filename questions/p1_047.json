@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_047",
+  "domain": "Customer Support Agent Design & Human Escalation (Thiết kế Agent CSKH & Cơ chế chuyển giao cho người - Human Handoff)",
+  "topic": "Câu P1.47: Structured Handoff Summary for escalate_to_human",
+  "question": "After investigating a billing dispute over 25+ turns, you've identified that duplicate charges occurred due to a payment gateway timeout triggering retry logic. The required refund ($847) exceeds your $500 authorization limit. You need to call escalate_to_human, and the human agent won't have access to your conversation transcript.\nWhat context should you pass to enable effective resolution?",
+  "options": {
+    "A": "A structured summary: customer ID, root cause, refund amount, and recommended action.",
+    "B": "The complete conversation transcript with all tool results.",
+    "C": "Your diagnosis and the refund amount only.",
+    "D": "The customer's original complaint verbatim plus the tool result excerpts showing duplicate transactions."
+  },
+  "correct_answer": "A. A structured summary: customer ID, root cause, refund amount, and recommended action.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Bối cảnh: người xử lý (human agent) sẽ KHÔNG có transcript, và cần hành động được ngay:",
+    "points": [
+      "Sau 25+ lượt, agent đã có chẩn đoán hoàn chỉnh: charge trùng do payment gateway timeout kích hoạt retry, cần hoàn $847 – vượt hạn mức $500 của agent.",
+      "Handoff hiệu quả cần tự đầy đủ (self-contained) và có cấu trúc: customer ID (để tra cứu), root cause (để không phải điều tra lại), refund amount (để phê duyệt), recommended action (để hành động ngay).",
+      "Bản tóm tắt cấu trúc giúp người nhận xử lý nhanh, giảm thời gian đọc và tránh bắt khách hàng kể lại từ đầu – đúng mục tiêu của escalation."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Gửi toàn bộ transcript và tool results):",
+        "trap": "Bẫy đổ dữ liệu thô (Information dump trap)",
+        "explanation": "Đề nói rõ human agent không có quyền truy cập transcript; ngay cả khi gửi kèm, 25+ lượt hội thoại thô buộc người nhận đọc lại toàn bộ để tự rút ra kết luận mà agent đã có."
+      },
+      "C": {
+        "title": "C sai (Chỉ gửi chẩn đoán và số tiền):",
+        "trap": "Bẫy thiếu ngữ cảnh định danh (Incomplete handoff trap)",
+        "explanation": "Thiếu customer ID và hành động đề xuất, người nhận không biết hoàn tiền cho ai, giao dịch nào và phải làm gì – buộc phải hỏi lại hoặc điều tra lại."
+      },
+      "D": {
+        "title": "D sai (Gửi khiếu nại gốc nguyên văn kèm trích đoạn tool result):",
+        "trap": "Bẫy chuyển giao dữ liệu chưa xử lý (Unsynthesized evidence trap)",
+        "explanation": "Dữ liệu này cho thấy triệu chứng nhưng bỏ qua phần giá trị nhất – root cause và khuyến nghị xử lý – mà agent đã mất 25+ lượt để xác định."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic – Customer support agent guidance & Prompt engineering best practices:",
+    "points": [
+      "Khi chuyển giao cho con người, cung cấp bản tóm tắt có cấu trúc, đầy đủ để người nhận hành động mà không cần xem lại toàn bộ hội thoại.",
+      "Thông tin escalation nên bao gồm định danh khách hàng, vấn đề đã xác định, số liệu liên quan và đề xuất xử lý."
+    ]
+  }
+}

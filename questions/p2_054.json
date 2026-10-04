@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_054",
+  "domain": "Tool Design & Error Handling (Thiết kế Tool & Xử lý lỗi)",
+  "topic": "Câu P2.54: Partitioning Transient vs Non-Transient Error Handling",
+  "question": "Your publish article tool calls an external CMS API that occasionally returns transient errors (network timeouts, 503s) and non-transient errors (403 permission denied, 422 validation failure). Currently, every error is returned directly to the agent, which leads to the agent retrying non-transient errors and wasting turns on failures that will never succeed.\nHow should you partition error-handling responsibility between the tool implementation and the agent?",
+  "options": {
+    "A": "Handle all errors inside the tool: Implement retries with exponential backoff for every error type, and only surface a failure to the agent after a fixed number of retry attempts have been exhausted.",
+    "B": "Handle transient errors (timeouts, 503s) with automatic retries inside the tool implementation, and surface non-transient errors (permission denied, validation fallures) to the agent with descriptive messages so it can take corrective action.",
+    "C": "Surface all errors to the agent immediately with detailed context, and let the agent decide which errors to retry and how many times-keeping the tool implementation stateless and simple.",
+    "D": "Implement a universal error handler that catches all exceptions and returns a generic \"tool unavailable- try again later\" message, shielding the agent from error complexity."
+  },
+  "correct_answer": "B. Handle transient errors (timeouts, 503s) with automatic retries inside the tool implementation, and surface non-transient errors (permission denied, validation fallures) to the agent with descriptive messages so it can take corrective action.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Nguyên tắc phân chia trách nhiệm xử lý lỗi giữa tool và agent:",
+    "points": [
+      "Lỗi tạm thời (transient: timeout, 503) thường tự khỏi khi thử lại; chúng không đòi hỏi suy luận của agent. Xử lý bằng retry với exponential backoff ngay trong tool là cách tất định, rẻ và không tốn lượt của agent.",
+      "Lỗi không tạm thời (non-transient: 403 permission denied, 422 validation failure) sẽ không bao giờ thành công khi retry nguyên trạng. Chúng cần quyết định ở cấp agent: sửa dữ liệu đầu vào, xin quyền, hoặc báo cho người dùng. Vì vậy cần trả về cho agent với thông báo mô tả rõ ràng (actionable error message).",
+      "Phân chia này đặt mỗi loại lỗi ở đúng tầng có khả năng xử lý nó: code xử lý những gì cơ học, agent xử lý những gì cần phán đoán."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Retry mọi lỗi trong tool, chỉ báo khi hết số lần):",
+        "trap": "Bẫy retry đồng loạt (Uniform retry trap)",
+        "explanation": "Retry 403/422 là vô ích, gây trễ và tải không cần thiết lên CMS. Khi cuối cùng báo lỗi, agent cũng chỉ nhận được \"đã hết số lần retry\" thay vì thông tin để khắc phục."
+      },
+      "C": {
+        "title": "C sai (Đẩy mọi lỗi lên agent để agent tự quyết retry):",
+        "trap": "Bẫy giữ nguyên hiện trạng (Status quo trap)",
+        "explanation": "Đây chính là thiết kế hiện tại đang gây ra vấn đề: agent tốn lượt retry lỗi không tạm thời và xử lý cả những lỗi transient mà code có thể tự giải quyết."
+      },
+      "D": {
+        "title": "D sai (Handler chung trả về \"tool unavailable - try again later\"):",
+        "trap": "Bẫy che giấu thông tin lỗi (Error masking trap)",
+        "explanation": "Thông báo chung chung khiến agent không thể phân biệt lỗi, thậm chí khuyến khích retry lỗi 403/422, làm tình trạng tệ hơn. Agent mất hoàn toàn thông tin cần để sửa lỗi validation."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool Use (handling tool errors, is_error) & \"Writing effective tools for agents\":",
+    "points": [
+      "Khi tool gặp lỗi, trả về tool_result với `is_error: true` kèm thông báo lỗi mô tả rõ ràng để Claude có thể điều chỉnh hành động.",
+      "Thông báo lỗi nên hữu ích và có thể hành động (actionable), chỉ ra điều cần sửa thay vì mã lỗi mù mờ; những gì xử lý tất định được bằng code nên được xử lý trong tool."
+    ]
+  }
+}

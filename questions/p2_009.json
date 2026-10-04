@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_009",
+  "domain": "Prompt Engineering & Automated Code Review (Kỹ thuật Prompt & Review code tự động)",
+  "topic": "Câu P2.9: Improving Review Recall by Separating Coverage-Focused Finding from Thresholding",
+  "question": "After deploying the automated review, you notice high precision but low recall — real bugs are slipping through undetected. Investigation reveals your review prompt instructs Claude to \"only report high- confidence issues you are certain about\" and \"err on the side of not commenting.\" Developers appreciate the low noise, but a race condition that caused a production outage was visible in a reviewed PR and went unreported. You need to substantially improve bug detection while keeping false positive rates manageable for your team.\nWhat is the most effective approach?",
+  "options": {
+    "A": "Remove the conservative filtering instructions and prompt Claude to report all potential issues, then apply a programmatic filter to deduplicate and suppress categories that historically generate false positives.",
+    "B": "Add detailed few-shot examples demonstrating bug categories Claude should flag — race conditions, null dereferences, error handling gaps — while keeping the high-confidence filtering instruction to maintain current precision levels.",
+    "C": "Expand the context window by including related test files, recent git history, and the module's dependency graph alongside the diff, giving Claude richer signals to assess issue severity.",
+    "D": "Split the review into a finding stage where Claude's goal is coverage — flagging every potential issue with confidence and severity metadata — and a separate stage that thresholds those findings."
+  },
+  "correct_answer": "D. Split the review into a finding stage where Claude's goal is coverage — flagging every potential issue with confidence and severity metadata — and a separate stage that thresholds those findings.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Nguyên nhân gốc: một prompt duy nhất buộc Claude vừa tìm lỗi vừa tự kiểm duyệt (“only report high-confidence issues”, “err on the side of not commenting”):",
+    "points": [
+      "Khi hai mục tiêu xung đột (coverage và precision) bị gộp vào một bước, model tự lọc bỏ ngay các phát hiện chưa chắc chắn — như race condition, loại lỗi vốn khó khẳng định 100% khi chỉ đọc diff. Kết quả: precision cao nhưng recall thấp.",
+      "Tách thành hai stage: Stage 1 có mục tiêu duy nhất là coverage, gắn metadata confidence và severity cho từng finding; Stage 2 áp ngưỡng (threshold) lên các finding đó. Mỗi bước có một mục tiêu rõ ràng — đúng tinh thần prompt chaining trong “Building Effective Agents”.",
+      "Metadata severity giúp ngưỡng linh hoạt: một race condition severity cao vẫn được báo dù confidence trung bình, còn các nit confidence thấp bị lọc. Nhờ vậy recall tăng đáng kể mà false positive vẫn kiểm soát được.",
+      "Ngưỡng có thể điều chỉnh và đo lường (tuning trên dữ liệu thực) mà không cần viết lại prompt tìm lỗi."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Báo cáo mọi issue rồi lọc theo category lịch sử):",
+        "trap": "Bẫy lọc thô theo danh mục (Coarse category filter trap)",
+        "explanation": "Bỏ filter hoàn toàn sẽ làm bùng nổ noise, và filter programmatic theo category/deduplicate không có thông tin confidence/severity để phân biệt finding nghiêm trọng với finding nhiễu trong cùng category. Có thể chặn nhầm cả bug thật thuộc category “hay false positive”."
+      },
+      "B": {
+        "title": "B sai (Few-shot các loại bug nhưng giữ chỉ dẫn high-confidence):",
+        "trap": "Bẫy giữ nguyên nguyên nhân gốc (Root cause retained trap)",
+        "explanation": "Few-shot giúp model nhận diện loại bug, nhưng chỉ dẫn “only report if certain” vẫn còn — chính là thứ khiến race condition bị bỏ qua. Recall sẽ không cải thiện đáng kể."
+      },
+      "C": {
+        "title": "C sai (Mở rộng context với test files, git history, dependency graph):",
+        "trap": "Bẫy thêm context không đúng chỗ (Misdiagnosed context trap)",
+        "explanation": "Race condition đã “visible in a reviewed PR” — thông tin đã có, vấn đề là model tự kiềm chế không báo. Thêm context tốn token và không thay đổi chỉ dẫn bảo thủ đang chặn finding."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Research – “Building Effective Agents” (Prompt chaining) & Anthropic Documentation – Prompt engineering (Be clear and direct, Chain complex prompts):",
+    "points": [
+      "Chia tác vụ phức tạp thành các bước nối tiếp, mỗi bước một mục tiêu rõ ràng, giúp tăng chất lượng từng bước và dễ kiểm soát.",
+      "Yêu cầu model xuất kèm mức độ tin cậy/mức độ nghiêm trọng có cấu trúc giúp lọc kết quả ở bước sau bằng logic rõ ràng."
+    ]
+  }
+}

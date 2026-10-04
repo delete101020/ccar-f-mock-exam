@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_058",
+  "domain": "Anthropic API Fundamentals & Conversation State (Nền tảng Messages API & Trạng thái hội thoại)",
+  "topic": "Câu P1.58: Agent Forgetting Earlier Turns Because Conversation History Is Not Resent",
+  "question": "The agent verifies customer identity through a multi-step process before resetting passwords. During testing, you notice that after the customer answers the third verification question, the agent asks them to provide their name again, as if the earlier exchange never happened.\nWhat's the most likely cause of this behavior?",
+  "options": {
+    "A": "The prompt lacks instructions telling Claude to remember information across multiple exchanges.",
+    "B": "The conversation history isn't being passed in subsequent API requests.",
+    "C": "The verification tool is clearing the agent's internal state after each successful validation step.",
+    "D": "Claude's memory retention is limited to two conversational turns by default, requiring explicit configuration to extend it."
+  },
+  "correct_answer": "B. The conversation history isn't being passed in subsequent API requests.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Bản chất stateless của Claude Messages API:",
+    "points": [
+      "Messages API không lưu trạng thái giữa các request. Mỗi lần gọi, model chỉ biết những gì nằm trong `system` và mảng `messages` của chính request đó.",
+      "Muốn hội thoại nhiều lượt, ứng dụng phải gửi lại toàn bộ lịch sử (các lượt user/assistant trước, kể cả tool_use/tool_result) trong mỗi request mới.",
+      "Triệu chứng agent hỏi lại tên \"như thể cuộc trao đổi trước chưa từng xảy ra\" là dấu hiệu kinh điển của việc ứng dụng chỉ gửi tin nhắn mới nhất thay vì lịch sử đầy đủ."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Prompt thiếu chỉ dẫn \"hãy ghi nhớ\"):",
+        "trap": "Bẫy tưởng prompt điều khiển bộ nhớ (Prompt-as-memory misconception trap)",
+        "explanation": "Không có chỉ dẫn nào giúp model nhớ thông tin không có trong request. Nếu lịch sử được gửi, Claude tự nhiên sử dụng nó mà không cần dặn."
+      },
+      "C": {
+        "title": "C sai (Tool xác minh xóa internal state của agent):",
+        "trap": "Bẫy giả định trạng thái ẩn (Hidden internal state trap)",
+        "explanation": "Model không có \"internal state\" lưu giữa các request để tool có thể xóa; trạng thái hội thoại hoàn toàn nằm trong messages do ứng dụng quản lý."
+      },
+      "D": {
+        "title": "D sai (Claude chỉ nhớ hai lượt theo mặc định):",
+        "trap": "Bẫy giới hạn bịa đặt (Fabricated limitation trap)",
+        "explanation": "Không tồn tại giới hạn \"hai lượt\"; Claude xử lý mọi lượt có trong context window (rất lớn). Không có cấu hình nào như vậy."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude API Docs – Messages API (multi-turn conversations):",
+    "points": [
+      "Messages API là stateless: luôn gửi toàn bộ lịch sử hội thoại trong mỗi request để duy trì ngữ cảnh nhiều lượt.",
+      "Các lượt trước được biểu diễn bằng các message user/assistant xen kẽ trong mảng messages."
+    ]
+  }
+}

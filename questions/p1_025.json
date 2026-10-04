@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_025",
+  "domain": "Information Extraction & Structured Schema Design (Trích xuất thông tin & Thiết kế Schema có cấu trúc)",
+  "topic": "Câu P1.25: Strict Output Schema with Format Normalization Rules in Prompt",
+  "question": "Your extraction pipeline processes restaurant menus and must output structured JSON with fields for item names, descriptions, prices, and dietary tags. Some menus use inconsistent formatting–prices as \"$12\" vs \"12.00\", dietary info as icons vs text.\nWhat's the most reliable approach?",
+  "options": {
+    "A": "Use separate extraction calls for each field to ensure consistent handling of each type.",
+    "B": "Request multiple extraction attempts per document and select the most common format.",
+    "C": "Extract data as-is and normalize formats in post-processing code after Claude returns.",
+    "D": "Define a strict output schema and include format normalization rules in your prompt."
+  },
+  "correct_answer": "D. Define a strict output schema and include format normalization rules in your prompt.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Phân tích yêu cầu trích xuất menu nhà hàng:",
+    "points": [
+      "Đầu vào không đồng nhất (giá \"$12\" vs \"12.00\"; thông tin dietary dạng icon vs text) nhưng đầu ra phải là JSON có cấu trúc nhất quán.",
+      "Strict output schema (qua tool use / structured outputs) đảm bảo cấu trúc: đúng tên trường, đúng kiểu dữ liệu (ví dụ price là number, dietary_tags là mảng các giá trị enum).",
+      "Format normalization rules trong prompt (ví dụ: \"price luôn là số thập phân không ký hiệu tiền tệ\", \"chuyển icon lá cây thành 'vegetarian'\") cho mô hình tiêu chí rõ ràng để chuẩn hóa ngay trong quá trình trích xuất. Claude rất giỏi hiểu ngữ nghĩa (như diễn giải icon thành dietary tag) — điều mà code hậu xử lý khó làm.",
+      "Kết hợp hai yếu tố này là cách tiếp cận đáng tin cậy nhất: schema ràng buộc cấu trúc, prompt ràng buộc cách chuẩn hóa giá trị, chỉ cần một lần gọi cho mỗi tài liệu."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Gọi trích xuất riêng cho từng trường):",
+        "trap": "Bẫy phân mảnh không cần thiết (Over-decomposition trap)",
+        "explanation": "Tách mỗi trường thành một lần gọi riêng làm tăng chi phí và độ trễ lên nhiều lần, đồng thời mất ngữ cảnh liên kết giữa các trường của cùng một món ăn (tên, mô tả, giá, tag thuộc cùng một item). Nó cũng không tự giải quyết vấn đề chuẩn hóa định dạng."
+      },
+      "B": {
+        "title": "B sai (Trích xuất nhiều lần và chọn định dạng phổ biến nhất):",
+        "trap": "Bẫy self-consistency tốn kém (Majority voting cost trap)",
+        "explanation": "Chạy nhiều lần làm chi phí tăng gấp bội, và nếu mô hình không được chỉ dẫn quy ước chuẩn hóa thì định dạng \"phổ biến nhất\" vẫn có thể không phải định dạng mong muốn. Voting không thay thế được việc chỉ rõ quy tắc."
+      },
+      "C": {
+        "title": "C sai (Trích xuất nguyên dạng rồi chuẩn hóa bằng code hậu xử lý):",
+        "trap": "Bẫy đẩy logic ngữ nghĩa sang code cứng (Brittle post-processing trap)",
+        "explanation": "Code hậu xử lý phải xử lý vô số biến thể không lường trước (icon, ký hiệu, cách viết khác nhau) — đặc biệt dietary info dạng icon đòi hỏi hiểu ngữ nghĩa mà code khó làm. Đầu ra \"as-is\" cũng thiếu cấu trúc chặt chẽ, khiến pipeline mong manh. Tốt hơn là để Claude chuẩn hóa theo quy tắc rõ ràng ngay khi trích xuất."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Docs – Tool use (input_schema) / Structured outputs; Prompt engineering: Be clear and direct.",
+    "points": [
+      "Dùng JSON schema qua tool use hoặc structured outputs để đảm bảo đầu ra tuân thủ cấu trúc.",
+      "Cung cấp chỉ dẫn rõ ràng, cụ thể về định dạng mong muốn (format rules) trong prompt để mô hình chuẩn hóa nhất quán các dữ liệu đầu vào đa dạng."
+    ]
+  }
+}

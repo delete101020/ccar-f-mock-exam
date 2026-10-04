@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_010",
+  "domain": "Claude Code CLI & Session Branching (Quản lý phiên làm việc & Phân nhánh phiên khám phá)",
+  "topic": "Câu P1.10: Exploring Alternative Architecture Approaches via Session Forking",
+  "question": "An engineer used the agent yesterday to analyze a legacy authentication module, identifying two distinct refactoring approaches: extracting a microservice versus refactoring in-place. Today, they want to explore both approaches in depth–having the agent propose specific code changes for each–before deciding which to implement.\nWhat's the most effective way to structure this exploration?",
+  "options": {
+    "A": "Resume yesterday's session and explore both approaches sequentially within the same conversation thread.",
+    "B": "Use fork_session to create two branches from yesterday's analysis, exploring one approach in each fork.",
+    "C": "Start two fresh sessions, manually providing a summary of yesterday's analysis findings to establish context.",
+    "D": "Resume yesterday's session to explore the first approach, then start a new session for the second, manually recreating the original context."
+  },
+  "correct_answer": "B. Use fork_session to create two branches from yesterday's analysis, exploring one approach in each fork.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Nhu cầu khám phá đa hướng phân kỳ và cơ chế phân nhánh phiên:",
+    "points": [
+      "Nhu cầu khám phá đa hướng phân kỳ: Buổi làm việc hôm qua đã hiểu sâu về cấu trúc code legacy. Hôm nay kỹ sư cần đề xuất code chi tiết cho 2 hướng đi khác nhau (microservice vs in-place refactoring).",
+      "Cơ chế phân nhánh phiên (fork_session): Cho phép nhân bản phiên làm việc tại đúng điểm checkpoint sau khi phân tích xong hôm qua. Cả hai nhánh đều thừa hưởng toàn bộ ngữ cảnh nền tảng mà không cần nạp lại từ đầu.",
+      "Cách ly ngữ cảnh (Context Isolation): Ngăn ngừa hiện tượng ô nhiễm chéo ngữ cảnh (cross-contamination) giữa hai giải pháp đối lập, giữ context window của mỗi nhánh luôn tinh gọn và tập trung."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Khám phá tuần tự trong cùng 1 thread):",
+        "trap": "Bẫy ô nhiễm và bão hòa ngữ cảnh (Context contamination & bloat trap)",
+        "explanation": "Sinh code chi tiết cho cả 2 giải pháp trong cùng một luồng hội thoại sẽ làm phình to context window, khiến các mã nguồn của hướng microservice làm nhiễu tư duy của mô hình khi chuyển sang giải pháp in-place refactoring."
+      },
+      "C": {
+        "title": "C sai (Mở 2 session mới toanh và copy tóm tắt thủ công):",
+        "trap": "Bẫy mất ngữ cảnh sâu và tốn công thủ công (Context loss & manual overhead trap)",
+        "explanation": "Bản tóm tắt thủ công sẽ làm mất các chi tiết kỹ thuật sâu mà session hôm qua đã thu thập được. Agent sẽ phải tốn thêm thời gian và token để đọc lại mã nguồn từ đầu ở cả hai phiên."
+      },
+      "D": {
+        "title": "D sai (Khám phá hướng 1 trong session cũ, rồi tạo session mới thủ công cho hướng 2):",
+        "trap": "Bẫy bất đối xứng và lãng phí thời gian (Asymmetric workflow trap)",
+        "explanation": "Nhánh thứ nhất được tận hưởng toàn bộ context cũ trong khi nhánh thứ hai lại phải dựng lại context thủ công, tạo ra sự so sánh không đồng nhất và lãng phí thời gian của kỹ sư."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code – quản lý session (resume/fork):",
+    "points": [
+      "Fork session cho phép rẽ nhánh từ một phiên có sẵn để thử nhiều hướng độc lập mà không ảnh hưởng phiên gốc.",
+      "Cô lập context từng nhánh giúp tránh nhầm lẫn khái niệm giữa hai hướng đi."
+    ]
+  }
+}

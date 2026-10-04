@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_006",
+  "domain": "Information Extraction & Prompt Engineering (Trích xuất thông tin & Kỹ thuật Prompt)",
+  "topic": "Câu P3.6: Using Few-Shot Examples to Handle Informal Recipe Measurements",
+  "question": "Your system has been running for 3 weeks and human reviewers have corrected 847 extractions. Analysis reveals a recurring pattern: when recipes use informal measurements like \"a handful\" or \"a splash,\" the model either invents specific amounts or leaves fields empty—accounting for 23% of all corrections.\nHow should you use this feedback to improve extraction accuracy?",
+  "options": {
+    "A": "Update your JSON schema to add a \"measurement_type\" enum field (precise/informal).",
+    "B": "Add few-shot examples to your prompt demonstrating correct handling of informal measurements— extracting them verbatim rather than converting or omitting them.",
+    "C": "Implement a post-processing layer that uses pattern matching to detect informal measurement phrases in source text and automatically populate values when the extraction is empty.",
+    "D": "Fine-tune the model on the 847 corrected extractions."
+  },
+  "correct_answer": "B. Add few-shot examples to your prompt demonstrating correct handling of informal measurements— extracting them verbatim rather than converting or omitting them.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Phân tích pattern lỗi từ 847 corrections:",
+    "points": [
+      "Lỗi là một pattern hành vi nhất quán: gặp 'a handful' hoặc 'a splash', model hoặc bịa ra số đo cụ thể (hallucination) hoặc bỏ trống field. Model không biết cách xử lý mong muốn cho trường hợp mơ hồ này.",
+      "Few-shot examples là cách hiệu quả nhất để dạy model một quy tắc xử lý cho edge case: minh họa trực tiếp input chứa 'a handful of basil' → output giữ nguyên văn 'a handful'. Anthropic khuyến nghị dùng examples (multishot prompting) để định hướng chính xác định dạng và hành vi đầu ra.",
+      "Dữ liệu correction của reviewers là nguồn tự nhiên để chọn các example thực tế, đa dạng — một vòng lặp feedback chi phí thấp, có thể triển khai và đánh giá ngay."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Thêm enum measurement_type precise/informal vào schema):",
+        "trap": "Bẫy schema không chỉ dẫn hành vi (Schema-only fix trap)",
+        "explanation": "Thêm field phân loại không cho model biết phải điền giá trị gì vào field quantity khi gặp đo lường informal. Model vẫn có thể bịa số hoặc bỏ trống, chỉ là có thêm một nhãn phân loại."
+      },
+      "C": {
+        "title": "C sai (Post-processing pattern matching tự động điền giá trị):",
+        "trap": "Bẫy vá lỗi hạ nguồn mong manh (Brittle post-processing trap)",
+        "explanation": "Regex chỉ bắt được các cụm từ đã biết và chỉ xử lý trường hợp field rỗng — không sửa được trường hợp model đã bịa ra số đo cụ thể. Đây là vá triệu chứng thay vì sửa hành vi extraction."
+      },
+      "D": {
+        "title": "D sai (Fine-tune model trên 847 corrections):",
+        "trap": "Bẫy giải pháp nặng nề không tương xứng (Disproportionate fine-tuning trap)",
+        "explanation": "Fine-tuning tốn kém, chậm và cần pipeline huấn luyện/đánh giá riêng, trong khi vấn đề có thể giải quyết bằng prompt engineering. 847 corrections cũng bao gồm nhiều loại lỗi khác, không chỉ informal measurements."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Prompt Engineering (Use examples / multishot prompting):",
+    "points": [
+      "Examples là một trong những công cụ mạnh nhất để định hướng output: nên đưa 3-5 ví dụ liên quan, đa dạng, bao phủ cả các edge case.",
+      "Thứ tự ưu tiên khi cải thiện chất lượng: thử prompt engineering (instructions rõ ràng, examples) trước khi cân nhắc các giải pháp tốn kém như fine-tuning."
+    ]
+  }
+}

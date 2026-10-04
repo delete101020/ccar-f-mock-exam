@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_005",
+  "domain": "Context Management & Context Degradation (Suy giảm chất lượng ngữ cảnh & Quản lý subagent)",
+  "topic": "Câu P1.5: Mitigating Context Saturation via Distillation and Sub-agents",
+  "question": "Your agent has spent 25 minutes exploring a game engine's rendering subsystem–reading shader code, buffer management, and frame synchronization logic. An engineer now asks it to understand how the physics engine integrates with rendering for collision debug overlays. You notice recent responses reference \"typical rendering patterns\" rather than the specific VulkanPipeline and FrameGraph classes it discovered earlier.\nWhat's the most effective approach?",
+  "options": {
+    "A": "Use /clear to reset context completely, then start fresh with physics exploration using file paths from the project's CLAUDE.md.",
+    "B": "Spawn a sub-agent to explore physics independently, then manually synthesize its findings with the rendering knowledge accumulated in the main conversation.",
+    "C": "Continue in the current context with more targeted prompts referencing the specific classes by name.",
+    "D": "Summarize key rendering findings, then spawn a sub-agent for physics exploration with that summary in its initial context."
+  },
+  "correct_answer": "D. Summarize key rendering findings, then spawn a sub-agent for physics exploration with that summary in its initial context.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Phân tích dấu hiệu suy giảm ngữ cảnh và cơ chế bàn giao:",
+    "points": [
+      "Dấu hiệu bão hòa ngữ cảnh (Context Degradation): Sau 25 phút đọc code chuyên sâu (shader, buffers, sync), context đã bị phình to. Việc agent chuyển sang dùng các cụm từ khái quát chung ('typical rendering patterns') thay vì các class cụ thể ('VulkanPipeline', 'FrameGraph') là dấu hiệu rõ ràng của việc suy giảm độ chú ý (attention dilution).",
+      "Yêu cầu nhiệm vụ giao thoa: Tích hợp giữa Physics và Debug Overlay đòi hỏi vừa phải biết điểm hook của Rendering vừa phải tìm hiểu Physics.",
+      "Cơ chế Distillation & Context Handoff: Phương án tối ưu nhất theo chuẩn Anthropic là cô đọng (summarize) những class/kiến trúc rendering quan trọng nhất, sau đó khởi chạy một sub-agent với context sạch kèm bản tóm tắt đó để bắt đầu khám phá Physics."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Dùng /clear xóa sạch context):",
+        "trap": "Bẫy mất trắng công sức (Complete context loss trap)",
+        "explanation": "Lệnh /clear sẽ xóa toàn bộ 25 phút nghiên cứu rendering trước đó. Khi chuyển sang nghiên cứu debug overlay, agent sẽ hoàn toàn mất dấu các class VulkanPipeline hay FrameGraph, buộc kỹ sư phải yêu cầu nó đọc lại toàn bộ mã nguồn rendering."
+      },
+      "B": {
+        "title": "B sai (Tạo sub-agent độc lập rồi người dùng tự tổng hợp thủ công):",
+        "trap": "Bẫy phân mảnh và tốn công thủ công (Manual synthesis trap)",
+        "explanation": "Nếu sub-agent khám phá physics hoàn toàn độc lập mà không biết rendering cần hook vào đâu (API interface nào), nó sẽ khám phá lan man. Hơn nữa, việc bắt kỹ sư tự tổng hợp thủ công ('manually synthesize') làm mất đi mục tiêu tự động hóa của agent."
+      },
+      "C": {
+        "title": "C sai (Cố tiếp tục trong context hiện tại):",
+        "trap": "Bẫy phình to ngữ cảnh (Context bloat trap)",
+        "explanation": "Context hiện tại đã bị suy giảm chú ý (bắt đầu sinh ra câu trả lời chung chung). Việc tiếp tục nhồi thêm mã nguồn của subsystem Physics sẽ chỉ làm trầm trọng thêm hiện tượng hallucination và khiến token tăng vọt, tốc độ xử lý chậm lại."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Nguyên tắc chung (nên đối chiếu thêm tài liệu chính thức của Anthropic):",
+    "points": [
+      "Khi context dài, model có xu hướng nhắc đến khuôn mẫu chung thay vì tên class/hàm cụ thể đã đọc trước đó; đây là dấu hiệu nên chuyển sang context mới thay vì nhồi thêm.",
+      "Trước khi chuyển sang subsystem mới, cô đọng phát hiện chính thành bản tóm tắt và giao phần khám phá mới cho subagent có context sạch."
+    ]
+  }
+}

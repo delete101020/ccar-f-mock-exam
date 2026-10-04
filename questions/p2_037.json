@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_037",
+  "domain": "Anthropic API Tool Use & Error Handling (Sử dụng Tool trong Anthropic API & Xử lý lỗi)",
+  "topic": "Câu P2.37: Surfacing a 503 Service Unavailable as an Explicit Tool Error",
+  "question": "Your search Flights tool calls an external airline API that occasionally returns a 503 Service Unavailable error.\nWhat is the most effective way to handle this error in your tool implementation?",
+  "options": {
+    "A": "Return an empty flight list as if the search succeeded but found no matching flights.",
+    "B": "Log the error internally and return an empty response, letting the model continue without the flight data.",
+    "C": "Return an error message in the tool result explaining the service is temporarily unavailable.",
+    "D": "Automatically retry the request up to five times with exponential backoff before returning results to the agent."
+  },
+  "correct_answer": "C. Return an error message in the tool result explaining the service is temporarily unavailable.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Nguyên tắc xử lý lỗi tool trong agentic loop:",
+    "points": [
+      "Claude chỉ biết những gì có trong `tool_result`. Với 503, cách đúng là trả về `tool_result` có `is_error: true` và thông điệp rõ ràng, ví dụ: \"Airline API temporarily unavailable (503). This is transient — you may retry shortly or inform the user.\"",
+      "Phân biệt rõ \"không có chuyến bay\" với \"không thể tìm kiếm\": hai tình huống này dẫn đến câu trả lời hoàn toàn khác cho user. Thông báo lỗi minh bạch giúp Claude chọn hành động đúng — thử lại sau, gợi ý user đợi, hoặc dùng phương án thay thế.",
+      "Từ khóa \"temporarily\" cho Claude biết đây là lỗi transient, phù hợp với khuyến nghị của Anthropic: thông điệp lỗi nên nói điều gì đã xảy ra và Claude có thể làm gì tiếp theo."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Trả danh sách rỗng như tìm kiếm thành công):",
+        "trap": "Bẫy che giấu lỗi thành kết quả hợp lệ (Silent failure masquerading as success trap)",
+        "explanation": "Claude sẽ tin rằng không có chuyến bay nào và nói sai với user (\"Không có chuyến bay phù hợp\"), trong khi thực tế dịch vụ chỉ tạm thời lỗi. Đây là dữ liệu sai lệch, dẫn đến quyết định sai của user."
+      },
+      "B": {
+        "title": "B sai (Log nội bộ và trả về response rỗng):",
+        "trap": "Bẫy nuốt lỗi (Swallowed error trap)",
+        "explanation": "Log chỉ giúp đội vận hành, còn model nhận một response rỗng mơ hồ — không biết là lỗi hay không có kết quả. Claude có thể bịa dữ liệu hoặc trả lời sai, và không thể chọn hành động phục hồi phù hợp."
+      },
+      "D": {
+        "title": "D sai (Tự động retry 5 lần với exponential backoff):",
+        "trap": "Bẫy retry quá mức che khuất agent (Excessive hidden retry trap)",
+        "explanation": "Retry ngắn có thể là bổ sung hợp lý, nhưng 5 lần với backoff lũy thừa có thể khiến user chờ hàng chục giây trong một hội thoại tương tác, gây thêm tải lên dịch vụ đang quá tải. Quan trọng hơn, phương án này không nói gì về việc báo lỗi cho agent khi các lần retry đều thất bại — lỗi cuối cùng vẫn phải được trả về rõ ràng như C."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool use: Handling tool results & errors:",
+    "points": [
+      "Nếu tool gặp lỗi khi thực thi, trả về thông báo lỗi trong `content` của `tool_result` kèm `is_error: true`; Claude sẽ kết hợp thông tin đó vào phản hồi hoặc bước tiếp theo.",
+      "Thông điệp lỗi nên mang tính hướng dẫn: mô tả điều gì sai và Claude nên thử gì tiếp theo."
+    ]
+  }
+}

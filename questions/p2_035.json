@@ -1,0 +1,53 @@
+{
+  "id": "ccar_f_p2_035",
+  "domain": "Anthropic API Tool Use & Orchestration (Sử dụng Tool trong Anthropic API & Điều phối luồng)",
+  "topic": "Câu P2.35: Forcing extract_metadata First, Then Enrichment in Later Turns",
+  "question": "Your pipeline uses a tool called extract_metadata with a JSON schema for paper details. You've also defined lookup_citations and verify_doi tools for enrichment. During testing, you notice that when users include requests like \"extract the metadata and tell me how cited it is,\" Claude sometimes calls lookup_citations first, which fails because it needs the DOI that extract_metadata would provide.\nWhat's the most effective way to ensure structured metadata extraction happens first?",
+  "options": {
+    "A": "Set tool_choice to \"any\" so Claude must use a tool, combined with system prompt instructions prioritizing extract_metadata.",
+    "B": "Set tool_choice to \"auto\" and reorder the tool definitions so extract_metadata appears first in the tools array, since Claude prioritizes earlier-listed tools.",
+    "C": "Set tool_choice to {\"type\": \"tool\", \"name\": \"extract_metadata\"} and process the enrichment requests in subsequent turns after receiving the extracted metadata.",
+    "D": "Set tool_choice to {\"type\": \"tool\", \"name\": \"extract_metadata\"} for every API call in the pipeline, ensuring Claude always extracts metadata before any enrichment can occur."
+  },
+  "correct_answer": "C. Set tool_choice to {\"type\": \"tool\", \"name\": \"extract_metadata\"} and process the enrichment requests in subsequent turns after receiving the extracted metadata.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Bài toán là một phụ thuộc thứ tự (ordering dependency) giữa các tool:",
+    "points": [
+      "Nguyên nhân lỗi: lookup_citations cần DOI mà chỉ extract_metadata cung cấp. Khi user yêu cầu gộp (\"extract... and tell me how cited it is\"), Claude ở chế độ mặc định có thể chọn gọi lookup_citations trước vì nó khớp trực tiếp với phần \"how cited\" của yêu cầu.",
+      "Ép buộc tool cụ thể ở lượt đầu: `tool_choice: {\"type\": \"tool\", \"name\": \"extract_metadata\"}` là cơ chế tất định của API — Claude bắt buộc phải gọi đúng extract_metadata, đảm bảo DOI và metadata có cấu trúc luôn có sẵn trước.",
+      "Chuyển sang lượt sau cho enrichment: sau khi trả `tool_result` của extract_metadata, các lượt tiếp theo dùng `tool_choice: auto` để Claude tự do gọi lookup_citations và verify_doi với DOI đã có. Đây là mẫu forced-first-step rồi trả lại quyền tự quyết cho model."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (tool_choice: any kèm chỉ dẫn ưu tiên extract_metadata):",
+        "trap": "Bẫy ép gọi tool không chỉ định (Non-specific tool choice trap)",
+        "explanation": "`any` chỉ buộc Claude gọi MỘT tool bất kỳ — lookup_citations vẫn là lựa chọn hợp lệ, nên lỗi gốc vẫn có thể xảy ra. Chỉ dẫn trong system prompt chỉ tăng xác suất, không đảm bảo."
+      },
+      "B": {
+        "title": "B sai (tool_choice: auto và đưa extract_metadata lên đầu mảng tools):",
+        "trap": "Bẫy ngụy biện thứ tự định nghĩa (Tool ordering fallacy trap)",
+        "explanation": "Không có cơ chế tài liệu nào nói Claude ưu tiên tool được liệt kê trước. Chế độ auto vẫn để Claude tự chọn tool phù hợp nhất với yêu cầu, nên thứ tự mảng không giải quyết được phụ thuộc DOI."
+      },
+      "D": {
+        "title": "D sai (Ép extract_metadata ở MỌI API call trong pipeline):",
+        "trap": "Bẫy ép buộc quá mức (Over-forcing / infinite loop trap)",
+        "explanation": "Nếu mọi lượt đều bị ép gọi extract_metadata, Claude không bao giờ được gọi lookup_citations hay verify_doi, cũng không thể trả lời bằng text. Pipeline sẽ lặp lại việc trích xuất mãi mãi và yêu cầu enrichment không bao giờ được thực hiện."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool Use (Function Calling) & tool_choice parameter:",
+    "points": [
+      "Các giá trị của tool_choice:",
+      "- `auto`: Claude tự quyết định có gọi tool hay không và gọi tool nào (mặc định khi có tools).",
+      "- `any`: Claude bắt buộc gọi một tool, nhưng tự chọn tool nào.",
+      "- `tool`: ép Claude gọi đúng tool được chỉ định qua `name`.",
+      "Có thể thay đổi tool_choice giữa các lượt trong cùng một hội thoại: ép tool ở bước đầu cần tính tất định, rồi trả về `auto` cho các bước tiếp theo."
+    ]
+  }
+}

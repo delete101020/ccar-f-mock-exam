@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_059",
+  "domain": "Tool Error Handling & Agent Resilience (Xử lý lỗi Tool & Khả năng phục hồi của Agent)",
+  "topic": "Câu P1.59: Distinguishing Transient vs Permanent Refund Errors via Structured Responses",
+  "question": "Your process_refund tool returns two types of errors: technical errors (\"503 Service Unavailable\", \"Connection timeout\") that are transient (5% of calls), and business errors (\"Order exceeds 30-day return window\", \"Item already refunded\") that are permanent (12% of calls). Monitoring shows the agent wastes 3-4 turns retrying business errors that can never succeed. Currently, both error types return only a plain text message to Claude.\nWhat's the most effective way to reduce wasted retries while improving customer-facing response quality?",
+  "options": {
+    "A": "Add few-shot examples showing how to distinguish retryable from non-retryable errors by parsing error message text.",
+    "B": "Add a check_refund_eligibility tool that must be called before process_refund to prevent business rule violations.",
+    "C": "Return structured error responses with retryable: false for business errors and a customer-friendly explanation for Claude to use.",
+    "D": "Implement automatic retry logic at the tool level for technical errors only, passing business errors to Claude without retries."
+  },
+  "correct_answer": "C. Return structured error responses with retryable: false for business errors and a customer-friendly explanation for Claude to use.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Hai mục tiêu cần đạt cùng lúc: giảm retry lãng phí VÀ cải thiện chất lượng phản hồi cho khách:",
+    "points": [
+      "Nguyên nhân gốc rễ: cả lỗi kỹ thuật lẫn lỗi nghiệp vụ đều trả về plain text, Claude không có tín hiệu rõ ràng nên retry cả những lỗi vĩnh viễn (12% số lần gọi).",
+      "Structured error response với `retryable: false` cho business errors cho Claude biết ngay không nên thử lại – loại bỏ 3-4 lượt lãng phí một cách tất định.",
+      "Trường customer-friendly explanation (ví dụ: \"Đơn hàng đã quá hạn đổi trả 30 ngày\") cho Claude nội dung phù hợp để giải thích với khách – đáp ứng mục tiêu thứ hai mà các phương án khác bỏ qua. Lỗi kỹ thuật có thể được đánh dấu `retryable: true`."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Few-shot dạy parse text lỗi):",
+        "trap": "Bẫy phụ thuộc parsing văn bản (Brittle text parsing trap)",
+        "explanation": "Vẫn bắt model đoán từ text tự do; khi thông báo lỗi thay đổi hoặc lạ, model sẽ phân loại sai. Không cải thiện chất lượng câu trả lời cho khách."
+      },
+      "B": {
+        "title": "B sai (Thêm tool check_refund_eligibility bắt buộc gọi trước):",
+        "trap": "Bẫy thêm bước không giải quyết gốc rễ (Extra pre-check tool trap)",
+        "explanation": "Thêm một lượt tool call cho mọi yêu cầu, không đảm bảo model luôn gọi nó, và không xử lý được các lỗi vẫn có thể xảy ra (race condition, item đã hoàn tiền). Lỗi trả về vẫn là plain text."
+      },
+      "D": {
+        "title": "D sai (Tự động retry ở tầng tool cho lỗi kỹ thuật):",
+        "trap": "Bẫy giải pháp nửa vời (Partial fix trap)",
+        "explanation": "Retry tự động cho lỗi kỹ thuật là hữu ích, nhưng business errors vẫn được trả về dạng plain text – Claude vẫn có thể retry chúng và vẫn thiếu lời giải thích thân thiện cho khách. Vấn đề chính (12% business errors) không được giải quyết."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – Writing effective tools for agents & MCP Specification – Tool error handling:",
+    "points": [
+      "Thiết kế error response rõ ràng, có thể hành động: cho agent biết lỗi là gì và nên làm gì tiếp theo.",
+      "Trả lỗi thực thi trong tool result (isError / is_error) với nội dung có cấu trúc để model xử lý chính xác."
+    ]
+  }
+}

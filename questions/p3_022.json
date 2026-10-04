@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_022",
+  "domain": "Prompt Engineering & System Prompt Design (Kỹ thuật Prompt & Thiết kế System Prompt)",
+  "topic": "Câu P3.22: Replacing Rigid Conditionals with a General Principle for Implicit Expertise Signals",
+  "question": "Your fitness coaching assistant uses a system prompt with detailed conditional logic: \"If the user mentions being a beginner, provide step-by-step form instructions. If they use term 'progressive overload' or 'superset', respond concisely. If they ask about injury history, always recommend consulting a physician.\" During evaluation, you find the assistant correct explicit expertise declarations but struggles when users don't clearly state their level-often defaulting to overly detailed responses regardless of contextual cues like technical terms.\nWhich change to the system prompt would most directly address this failure to pick up on implicit expertise signals?",
+  "options": {
+    "A": "Replace most conditionals with a general principle: \"Adapt explanation depth to match user expertise, mirroring their terminology.\" Keep only the safety-critical conditional abou consultations.",
+    "B": "Add more conditional branches to cover additional expertise signals, such as \"If user mentions specific rep ranges or asks about periodization, treat as advanced.\"",
+    "C": "Implement a pre-conversation intake that asks users to rate their experience level, then inject that rating into the system prompt as context for all subsequent responses.",
+    "D": "Add an explicit instruction for the model to ask a clarifying question about experience level whenever the user's expertise isn't immediately clear from their first message."
+  },
+  "correct_answer": "A. Replace most conditionals with a general principle: \"Adapt explanation depth to match user expertise, mirroring their terminology.\" Keep only the safety-critical conditional abou consultations.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Nguyên nhân gốc rễ nằm ở cách system prompt được viết:",
+    "points": [
+      "System prompt hiện tại là một tập luật if/then cứng (keyword-triggered conditionals). Mô hình làm đúng khi người dùng nói rõ 'I'm a beginner' vì điều đó khớp trực tiếp một nhánh, nhưng khi tín hiệu là ngầm định (dùng thuật ngữ chuyên môn, cách đặt câu hỏi), không có nhánh nào khớp nên mô hình rơi về hành vi mặc định là giải thích quá chi tiết.",
+      "Anthropic khuyến nghị cung cấp cho Claude nguyên tắc và lý do (the 'why') thay vì danh sách luật cứng: một nguyên tắc tổng quát như 'Adapt explanation depth to match user expertise, mirroring their terminology' cho phép mô hình tự suy luận từ mọi tín hiệu ngữ cảnh, kể cả những tín hiệu chưa từng được liệt kê.",
+      "Giữ lại duy nhất conditional về an toàn (injury history → recommend consulting a physician) là đúng: đây là ràng buộc bắt buộc (non-negotiable), cần phát biểu tường minh, còn phần điều chỉnh độ sâu giải thích là vùng phán đoán (judgment) nên dùng nguyên tắc."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Thêm nhiều nhánh conditional hơn):",
+        "trap": "Bẫy mở rộng luật vô tận (Rule proliferation / Whack-a-mole trap)",
+        "explanation": "Thêm nhánh 'rep ranges', 'periodization' chỉ vá thêm vài từ khóa; vẫn còn vô số tín hiệu ngầm khác không được liệt kê. Cách này lặp lại đúng nguyên nhân gốc (tư duy keyword-matching), làm prompt phình to, khó bảo trì và dễ xung đột giữa các nhánh."
+      },
+      "C": {
+        "title": "C sai (Bảng khảo sát trình độ trước hội thoại):",
+        "trap": "Bẫy né vấn đề bằng thay đổi UX (Sidestepping the prompt problem trap)",
+        "explanation": "Câu hỏi hỏi về thay đổi system prompt để mô hình nhận ra tín hiệu ngầm. Intake form tăng ma sát cho người dùng, tự đánh giá thường không chính xác, và không dạy mô hình đọc tín hiệu ngữ cảnh khi trình độ thể hiện khác nhau giữa các chủ đề."
+      },
+      "D": {
+        "title": "D sai (Hỏi lại trình độ mỗi khi không rõ):",
+        "trap": "Bẫy hỏi lại quá mức (Over-clarification trap)",
+        "explanation": "Vấn đề là mô hình không nhận ra tín hiệu đã có sẵn (thuật ngữ chuyên môn). Bắt nó hỏi lại khi 'không rõ' sẽ khiến nó hỏi cả những người dùng đã thể hiện rõ trình độ qua từ ngữ, gây phiền và không sửa được khả năng suy luận ngữ cảnh."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Prompt engineering overview & Claude prompting best practices:",
+    "points": [
+      "Cung cấp ngữ cảnh và lý do đằng sau chỉ dẫn giúp Claude tổng quát hóa tốt hơn so với các luật cứng chỉ khớp tình huống cụ thể.",
+      "Dùng chỉ dẫn tường minh, bắt buộc cho các ràng buộc an toàn/quan trọng; dùng nguyên tắc tổng quát cho các hành vi cần phán đoán theo ngữ cảnh (như điều chỉnh giọng điệu và độ sâu)."
+    ]
+  }
+}

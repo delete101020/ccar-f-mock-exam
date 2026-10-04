@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_016",
+  "domain": "Information Extraction & Long Context Optimization (Trích xuất thông tin & Tối ưu ngữ cảnh dài)",
+  "topic": "Câu P3.16: Adding a Pre-Extraction Summarization Step for Long Meandering Transcripts",
+  "question": "Evaluation shows 94% extraction accuracy on short meeting transcripts (<30 minutes) but only 68% on longer transcripts (>60 minutes) where discussions meander and key information is scattered throughout. Transcripts of both lengths fit within the model's context window.\nWhat pattern most effectively improves accuracy on complex, lengthy documents?",
+  "options": {
+    "A": "Add few-shot examples demonstrating correct extraction from lengthy meetings with scattered Information.",
+    "B": "Split lengthy transcripts Into chunks, extract from each chunk separately, then merge and deduplicate the results.",
+    "C": "Upgrade to a more capable model tier for the extraction task",
+    "D": "Add a pre-extraction step where the model summarizes key discussions and conclusions before performing structured extraction."
+  },
+  "correct_answer": "D. Add a pre-extraction step where the model summarizes key discussions and conclusions before performing structured extraction.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Bài toán đưa ra các dữ kiện quan trọng:",
+    "points": [
+      "Transcript dài vẫn nằm trong context window, nên vấn đề không phải giới hạn kích thước mà là độ phức tạp: thảo luận lan man (meander), thông tin quan trọng rải rác khắp tài liệu — ví dụ một quyết định được đề xuất ở phút 10 và chốt lại ở phút 70.",
+      "Thêm bước tiền xử lý trong đó model tổng hợp các thảo luận và kết luận chính trước khi structured extraction là một dạng prompt chaining: bước 1 gom và hợp nhất thông tin rải rác thành một trung gian mạch lạc, bước 2 trích xuất có cấu trúc trên nền đó. Mỗi bước là một tác vụ đơn giản hơn nên chính xác hơn.",
+      "Đây tương ứng với khuyến nghị long-context của Anthropic: yêu cầu Claude trích dẫn/tổng hợp các phần liên quan trước khi thực hiện tác vụ chính giúp model 'cắt qua' phần nhiễu của tài liệu dài."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Thêm few-shot examples với meeting dài):",
+        "trap": "Bẫy context phình to (Example bloat trap)",
+        "explanation": "Ví dụ về meeting dài bản thân rất dài, làm context càng phình to và khó minh họa được cách liên kết thông tin rải rác. Few-shot giúp định dạng/hành vi nhưng không giải quyết được việc tìm và hợp nhất thông tin phân tán."
+      },
+      "B": {
+        "title": "B sai (Chia transcript thành chunks, trích xuất riêng rồi merge):",
+        "trap": "Bẫy phá vỡ liên kết xuyên đoạn (Cross-chunk fragmentation trap)",
+        "explanation": "Chunking là giải pháp khi tài liệu vượt context window, nhưng ở đây transcript đã vừa. Với thông tin rải rác, chia chunk cắt đứt liên kết giữa phần đề xuất và phần chốt quyết định, khiến merge sinh ra kết quả mâu thuẫn hoặc trùng lặp."
+      },
+      "C": {
+        "title": "C sai (Nâng cấp model tier):",
+        "trap": "Bẫy nâng cấp mô hình (Model upgrade fallacy trap)",
+        "explanation": "Tăng chi phí mà không thay đổi cấu trúc tác vụ. Câu hỏi hỏi về 'pattern' cải thiện xử lý tài liệu phức tạp, không phải thay model."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Long context prompting tips & Chain complex prompts:",
+    "points": [
+      "Với tài liệu dài, yêu cầu Claude trước tiên trích dẫn/tổng hợp các phần liên quan rồi mới thực hiện tác vụ giúp loại bỏ nhiễu và tăng độ chính xác.",
+      "Prompt chaining: tách tác vụ phức tạp thành các bước tuần tự (ví dụ tổng hợp → trích xuất có cấu trúc), mỗi bước tập trung và dễ kiểm soát chất lượng hơn."
+    ]
+  }
+}

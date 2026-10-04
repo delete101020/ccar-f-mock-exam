@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_019",
+  "domain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
+  "topic": "Câu P2.19: Replacing a Sliding Window with Hybrid Summarization Plus Recent Verbatim Messages",
+  "question": "Users report that during extended conversations, the AI loses track of specific topics, examples, and preferences they mentioned earlier in the session. Your current implementation uses a sliding window that keeps only the most recent 25 message pairs to stay within context limits.\nWhat's the most effective approach to maintain awareness of earlier conversation content while managing context size?",
+  "options": {
+    "A": "Replace the sliding window with a hybrid approach: summarize older messages while keeping recent messages verbatim.",
+    "B": "Implement vector similarity search over the full conversation history, retrieving relevant past messages for each user query.",
+    "C": "Increase the window size to 50 message pairs to retain more conversation history before truncation.",
+    "D": "Add a separate API call each turn to summarize messages being dropped, prepending this running summary to the conversation."
+  },
+  "correct_answer": "A. Replace the sliding window with a hybrid approach: summarize older messages while keeping recent messages verbatim.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Nguyên nhân gốc: sliding window 25 cặp message cắt bỏ hoàn toàn nội dung cũ, nên chủ đề, ví dụ và sở thích nhắc tới sớm bị mất vĩnh viễn:",
+    "points": [
+      "Hybrid approach: tóm tắt các message cũ (giữ lại topics, examples, preferences quan trọng) và giữ nguyên văn các message gần đây. Nội dung cũ không còn bị xóa mà được nén lại.",
+      "Cân bằng hai yêu cầu của đề bài: duy trì nhận thức về nội dung trước đó và kiểm soát kích thước context. Phần gần đây (thường liên quan trực tiếp nhất) vẫn đầy đủ chi tiết; phần cũ chiếm ít token.",
+      "Đây là kỹ thuật compaction / progressive summarization được Anthropic mô tả cho hội thoại và agent chạy dài: tóm tắt lịch sử khi tiến gần giới hạn, giữ lại quyết định và chi tiết quan trọng.",
+      "Có thể triển khai theo lô (tóm tắt khi số message vượt ngưỡng) thay vì mỗi turn, giữ chi phí thấp."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Vector similarity search trên toàn bộ lịch sử):",
+        "trap": "Bẫy retrieval phân mảnh (Fragmented retrieval trap)",
+        "explanation": "Chỉ truy xuất các message tương đồng với câu hỏi hiện tại, dễ bỏ sót sở thích/ngữ cảnh không trùng từ khóa nhưng vẫn quan trọng, và mất mạch hội thoại. Thêm hạ tầng embedding/vector DB phức tạp hơn mức cần thiết."
+      },
+      "C": {
+        "title": "C sai (Tăng window lên 50 cặp message):",
+        "trap": "Bẫy trì hoãn vấn đề (Kicking the can trap)",
+        "explanation": "Chỉ đẩy điểm cắt ra xa hơn: hội thoại đủ dài vẫn mất nội dung cũ, đồng thời tăng gấp đôi token mỗi request mà không giải quyết bản chất mất dữ liệu của truncation."
+      },
+      "D": {
+        "title": "D sai (Gọi API riêng mỗi turn để tóm tắt message bị drop):",
+        "trap": "Bẫy chi phí gọi thêm mỗi lượt (Per-turn overhead trap)",
+        "explanation": "Cùng ý tưởng tóm tắt nhưng được triển khai kém hiệu quả: một API call bổ sung ở mọi turn làm tăng độ trễ và chi phí, và vẫn giữ nguyên cơ chế sliding window làm nền tảng. Phương án A thay thế cơ chế truncation bằng một thiết kế hybrid tổng thể, có thể tóm tắt theo lô khi cần."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – “Effective context engineering for AI agents” (Compaction) & Anthropic Documentation – Context windows / Long conversations:",
+    "points": [
+      "Compaction tóm tắt lịch sử hội thoại để tiếp tục với context đã nén, bảo toàn các chi tiết quan trọng thay vì cắt bỏ.",
+      "Giữ các message gần nhất nguyên văn kết hợp bản tóm tắt phần cũ là mẫu phổ biến để quản lý hội thoại dài."
+    ]
+  }
+}

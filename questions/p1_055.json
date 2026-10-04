@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_055",
+  "domain": "Customer Support Agent Design & Human Escalation (Thiết kế Agent CSKH & Cơ chế chuyển giao cho người - Human Handoff)",
+  "topic": "Câu P1.55: Balancing Customer Frustration with an Immediately Resolvable Return",
+  "question": "A customer writes: \"I've been going back and forth on this return for days. I just want to speak to someone who can actually help me.\" The agent has confirmed via lookup_order that the return is straightforward–within policy and eligible for immediate processing.\nWhat should the agent do?",
+  "options": {
+    "A": "Call escalate_to_human immediately to honor the customer's request",
+    "B": "Acknowledge frustration, inform them this is resolvable now, and offer to complete it or escalate",
+    "C": "Process the refund via process_refund to resolve the underlying issue, then inform them it's complete",
+    "D": "Ask what specifically hasn't worked in previous attempts before deciding whether to escalate or resolve automatically"
+  },
+  "correct_answer": "B. Acknowledge frustration, inform them this is resolvable now, and offer to complete it or escalate",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Hai dữ kiện cần cân bằng:",
+    "points": [
+      "Khách bày tỏ sự bực bội và mong muốn \"speak to someone who can actually help\" – trọng tâm là được giúp đỡ thực sự, không nhất thiết là một yêu cầu cứng nhắc phải gặp người.",
+      "Agent đã xác minh qua lookup_order rằng việc trả hàng nằm trong chính sách và có thể xử lý ngay. Vấn đề hoàn toàn nằm trong khả năng của agent.",
+      "Cách tốt nhất: ghi nhận sự bực bội, thông báo rằng vấn đề có thể giải quyết ngay bây giờ, và để khách lựa chọn – hoàn tất ngay hoặc chuyển cho người. Cách này vừa giải quyết nhanh nhất vừa tôn trọng quyền lựa chọn của khách."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Escalate ngay lập tức):",
+        "trap": "Bẫy escalate khi có thể tự giải quyết (Unnecessary escalation trap)",
+        "explanation": "Chuyển cho người một vấn đề có thể xử lý ngay sẽ khiến khách chờ thêm – đúng điều khách đang bực bội (\"going back and forth for days\"). Agent nên ít nhất cho khách biết có thể giải quyết ngay."
+      },
+      "C": {
+        "title": "C sai (Tự động process_refund rồi thông báo):",
+        "trap": "Bẫy hành động không được đồng ý (Acting without consent trap)",
+        "explanation": "Khách đã bày tỏ mong muốn được nói chuyện với người; tự ý thực hiện hành động tài chính mà không hỏi ý kiến bỏ qua mong muốn đó. Nên đề nghị và để khách xác nhận."
+      },
+      "D": {
+        "title": "D sai (Hỏi điều gì chưa hiệu quả trước khi quyết định):",
+        "trap": "Bẫy điều tra thừa (Unnecessary probing trap)",
+        "explanation": "Agent đã có đủ thông tin để giải quyết; hỏi thêm làm kéo dài một cuộc hội thoại mà khách đã mệt mỏi."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic – Customer support agent guidance (handling frustration & escalation):",
+    "points": [
+      "Khi vấn đề nằm trong khả năng của agent, ghi nhận cảm xúc và đề nghị giải quyết, đồng thời vẫn giữ lựa chọn escalation nếu khách muốn.",
+      "Yêu cầu dứt khoát/lặp lại muốn gặp người thì cần được tôn trọng ngay."
+    ]
+  }
+}

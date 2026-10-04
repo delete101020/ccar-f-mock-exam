@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_006",
+  "domain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Vòng lặp phản hồi - Iterative Refinement)",
+  "topic": "Câu P2.6: Closing Research Gaps via Analysis-Driven Iterative Search Loop",
+  "question": "Users report that final reports sometimes lack depth on specific subtopics. Investigation shows that the document analysis agent frequently identifies gaps—for instance, noting \"the retrieved sources discuss API authentication but lack details on token refresh patterns\"—but under the current strict pipeline, this insight isn't actionable since search has already completed.\nWhat's the most effective architectural change?",
+  "options": {
+    "A": "Have the coordinator review analysis output for gap indicators and re-invoke search with gapinformed queries when gaps are detected.",
+    "B": "Have the synthesis agent attach confidence scores to each section and flag areas with insufficient coverage for manual review.",
+    "C": "Add a research planning agent before the search phase that decomposes topics into specific sub- questions.",
+    "D": "Have the analysis agent report specific gaps to the coordinator, which triggers targeted searches and re-invokes analysis until sufficient."
+  },
+  "correct_answer": "D. Have the analysis agent report specific gaps to the coordinator, which triggers targeted searches and re-invokes analysis until sufficient.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Vấn đề cốt lõi: analysis agent đã phát hiện được gap cụ thể (“thiếu chi tiết về token refresh patterns”), nhưng pipeline tuyến tính cứng nhắc khiến insight này không được hành động:",
+    "points": [
+      "Nguyên nhân gốc là kiến trúc một chiều (search → analysis → synthesis). Cần chuyển sang vòng lặp phản hồi (feedback loop) trong đó kết quả phân tích có thể kích hoạt lại bước search.",
+      "Analysis agent là agent hiểu rõ nhất gap là gì, nên nó báo cáo gap cụ thể (structured gap report) cho coordinator; coordinator dùng đó để chạy targeted searches cho đúng sub-topic thiếu.",
+      "Điểm then chốt: sau khi có nguồn mới, analysis được re-invoke để đánh giá lại, và vòng lặp tiếp tục “until sufficient” — đảm bảo gap thực sự được lấp chứ không chỉ tìm thêm một lần rồi hy vọng.",
+      "Đây là mẫu evaluator-optimizer / iterative research loop mà Anthropic mô tả: lead agent đánh giá kết quả, quyết định có cần nghiên cứu thêm hay không, và lặp lại cho đến khi đủ thông tin. Giữ coordinator làm trung tâm điều phối giúp luồng thông tin có thể quan sát và kiểm soát."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Coordinator tự dò gap indicators rồi re-invoke search):",
+        "trap": "Bẫy vòng lặp nửa vời (Incomplete loop trap)",
+        "explanation": "Coordinator phải tự “đoán” gap từ output phân tích (dò indicator) thay vì nhận báo cáo gap rõ ràng từ analysis agent, dễ bỏ sót. Quan trọng hơn, phương án chỉ re-invoke search mà không re-invoke analysis để xác nhận gap đã được lấp, nên không có điều kiện dừng “until sufficient”."
+      },
+      "B": {
+        "title": "B sai (Synthesis gắn confidence score và flag cho manual review):",
+        "trap": "Bẫy phát hiện mà không khắc phục (Detect-but-don't-fix trap)",
+        "explanation": "Chỉ đánh dấu vùng thiếu coverage rồi đẩy sang người duyệt — báo cáo vẫn thiếu chiều sâu. Hệ thống đã phát hiện được gap một cách tự động; giải pháp đúng là cho phép tự động hành động trên gap đó."
+      },
+      "C": {
+        "title": "C sai (Thêm research planning agent trước search):",
+        "trap": "Bẫy lập kế hoạch trước (Upfront planning trap)",
+        "explanation": "Planning trước giúp phân rã chủ đề tốt hơn, nhưng gap chỉ lộ ra sau khi đã đọc nguồn (không thể biết trước nguồn thiếu token refresh patterns). Pipeline vẫn tuyến tính, nên các gap phát hiện trong analysis vẫn không thể hành động."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Research – “Building Effective Agents” (Evaluator-optimizer, Orchestrator-workers) & “How we built our multi-agent research system”:",
+    "points": [
+      "Evaluator-optimizer workflow: một bước đánh giá đưa feedback để bước khác cải thiện kết quả theo vòng lặp, hiệu quả khi có tiêu chí đánh giá rõ ràng.",
+      "Trong hệ thống research của Anthropic, lead agent tổng hợp kết quả và quyết định có cần thêm vòng nghiên cứu (spawn thêm subagent/tìm kiếm) hay không."
+    ]
+  }
+}

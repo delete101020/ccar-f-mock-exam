@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_022",
+  "domain": "Prompt Engineering & Response Style Control (Kỹ thuật Prompt & Kiểm soát văn phong phản hồi)",
+  "topic": "Câu P2.22: Removing Repetitive Affirmation Openers via System Prompt Instructions",
+  "question": "Users report that responses feel repetitive across turns—each message begins with phrases like \"Certainly!\" or \"I'd be happy to help!\" even deep into conversations. You want responses to feel more natural, without these repetitive openers.\nWhat's the most effective approach?",
+  "options": {
+    "A": "Implement post-processing to detect and strip common greeting phrases from response beginnings",
+    "B": "Add system prompt instructions specifying phrases to avoid, such as \"Never begin responses with 'Certainly' or similar affirmations\"",
+    "C": "Lower the temperature parameter to make response openings more deterministic and less variable",
+    "D": "Append a partial assistant message with a direct response opening that the model will continue from"
+  },
+  "correct_answer": "B. Add system prompt instructions specifying phrases to avoid, such as \"Never begin responses with 'Certainly' or similar affirmations\"",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Bản chất của vấn đề văn phong (style) lặp lại trên mọi lượt hội thoại:",
+    "points": [
+      "Đây là một hành vi phong cách mang tính toàn cục (áp dụng cho mọi lượt), nên nơi phù hợp nhất để điều chỉnh là system prompt — chỉ dẫn được áp dụng nhất quán cho toàn bộ hội thoại.",
+      "Các model Claude hiện đại tuân thủ chỉ dẫn rõ ràng, cụ thể rất tốt. Nêu đích danh các mẫu cần tránh (\"Certainly\", \"I'd be happy to help\" và các câu khẳng định tương tự) cho model một tiêu chí rõ ràng thay vì yêu cầu mơ hồ kiểu \"hãy tự nhiên hơn\". Có thể kết hợp nói rõ hành vi mong muốn (\"đi thẳng vào câu trả lời\").",
+      "Giải pháp xử lý tại nguồn (generation), không cần hạ tầng bổ sung, không ảnh hưởng đến phần nội dung còn lại của câu trả lời và không phụ thuộc vào việc dự đoán trước câu trả lời sẽ bắt đầu thế nào."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Post-processing cắt bỏ cụm chào hỏi ở đầu câu):",
+        "trap": "Bẫy vá triệu chứng ở downstream (Symptom patching trap)",
+        "explanation": "Cắt chuỗi bằng regex dễ để lại câu cụt, sai ngữ pháp (\"Certainly! Here's...\" → \"Here's...\" thì ổn, nhưng \"I'd be happy to help you with that. First, ...\" thì khó cắt sạch), và phải liên tục bổ sung danh sách biến thể. Nó không thay đổi hành vi sinh của model."
+      },
+      "C": {
+        "title": "C sai (Giảm temperature):",
+        "trap": "Bẫy hiểu sai tác dụng của temperature (Sampling parameter misconception trap)",
+        "explanation": "Giảm temperature làm đầu ra tất định hơn — tức là model càng chọn token có xác suất cao nhất, mà \"Certainly!\" chính là lựa chọn có xác suất cao. Kết quả là lời mở đầu càng lặp lại nhiều hơn chứ không ít đi."
+      },
+      "D": {
+        "title": "D sai (Prefill một phần assistant message với câu mở đầu trực tiếp):",
+        "trap": "Bẫy prefill không phù hợp nội dung động (Inappropriate prefill trap)",
+        "explanation": "Prefill hữu ích khi biết chắc định dạng mở đầu (ví dụ `{` cho JSON). Trong hội thoại mở, ứng dụng không biết trước mỗi câu trả lời nên bắt đầu bằng gì; một prefill cố định sẽ tạo ra lời mở đầu lặp lại kiểu mới hoặc lệch nội dung. Ngoài ra, một số model Claude mới không còn hỗ trợ prefill assistant message, trong khi chỉ dẫn trong system prompt là cách được khuyến nghị."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Prompt engineering best practices (Be clear and direct, System prompts, Controlling output style):",
+    "points": [
+      "Chỉ dẫn rõ ràng, cụ thể trong system prompt là cách chính để điều chỉnh phong cách và giọng điệu của Claude trong toàn bộ hội thoại.",
+      "Hướng dẫn prompt cho các model Claude mới khuyến nghị yêu cầu trực tiếp (ví dụ bỏ phần preamble/lời rào đón) và mô tả hành vi mong muốn thay vì dựa vào các thủ thuật như prefill."
+    ]
+  }
+}

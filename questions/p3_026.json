@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_026",
+  "domain": "Tool Design & Structured Outputs (Thiết kế Tool & Đầu ra có cấu trúc)",
+  "topic": "Câu P3.26: Primary Advantage of Structured JSON Tool Results",
+  "question": "Your portfolio value tool returns the total value of a user's investment portfolio. You're deciding between returning a structured JSON object with explicit fields versus returning information as a formatted text string.\nWhat is the primary advantage of using structured output with defined fields?",
+  "options": {
+    "A": "Structured JSON consumes significantly fewer tokens than natural language, substantially reducing API costs.",
+    "B": "The agent can reliably extract specific values without parsing free form text, reducing errors in subsequent operations.",
+    "C": "Structured JSON is processed deterministically by the model, significantly improving accuracy when extracting values.",
+    "D": "JSON schemas automatically validate that the underlying API returned correct data before the agent processes it."
+  },
+  "correct_answer": "B. The agent can reliably extract specific values without parsing free form text, reducing errors in subsequent operations.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Giá trị thực sự của kết quả tool có cấu trúc:",
+    "points": [
+      "Khi portfolio tool trả về JSON với các trường rõ ràng (ví dụ total_value, currency, as_of), agent và code downstream có thể lấy chính xác từng giá trị theo tên trường thay vì phải phân tích câu văn tự do - nơi định dạng số, đơn vị tiền tệ, thứ tự thông tin có thể thay đổi.",
+      "Điều này giảm lỗi trong các bước tiếp theo (tính toán, so sánh, truyền tham số cho tool khác), đặc biệt trong chuỗi nhiều tool call nơi một lỗi trích xuất sẽ lan truyền.",
+      "Đây là lợi ích về độ tin cậy (reliability), không phải về chi phí token hay một cơ chế xử lý 'tất định' bên trong mô hình."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (JSON tiết kiệm token đáng kể):",
+        "trap": "Bẫy tối ưu chi phí sai (Token-cost misconception trap)",
+        "explanation": "JSON không nhất thiết ít token hơn văn bản; dấu ngoặc, tên khóa và dấu nháy cũng tốn token. Tiết kiệm token không phải lợi ích chính của dữ liệu có cấu trúc."
+      },
+      "C": {
+        "title": "C sai (Mô hình xử lý JSON một cách tất định):",
+        "trap": "Bẫy hiểu sai bản chất LLM (Deterministic processing fallacy)",
+        "explanation": "Mô hình vẫn xử lý JSON như mọi token khác theo cơ chế xác suất; không có chế độ 'deterministic parsing' bên trong. Lợi ích đến từ cấu trúc rõ ràng dễ trích xuất, không phải từ thay đổi cách mô hình suy luận."
+      },
+      "D": {
+        "title": "D sai (JSON schema tự động kiểm tra dữ liệu API đúng):",
+        "trap": "Bẫy nhầm lẫn validation cấu trúc với tính đúng dữ liệu (Schema vs data correctness trap)",
+        "explanation": "Schema chỉ mô tả hình dạng dữ liệu; nó không tự động xác minh giá trị mà API backend trả về là chính xác. Kiểm tra tính đúng đắn phải do code của tool đảm nhiệm."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic – Writing effective tools for agents & Tool use documentation (tool_result content):",
+    "points": [
+      "Tool nên trả về thông tin có ý nghĩa, rõ ràng và dễ cho agent sử dụng ở bước tiếp theo; định dạng có cấu trúc giúp agent trích xuất chính xác các trường cần thiết.",
+      "Structured outputs/JSON schema đảm bảo hình dạng dữ liệu, còn tính đúng đắn của dữ liệu nguồn vẫn cần được kiểm tra ở tầng ứng dụng."
+    ]
+  }
+}

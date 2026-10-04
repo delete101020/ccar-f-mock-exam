@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_035",
+  "domain": "Multi-Agent Systems & Synthesis Quality (Hệ thống đa Agent & Chất lượng tổng hợp - Uncertainty Handling)",
+  "topic": "Câu P1.35: Separating Confirmed Findings from Contested Analysis in Synthesis",
+  "question": "Production reviews reveal inconsistent handling of uncertainty in final reports. Sometimes conflicting subagent findings are synthesized into a single confident statement (losing other times reports over hedge with excessive qualifications (becoming unhelpful). When the web search agent returns \"Industry analysts estimate $50B market size (methodolo the document analysis agent returns \"peer-reviewed study estimates $358 (1578, 95% CI),\" the coordinator either picks one arbitrarily or produces vague statements like \"the ma 6358-6508 depending on factors.\" What systematic approach best addresses this?",
+  "options": {
+    "A": "Implement a confidence calibration layer where synthesis agent normalizes uncertainty expressions into standardized probability representations (0.0-1.0), then weights their calibrated confidence.",
+    "B": "Configure subagents to only report findings with sufficient coverage breadth, source diversity, and quality criteria before passing results to the synthesis agent.",
+    "C": "Instruct the synthesis agent to use explicit sections separating confirmed findings from contested analysis, preserving original source characterizations.",
+    "D": "Add a verification subagent that cross-references findings across sources, only accepting synthesis corroborated by at least two independent sources."
+  },
+  "correct_answer": "C. Instruct the synthesis agent to use explicit sections separating confirmed findings from contested analysis, preserving original source characterizations.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Hai thất bại đối lập trong cách xử lý sự không chắc chắn:",
+    "points": [
+      "Thất bại 1: gộp các phát hiện mâu thuẫn thành một tuyên bố tự tin duy nhất (hoặc chọn bừa một nguồn) → mất thông tin và gây hiểu lầm cho người đọc.",
+      "Thất bại 2: hedge quá mức, tạo ra các câu mơ hồ kiểu \"thị trường từ X đến Y tùy yếu tố\" → báo cáo trở nên vô dụng.",
+      "Cấu trúc báo cáo với các section tường minh — confirmed findings (đã được đồng thuận) tách biệt với contested analysis (đang tranh luận) — giải quyết cả hai: phần đã chắc chắn được nói rõ ràng, phần mâu thuẫn được trình bày minh bạch với đặc trưng nguồn gốc (ví dụ \"ước tính của analyst ngành, phương pháp không công bố\" vs \"nghiên cứu peer-reviewed, có 95% CI\").",
+      "Bảo toàn source characterization giúp người đọc tự đánh giá độ tin cậy dựa trên phương pháp luận, thay vì hệ thống đưa ra phán quyết tùy tiện. Đây là cách tiếp cận có hệ thống (systematic) và có thể áp dụng cho mọi báo cáo."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Lớp calibration chuẩn hóa uncertainty thành xác suất 0.0-1.0):",
+        "trap": "Bẫy độ chính xác giả tạo (False precision trap)",
+        "explanation": "Chuyển \"analyst estimate\" và \"95% CI\" thành một con số xác suất tùy ý tạo ra độ chính xác giả tạo và làm mất đặc trưng phương pháp luận của nguồn. LLM tự gán xác suất không được hiệu chỉnh đáng tin cậy, và việc weighting vẫn dẫn đến gộp các phát hiện thành một kết luận."
+      },
+      "B": {
+        "title": "B sai (Subagent chỉ báo cáo phát hiện đạt tiêu chí chất lượng):",
+        "trap": "Bẫy lọc thông tin ở thượng nguồn (Upstream filtering trap)",
+        "explanation": "Lọc ở subagent có thể loại bỏ những phát hiện mâu thuẫn nhưng có giá trị, và không giải quyết vấn đề cách synthesis agent trình bày sự không chắc chắn. Vấn đề nằm ở khâu tổng hợp, không phải ở đầu vào."
+      },
+      "D": {
+        "title": "D sai (Verification subagent chỉ chấp nhận phát hiện được ≥2 nguồn xác nhận):",
+        "trap": "Bẫy loại bỏ thông tin quan trọng do quy tắc cứng (Over-strict corroboration trap)",
+        "explanation": "Ở ví dụ này, hai nguồn đưa ra hai ước tính khác nhau — không có cái nào được hai nguồn xác nhận, nên cả hai sẽ bị loại và người đọc mất thông tin thị trường. Quy tắc này cũng không giải quyết cách trình bày các phát hiện bị tranh luận."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – \"How we built our multi-agent research system\"; Claude Docs – Prompt engineering (structured output, reduce hallucinations).",
+    "points": [
+      "Agent tổng hợp nên bảo toàn nguồn gốc và đặc trưng của từng nguồn (provenance/attribution) thay vì gộp mù quáng các phát hiện.",
+      "Cấu trúc đầu ra rõ ràng giúp phân biệt thông tin đã xác nhận và thông tin còn tranh luận, tránh cả tự tin thái quá lẫn hedge quá mức."
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_007",
+  "domain": "Claude Code CLI & Session Management (Quản lý phiên làm việc & Phân nhánh phiên)",
+  "topic": "Câu P3.7: Forking an Analysis Session to Develop Two Testing Strategies Independently",
+  "question": "\"You're the Lead Data Scientist/Engineer on a critical project. Something is not completely right with technical details or the data, and it negative impacts expected outputs. They need to independently develop both approaches to evaluation data... \nHow do you manage this scenario?\"",
+  "options": {
+    "A": "Start two fresh sessions, having each re-read the relevant source files before beginning.",
+    "B": "Continue in the original session, developing end-to-end tests first, then snapshot tests sequentially.",
+    "C": "Resume the analysis session with fork_session enabled, creating a separate branch for each testing strategy.",
+    "D": "Export the analysis session's key findings to a file, then create two new sessions that reference this file."
+  },
+  "correct_answer": "C. Resume the analysis session with fork_session enabled, creating a separate branch for each testing strategy.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Bối cảnh: một phiên phân tích đã tích lũy hiểu biết sâu về dữ liệu/kỹ thuật, và cần phát triển độc lập hai hướng tiếp cận đánh giá (testing strategies) khác nhau.",
+    "points": [
+      "Resume phiên phân tích với fork_session (CLI: --resume <session-id> --fork-session; Agent SDK: forkSession/fork_session) tạo một session ID mới mang toàn bộ lịch sử hội thoại của phiên gốc, trong khi phiên gốc được giữ nguyên.",
+      "Mỗi nhánh fork thừa hưởng đầy đủ context phân tích (những gì đã đọc, phát hiện, giả thuyết) nhưng phát triển độc lập — hướng testing này không làm nhiễu (contaminate) context của hướng kia.",
+      "Đây là cách tiết kiệm nhất: không phải đọc lại source files, không mất mát thông tin do tóm tắt, và đúng mục đích thiết kế của session forking là khám phá các hướng tiếp cận song song từ một điểm xuất phát chung."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Mở hai session mới, mỗi session đọc lại source files):",
+        "trap": "Bẫy lãng phí công sức phân tích (Discarding accumulated context trap)",
+        "explanation": "Hai session mới mất toàn bộ các phát hiện và lập luận từ phiên phân tích. Đọc lại files chỉ khôi phục được dữ liệu thô, không khôi phục được insight, đồng thời tốn token gấp đôi."
+      },
+      "B": {
+        "title": "B sai (Tiếp tục session gốc, làm tuần tự end-to-end rồi snapshot tests):",
+        "trap": "Bẫy nhiễu ngữ cảnh (Context contamination trap)",
+        "explanation": "Yêu cầu là phát triển độc lập hai hướng. Làm tuần tự trong cùng một session khiến hướng thứ hai bị ảnh hưởng bởi các quyết định và chi tiết của hướng thứ nhất, đồng thời context ngày càng phình to."
+      },
+      "D": {
+        "title": "D sai (Export findings ra file rồi tạo hai session mới tham chiếu file):",
+        "trap": "Bẫy mất mát do tóm tắt (Lossy handoff trap)",
+        "explanation": "Cách này khả thi nhưng thủ công và mất thông tin — file key findings chỉ là bản tóm tắt, bỏ sót nhiều chi tiết của phiên phân tích. fork_session cung cấp sẵn toàn bộ lịch sử mà không cần bước export."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code CLI Reference & Agent SDK – Session Management:",
+    "points": [
+      "Claude Code CLI: --resume (hoặc --continue) kết hợp --fork-session tạo session ID mới thay vì tiếp tục phiên gốc, giữ nguyên lịch sử hội thoại làm điểm xuất phát.",
+      "Agent SDK (Session management): fork session cho phép rẽ nhánh từ một trạng thái hội thoại để thử các hướng tiếp cận khác nhau mà không thay đổi phiên gốc."
+    ]
+  }
+}

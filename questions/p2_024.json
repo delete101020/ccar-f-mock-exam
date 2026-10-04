@@ -1,0 +1,56 @@
+{
+  "id": "ccar_f_p2_024",
+  "domain": "Prompt Engineering & Few-Shot Examples (Kỹ thuật Prompt & Ví dụ minh họa Few-shot)",
+  "topic": "Câu P2.24: Replacing Verbose Proficiency Guidelines with Few-Shot Examples",
+  "question": "Your conversational AI tutor has a 2,800-token system prompt containing teaching methodology, persona guidelines, and detailed written instructions for adapting explanations to different proficiency levels. User testing reveals that in conversations exceeding 12 turns (approximately 4,000 tokens of conversation history), the assistant increasingly ignores the proficiency-adaptation guidelines, defaulting to intermediate-level explanations regardless of the learner's stated level.\nWhat's the most effective approach to ensure consistent adherence to these guidelines throughout extended conversations?",
+  "options": {
+    "A": "Inject a condensed reminder of the proficiency requirements into the conversation as a system message every 4-5 turns.",
+    "B": "Replace the verbose proficiency guidelines with few-shot examples demonstrating appropriate responses at each proficiency level, showing concrete differences in vocabulary, complexity, and explanation depth.",
+    "C": "Restructure the system prompt to place the proficiency-adaptation rules in a clearly-marked final section immediately before the conversation history begins.",
+    "D": "After each assistant response, make a separate API call to evaluate whether the difficulty level matched the learner's profile, regenerating responses that don't align."
+  },
+  "correct_answer": "B. Replace the verbose proficiency guidelines with few-shot examples demonstrating appropriate responses at each proficiency level, showing concrete differences in vocabulary, complexity, and explanation depth.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Phân tích dữ kiện:",
+    "key_facts": [
+      "Tổng context chỉ khoảng 2.800 + 4.000 ≈ 7K tokens — rất nhỏ so với context window của Claude, nên đây không phải lỗi tràn context.",
+      "Chỉ dẫn hiện tại là văn bản mô tả trừu tượng, dài (\"detailed written instructions\").",
+      "Triệu chứng: model trôi về mức \"intermediate\" — tức mức mặc định khi nó không có hình mẫu cụ thể cho từng level."
+    ],
+    "explanation": "Nguyên nhân gốc rễ là chỉ dẫn mô tả bằng lời không cho model một \"đích\" cụ thể để bám theo. Khi lịch sử hội thoại dài ra và chính các câu trả lời trước đó (ở mức intermediate) trở thành mẫu ngầm, model càng trôi về phong cách đó. Few-shot examples cho model thấy chính xác sự khác biệt giữa beginner/intermediate/advanced về từ vựng, độ phức tạp và độ sâu giải thích.",
+    "points": [
+      "Theo Anthropic, examples là một trong những cách đáng tin cậy nhất để định hướng định dạng, giọng điệu và mức độ của đầu ra — hiệu quả hơn mô tả trừu tượng dài dòng.",
+      "Ví dụ cụ thể (bọc trong thẻ `<example>`) dễ được model khái quát hóa và duy trì xuyên suốt hội thoại hơn là các quy tắc văn xuôi.",
+      "Thay thế (thay vì cộng thêm) giúp system prompt gọn hơn, giảm nhiễu giữa các phần methodology/persona và quy tắc proficiency."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Chèn lời nhắc rút gọn mỗi 4-5 lượt):",
+        "trap": "Bẫy nhắc lại triệu chứng (Periodic reminder band-aid trap)",
+        "explanation": "Nhắc lại đúng những quy tắc trừu tượng đã không hiệu quả chỉ làm tăng tần suất nhìn thấy, không làm chúng cụ thể hơn. Giữa các lần nhắc model vẫn trôi, và cơ chế này thêm độ phức tạp vào việc quản lý lịch sử hội thoại."
+      },
+      "C": {
+        "title": "C sai (Dời quy tắc proficiency xuống cuối system prompt):",
+        "trap": "Bẫy sắp xếp lại vị trí (Prompt reordering trap)",
+        "explanation": "Vị trí trong system prompt không phải nguyên nhân: các quy tắc vẫn là văn bản mô tả trừu tượng. Ngoài ra khi hội thoại dài, phần cuối system prompt vẫn bị đẩy xa khỏi lượt hiện tại như mọi phần khác."
+      },
+      "D": {
+        "title": "D sai (Gọi API đánh giá sau mỗi phản hồi và sinh lại):",
+        "trap": "Bẫy over-engineering hậu kiểm (Costly post-hoc validation trap)",
+        "explanation": "Mỗi lượt tốn thêm ít nhất một API call, có thể là hai nếu phải sinh lại — tăng gấp đôi chi phí và latency cho một ứng dụng hội thoại thời gian thực. Nó phát hiện lỗi sau khi xảy ra thay vì sửa nguyên nhân khiến model sinh sai level."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Prompt engineering: Use examples (multishot prompting):",
+    "points": [
+      "Examples là cách hiệu quả để Claude đạt được đầu ra chính xác, nhất quán về cấu trúc và phong cách; nên dùng nhiều ví dụ đa dạng, liên quan, bọc trong thẻ `<example>`.",
+      "Khi chỉ dẫn mô tả không đủ để model phân biệt các mức độ tinh tế, cho ví dụ cụ thể ở từng mức là cách khắc phục trực tiếp."
+    ]
+  }
+}

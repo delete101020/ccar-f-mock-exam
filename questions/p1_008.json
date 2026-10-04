@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_008",
+  "domain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "topic": "Câu P1.8: Improving Adoption of MCP Refactoring Tools via Enhanced Descriptions",
+  "question": "After adding an MCP server with specialized code refactoring tools (extract_function, rename_variable, inline_function), you notice the agent still uses basic text manipulation via Write and Bash sed commands for refactoring tasks. The MCP server is connected and working. Examining the configuration, you find each MCP tool has a minimal description like \"extract_function: extracts a function from code.\"\nWhat's the most effective way to improve adoption of the MCP refactoring tools?",
+  "options": {
+    "A": "Implement a request classifier that detects refactoring intent and automatically routes those requests to the MCP server before the agent processes them.",
+    "B": "Remove the Write tool from the agent's configuration for refactoring sessions so it must use the MCP tools for code modifications.",
+    "C": "Enhance the MCP tool descriptions to explain when each tool is preferable to text manipulation and clarify expected inputs and outputs.",
+    "D": "Accept this as expected behavior since simpler tools like sed are more predictable than specialized refactoring tools."
+  },
+  "correct_answer": "C. Enhance the MCP tool descriptions to explain when each tool is preferable to text manipulation and clarify expected inputs and outputs.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Cơ chế ra quyết định chọn Tool của LLM và nguyên tắc thiết kế Tool Descriptions:",
+    "points": [
+      "Cơ chế ra quyết định chọn Tool: LLM quyết định gọi tool nào dựa hoàn toàn vào tên, docstring và schema mô tả. Khi mô tả quá ngắn và mơ hồ ('extracts a function from code'), mô hình sẽ quay về thói quen mặc định là dùng các công cụ phổ quát quen thuộc (Write, sed) đã có sẵn trong dữ liệu tiền huấn luyện.",
+      "Nguyên tắc thiết kế Tool Descriptions chuẩn Anthropic: Mô tả công cụ đóng vai trò như một prompt chỉ dẫn. Cần nêu rõ: (1) Khi nào nên ưu tiên dùng tool này thay vì sửa văn bản thô (giữ toàn vẹn AST, tránh lỗi scope), và (2) Định dạng đầu vào/đầu ra rõ ràng để mô hình tự tin gọi tool.",
+      "Tính hiệu quả: Đây là giải pháp tự nhiên, ít can thiệp vào kiến trúc pipeline nhưng mang lại hiệu quả cao nhất để định hướng hành vi của agent."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Dựng bộ phân loại request - Request classifier):",
+        "trap": "Bẫy kiến trúc phức tạp hóa (Over-engineering / Brittle routing trap)",
+        "explanation": "Thêm router bên ngoài làm tăng độ trễ, tốn chi phí và rất dễ sai sót với các prompt đa mục đích. MCP tool được thiết kế để agent tự trị quyết định gọi trong vòng lặp ReAct, không nên ép buộc bằng router cứng."
+      },
+      "B": {
+        "title": "B sai (Gỡ bỏ công cụ Write):",
+        "trap": "Bẫy hạn chế năng lực agent (Handcuffing the agent trap)",
+        "explanation": "Gỡ Write sẽ làm tê liệt khả năng tạo file mới hoặc thực hiện các sửa đổi code nằm ngoài phạm vi 3 công cụ refactor kia, khiến agent không thể hoàn thành các tác vụ thông thường."
+      },
+      "D": {
+        "title": "D sai (Chấp nhận hành vi này):",
+        "trap": "Bẫy tư duy thụ động (Defeatist / Incorrect assumption trap)",
+        "explanation": "Chỉnh sửa code bằng sed hoặc regex text thuần túy không hiểu AST, rất dễ làm hỏng cú pháp mã nguồn. Mục tiêu tích hợp MCP chuyên dụng là nâng cao độ tin cậy nên không thể bỏ qua việc agent không dùng đến nó."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool Use Best Practices & MCP Specification:",
+    "points": [
+      "Nguyên tắc mô tả Tool: Dành thời gian viết mô tả chi tiết, giải thích rõ tool làm gì, khi nào NÊN dùng và khi nào KHÔNG NÊN dùng, ý nghĩa từng tham số và các trường hợp đặc biệt.",
+      "Khắc phục lỗi không chịu gọi Tool: Nếu mô hình không gọi công cụ như kỳ vọng, nguyên nhân phổ biến nhất chính là phần mô tả công cụ quá sơ sài hoặc mơ hồ."
+    ]
+  }
+}

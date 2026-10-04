@@ -1,0 +1,56 @@
+{
+  "id": "ccar_f_p2_034",
+  "domain": "Prompt Engineering & Review Criteria Design (Kỹ thuật Prompt & Thiết kế tiêu chí review)",
+  "topic": "Câu P2.34: Explicit Branch Enumeration Instructions for Coverage-Gap Detection",
+  "question": "Your code review prompts include both implementation changes and the corresponding test file, but the LLM's review comments fail to point out untested code paths. Analysis reveals the model correctly flags functions that have no tests at all, but fails to identify when conditional branches or error-handling paths within tested functions that have no tests at all, but fails to identify when conditional branches or error-handling paths within tested functio lack coverage.\nWhat's the most effective way to improve detection of branch-level coverage gaps without overcomplicating the pipeline?",
+  "options": {
+    "A": "Implement a multi-pass pipeline where separate LLM calls first extract all conditional branches, then cross-reference each against test assertions in a second pass.",
+    "B": "Include few-shot examples showing code with an uncovered branch paired with the review comment identifying the specific missing test case.",
+    "C": "Add explicit instructions directing the model to enumerate each conditional branch and exception path, then verify each has a corresponding test assertion.",
+    "D": "Restructure the prompt to interleave implementation and tests, presenting each function followed immediately by its test cases"
+  },
+  "correct_answer": "C. Add explicit instructions directing the model to enumerate each conditional branch and exception path, then verify each has a corresponding test assertion.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Chẩn đoán chính xác vấn đề:",
+    "key_facts": [
+      "Model đã có đủ dữ liệu (implementation + test file) và làm đúng ở mức function (phát hiện function không có test).",
+      "Model chỉ hụt ở mức chi tiết hơn: nhánh `if/else`, `try/except` bên trong function đã có test.",
+      "Ràng buộc: \"without overcomplicating the pipeline\"."
+    ],
+    "explanation": "Đây là lỗi về độ chi tiết của tiêu chí (granularity of criteria), không phải lỗi thiếu dữ liệu hay thiếu năng lực. Khi chỉ được yêu cầu chung chung \"chỉ ra code chưa được test\", model dừng ở mức function — đơn vị hiển nhiên nhất. Chỉ dẫn rõ ràng yêu cầu một quy trình cụ thể: liệt kê từng conditional branch và exception path, rồi đối chiếu từng mục với test assertion tương ứng.",
+    "points": [
+      "Explicit criteria: Anthropic nhấn mạnh việc nói rõ chính xác Claude cần kiểm tra cái gì; tiêu chí cụ thể hiệu quả hơn yêu cầu chung chung.",
+      "Enumerate-then-verify hoạt động như một dạng chain-of-thought có cấu trúc trong cùng một lượt gọi — buộc model xét lần lượt từng nhánh thay vì đánh giá tổng quát cả function.",
+      "Chi phí thấp nhất: chỉ sửa prompt, không thêm API call, không thay đổi cấu trúc dữ liệu đầu vào."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Pipeline nhiều pass: trích xuất nhánh rồi đối chiếu):",
+        "trap": "Bẫy over-engineering (Multi-pass overcomplication trap)",
+        "explanation": "Cách này có thể hoạt động, nhưng thêm nhiều API call, logic điều phối và điểm lỗi — trái với yêu cầu \"without overcomplicating the pipeline\". Cùng quy trình enumerate-then-verify có thể đạt được trong một lượt gọi bằng chỉ dẫn rõ ràng."
+      },
+      "B": {
+        "title": "B sai (Few-shot ví dụ nhánh chưa được test):",
+        "trap": "Bẫy dùng ví dụ thay cho tiêu chí (Examples without explicit procedure trap)",
+        "explanation": "Few-shot mạnh nhất khi cần định hình format/phong cách đầu ra hoặc khi chỉ dẫn rõ ràng đã tồn tại mà vẫn cho kết quả không nhất quán. Ở đây, prompt chưa từng yêu cầu kiểm tra ở mức nhánh; một vài ví dụ cụ thể có thể khiến model chỉ bắt các dạng nhánh giống ví dụ, thay vì áp dụng quy trình có hệ thống cho mọi nhánh. Ví dụ là bổ sung tốt, nhưng bước đầu tiên và trực tiếp nhất là tiêu chí rõ ràng."
+      },
+      "D": {
+        "title": "D sai (Xen kẽ implementation và test theo từng function):",
+        "trap": "Bẫy sắp xếp lại input không đúng nguyên nhân (Input restructuring trap)",
+        "explanation": "Model đã ghép đúng function với test của nó (vì phát hiện được function không có test), nên vấn đề không nằm ở việc khó liên kết dữ liệu. Sắp xếp lại input còn đòi hỏi tiền xử lý để ánh xạ test ↔ function, mà không yêu cầu model xét đến từng nhánh."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Prompt engineering: Be clear and direct & Let Claude think (chain-of-thought):",
+    "points": [
+      "Cung cấp chỉ dẫn cụ thể, tuần tự (ví dụ dạng danh sách bước) giúp Claude thực hiện đúng nhiệm vụ mong muốn.",
+      "Yêu cầu Claude suy luận theo từng bước có cấu trúc trước khi kết luận cải thiện độ chính xác cho các tác vụ phân tích phức tạp như code review."
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_005",
+  "domain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "topic": "Câu P2.5: Structured MCP Error Responses with errorCategory and isRetryable Metadata",
+  "question": "Production logs reveal inconsistent error handling: when lookup_order fails, the agent sometimes retries 5+ times (wasteful when the order ID doesn't exist), sometimes escalates immediately (premature for temporary network issues), and sometimes asks users for clarification (inappropriate when the issue is a backend permission error). Investigation shows your MCP tool returns uniform error responses: {\"isError\": true, \"content\": [{\"type\": \"text\", \"text\": \"Operation failed\"}]}. The agent cannot distinguish between error types.\nWhat's the most effective improvement?",
+  "options": {
+    "A": "Create an analyze_error MCP tool the agent calls after any failure to determine the error category and recommended action.",
+    "B": "Add few-shot examples to the system prompt demonstrating how to interpret error message patterns and select appropriate responses for each.",
+    "C": "Implement retry logic with exponential backoff in your MCP server for all errors, returning to the agent only after retries are exhausted.",
+    "D": "Enhance error responses with structured metadata: include errorCategory (transient/validation/permission), isRetryable boolean, and a description of what caused the failure."
+  },
+  "correct_answer": "D. Enhance error responses with structured metadata: include errorCategory (transient/validation/permission), isRetryable boolean, and a description of what caused the failure.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Nguyên nhân gốc được nêu rõ: MCP tool trả về lỗi đồng nhất “Operation failed”, nên agent không thể phân biệt loại lỗi:",
+    "points": [
+      "Agent chỉ có thể ra quyết định tốt khi tool cung cấp đủ thông tin. Với một thông báo lỗi chung chung, mọi hành vi (retry 5+ lần, escalate ngay, hỏi lại user) đều là phỏng đoán — đó là lý do hành vi không nhất quán.",
+      "Bổ sung metadata có cấu trúc vào error response (`errorCategory`: transient/validation/permission, `isRetryable`, mô tả nguyên nhân) sửa lỗi ngay tại nguồn: lỗi transient → retry; order ID không tồn tại (validation) → hỏi lại user; permission → escalate.",
+      "MCP spec cho phép tool trả về `isError: true` cùng nội dung mô tả lỗi để model tự xử lý và phục hồi. Anthropic khuyến nghị error message của tool phải cụ thể, có tính hành động (actionable), giúp agent biết bước tiếp theo nên làm gì.",
+      "Đây là giải pháp tất định, chi phí thấp, không thêm round-trip hay tool mới."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Tạo tool analyze_error để phân loại lỗi):",
+        "trap": "Bẫy thêm tầng gián tiếp (Extra indirection trap)",
+        "explanation": "Tool analyze_error cũng chỉ nhận được cùng thông báo “Operation failed” — nó không có thêm thông tin để phân loại. Ngoài ra còn thêm một lượt gọi tool sau mỗi lỗi, tăng độ trễ và token, trong khi thông tin phân loại vốn sẵn có ở MCP server."
+      },
+      "B": {
+        "title": "B sai (Few-shot examples hướng dẫn diễn giải pattern lỗi):",
+        "trap": "Bẫy prompt không thể bù thiếu dữ liệu (Prompting over missing signal trap)",
+        "explanation": "Few-shot dạy model phản ứng theo pattern của thông báo lỗi, nhưng mọi lỗi đều có cùng một text “Operation failed” — không có pattern nào để phân biệt. Prompt không thể tạo ra thông tin mà tool không cung cấp."
+      },
+      "C": {
+        "title": "C sai (Exponential backoff cho mọi lỗi ở MCP server):",
+        "trap": "Bẫy retry mù quáng (Blind retry trap)",
+        "explanation": "Retry chỉ có ý nghĩa với lỗi transient. Áp dụng cho mọi lỗi sẽ lãng phí thời gian với order ID không tồn tại hay lỗi permission, và sau khi hết lượt retry agent vẫn nhận lỗi không phân biệt — vấn đề gốc vẫn còn nguyên."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Model Context Protocol Specification – Tools (Error Handling) & Anthropic Engineering – “Writing effective tools for agents”:",
+    "points": [
+      "MCP tools báo lỗi thực thi qua `isError: true` trong kết quả, kèm nội dung mô tả để LLM nhận biết và xử lý lỗi.",
+      "Error response của tool nên cụ thể và actionable (nguyên nhân, có thể retry hay không, cần làm gì tiếp theo) thay vì mã lỗi/thông báo chung chung."
+    ]
+  }
+}

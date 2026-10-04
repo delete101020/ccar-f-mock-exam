@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_012",
+  "domain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "topic": "Câu P3.12: Disambiguating archive_file and delete_file via Tool Descriptions",
+  "question": "Your MCP server includes archive_file(file_id) and delete_file(file_id) tools. Production logs show the agent calls delete_file when users ask to \"remove old backups,\" policy requires archiving backup files. Both tools currently have minimal descriptions: \"Archives a file\" and \"Deletes a file.\" \nWhich change most directly improves tool selection?",
+  "options": {
+    "A": "Add a confirmation step that requires users to type \"CONFIRM DELETE\" before delete_file executes.",
+    "B": "Implement server-side validation that rejects delete_file calls for files tagged as backups, returning an error message suggesting archive_file.",
+    "C": "Expand tool descriptions to clarify use cases, adding guidance like \"Do not use for backup files\" to delete_file.",
+    "D": "Add few-shot examples to the system prompt demonstrating that requests involving \"backup\" or \"old\" should use archive_file."
+  },
+  "correct_answer": "C. Expand tool descriptions to clarify use cases, adding guidance like \"Do not use for backup files\" to delete_file.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Phân tích nguyên nhân gốc rễ của lỗi chọn tool:",
+    "points": [
+      "Hai tool có mô tả tối giản ('Archives a file' / 'Deletes a file'). Khi người dùng nói 'remove old backups', từ 'remove' gần nghĩa với 'delete', nên model chọn delete_file — model không hề biết chính sách yêu cầu archive backup.",
+      "Câu hỏi hỏi thay đổi 'most directly improves tool selection'. Tool description là đầu vào chính để model quyết định gọi tool nào. Mở rộng description để nêu rõ use case của từng tool, khi nào nên/không nên dùng (ví dụ delete_file: 'Do not use for backup files — use archive_file instead') giải quyết trực tiếp nguyên nhân.",
+      "Theo 'Writing effective tools for agents', mô tả tool nên được viết như hướng dẫn cho một nhân viên mới: nêu rõ mục đích, ranh giới giữa các tool chồng lấn và các quy ước ngầm."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Yêu cầu người dùng gõ 'CONFIRM DELETE'):",
+        "trap": "Bẫy chuyển gánh nặng cho người dùng (User friction trap)",
+        "explanation": "Bước xác nhận không cải thiện việc chọn tool; agent vẫn chọn delete_file. Người dùng muốn 'remove' có thể vẫn xác nhận, dẫn đến vi phạm chính sách."
+      },
+      "B": {
+        "title": "B sai (Server-side validation từ chối delete_file cho backup):",
+        "trap": "Bẫy guardrail hạ nguồn thay vì sửa lựa chọn (Downstream guardrail trap)",
+        "explanation": "Đây là lớp bảo vệ bổ sung hữu ích (defense in depth) nhưng không trực tiếp cải thiện việc chọn tool — model vẫn chọn sai, chỉ được sửa sau khi gặp lỗi, tốn thêm lượt gọi. Câu hỏi hỏi về cải thiện tool selection."
+      },
+      "D": {
+        "title": "D sai (Few-shot examples trong system prompt theo từ khóa 'backup'/'old'):",
+        "trap": "Bẫy khớp từ khóa mong manh (Keyword-based prompt patch trap)",
+        "explanation": "Gắn quy tắc với từ khóa 'old' hay 'backup' dễ tổng quát hóa sai (ví dụ 'delete old logs' bị archive). Hướng dẫn nên nằm trong định nghĩa tool, nơi model tham chiếu khi chọn tool, thay vì vá trong system prompt."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – \"Writing effective tools for agents\" & Tool Use Best Practices:",
+    "points": [
+      "Cung cấp mô tả tool cực kỳ chi tiết: tool làm gì, khi nào nên dùng và khi nào không nên dùng, ý nghĩa các tham số và các lưu ý quan trọng.",
+      "Khi các tool có chức năng gần nhau, mô tả phải phân định rõ ranh giới để model chọn đúng."
+    ]
+  }
+}

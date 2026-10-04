@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_042",
+  "domain": "Context Management & Multi-Agent Delegation (Quản lý Context & Phân nhánh Subagent)",
+  "topic": "Câu P1.42: Context Passing to Report Generator: Synthesis Draft plus Structured Source Index",
+  "question": "After the web search agent finds 25 sources (120K tokens of raw content), the document analysis agent extracts key insights (15K tokens), and the synthesis agent produces a coherent narrative draft (3K tokens), the coordinator must pass context to the report generation agent for the final output with proper source citations.\nWhat context-passing strategy provides the best balance of completeness and efficiency?",
+  "options": {
+    "A": "Pass the synthesis draft along with a structured source index that maps key claims to their source URLs and relevant excerpts.",
+    "B": "Pass the full accumulated context from all prior agents.",
+    "C": "Pass a condensed summary of all prior stages that preserves the main findings and attributes them to sources by name only.",
+    "D": "Pass only the synthesis draft and have a separate post-processing pipeline match claims to sources and insert citations after the report is generated."
+  },
+  "correct_answer": "A. Pass the synthesis draft along with a structured source index that maps key claims to their source URLs and relevant excerpts.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Bài toán cân bằng giữa đầy đủ (completeness) và hiệu quả (efficiency) khi chuyển context sang bước cuối:",
+    "points": [
+      "Report generation agent cần hai thứ: (1) nội dung đã được tổng hợp mạch lạc – synthesis draft 3K tokens; (2) dữ liệu nguồn để trích dẫn chính xác – URL và đoạn trích liên quan cho từng claim.",
+      "Structured source index (claim → source URL + relevant excerpt) chỉ chứa phần nguồn thực sự được dùng, nhỏ hơn rất nhiều so với 120K tokens raw content nhưng vẫn đủ để viết citation chính xác và kiểm chứng.",
+      "Đây là mẫu \"pass the minimum sufficient, structured context\": loại bỏ nhiễu, giữ lại provenance ở dạng có cấu trúc mà agent có thể tham chiếu một cách tất định."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Truyền toàn bộ context tích lũy từ mọi agent):",
+        "trap": "Bẫy nhồi context (Context stuffing trap)",
+        "explanation": "Hơn 138K tokens (raw 120K + insights 15K + draft 3K) gây tốn chi phí, tăng độ trễ và làm loãng sự chú ý của model (lost-in-the-middle). Phần lớn raw content không liên quan đến báo cáo cuối."
+      },
+      "C": {
+        "title": "C sai (Tóm tắt cô đọng, chỉ ghi nguồn theo tên):",
+        "trap": "Bẫy mất độ chi tiết của provenance (Lossy attribution trap)",
+        "explanation": "Chỉ ghi tên nguồn không đủ để tạo citation đúng chuẩn (thiếu URL, thiếu đoạn trích làm bằng chứng) và không ánh xạ được từng claim cụ thể với nguồn hỗ trợ nó."
+      },
+      "D": {
+        "title": "D sai (Chỉ truyền draft, ghép citation bằng pipeline hậu xử lý):",
+        "trap": "Bẫy gắn citation sau cùng (Post-hoc citation matching trap)",
+        "explanation": "Ghép claim với nguồn sau khi báo cáo đã viết xong mang tính phỏng đoán và dễ sai; report generator cũng không thể viết câu chữ phù hợp với bằng chứng nếu không thấy nguồn trong lúc sinh nội dung."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – Multi-agent research system & Context engineering guidance:",
+    "points": [
+      "Giữa các agent nên truyền context đã được chắt lọc và có cấu trúc thay vì toàn bộ dữ liệu thô.",
+      "Giữ ánh xạ claim–nguồn (kèm excerpt) để bước cuối có thể trích dẫn chính xác."
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_031",
+  "domain": "Information Extraction & Structured Schema Design (Trích xuất thông tin & Thiết kế Schema có cấu trúc)",
+  "topic": "Câu P2.31: Enforcing Resume Extraction Schema via Tool Use input_schema",
+  "question": "The system needs to extract candidate information (name, contact details, skills, work experience, education) from uploaded resumes. The extracted data must strictly conform to a predefined JSON schema, as missing required fields or incorrect data types will cause downstream validation failures.\nWhat is the most reliable approach to ensure Claude's output consistently matches the schema?",
+  "options": {
+    "A": "Define a tool with an input schema matching your required JSON structure and extract the data from Claude's tool_use response.",
+    "B": "Include detailed JSON formatting instructions and a template example in the system prompt, asking Claude to output only valid JSON.",
+    "C": "Parse Claude's text response with regex patterns to extract JSON objects, using retry logic for malformed responses.",
+    "D": "Make two separate API calls—first extracting information as text, then asking Claude to format that text as JSON."
+  },
+  "correct_answer": "A. Define a tool with an input schema matching your required JSON structure and extract the data from Claude's tool_use response.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Cơ chế dùng Tool Use như một kênh xuất dữ liệu có cấu trúc (structured output):",
+    "points": [
+      "Khi định nghĩa một tool (ví dụ `record_candidate`) với `input_schema` là JSON Schema của hồ sơ ứng viên (các field `required`, kiểu dữ liệu, mảng `work_experience`, `education`...), Claude sinh ra `tool_use` block với `input` là một JSON object đã được parse sẵn theo schema — không phải văn bản tự do cần bóc tách.",
+      "Kết hợp `tool_choice: {\"type\": \"tool\", \"name\": \"record_candidate\"}` để ép Claude luôn gọi đúng tool này, và bật `strict: true` (structured outputs) khi khả dụng để đảm bảo đầu ra tuân thủ schema về field bắt buộc và kiểu dữ liệu.",
+      "Ứng dụng chỉ cần đọc `content[i].input` từ `tool_use` block — loại bỏ hoàn toàn bước parse văn bản dễ vỡ, giảm lỗi validation ở downstream."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Hướng dẫn format JSON và template trong system prompt):",
+        "trap": "Bẫy dựa vào prompt cho tuân thủ schema (Prompt-only formatting trap)",
+        "explanation": "Chỉ dẫn và ví dụ cải thiện xác suất nhưng không ràng buộc cấu trúc: Claude vẫn có thể thêm lời dẫn, bỏ field bắt buộc, sai kiểu (\"5 years\" thay vì số) hoặc sinh JSON lỗi cú pháp với resume phức tạp. Yêu cầu \"strictly conform\" cần cơ chế mạnh hơn."
+      },
+      "C": {
+        "title": "C sai (Parse bằng regex và retry khi lỗi):",
+        "trap": "Bẫy parse văn bản dễ vỡ (Fragile regex parsing trap)",
+        "explanation": "Regex không phù hợp để bóc tách JSON lồng nhau; retry chỉ làm tăng chi phí và latency mà không đảm bảo lần sau đúng. Ngay cả khi lấy được JSON hợp lệ cú pháp, nó vẫn có thể thiếu field hoặc sai kiểu so với schema."
+      },
+      "D": {
+        "title": "D sai (Hai lượt gọi: trích xuất text rồi format JSON):",
+        "trap": "Bẫy thêm bước không giải quyết gốc rễ (Extra-hop trap)",
+        "explanation": "Gấp đôi chi phí và latency, trong khi lượt thứ hai vẫn là sinh JSON dạng text tự do với cùng rủi ro sai schema. Thêm bước trung gian còn có thể làm mất thông tin giữa hai lượt."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool use (JSON output via tools) & Structured outputs:",
+    "points": [
+      "Tài liệu Tool Use mô tả mẫu dùng tool để nhận JSON output: định nghĩa tool với `input_schema` mô tả cấu trúc mong muốn và dùng `tool_choice` để ép Claude gọi tool đó.",
+      "Structured outputs (`strict: true` trên tool definition) đảm bảo `input` của tool_use tuân thủ JSON Schema đã khai báo."
+    ]
+  }
+}

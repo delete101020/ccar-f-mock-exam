@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_026",
+  "domain": "Information Extraction & Structured Schema Design (Trích xuất thông tin & Thiết kế Schema có cấu trúc)",
+  "topic": "Câu P1.26: Extensible Enum with \"other\" + Detail Field",
+  "question": "Your extraction uses tool use with a JSON schema where property_type is defined as an enum: ['house', 'apartment', 'condo', 'townhouse']. After deployment, 8% of extractions fail schema validation. Investigation reveals listings mention many uncommon property types –\"studio\", \"loft\", \"duplex\", \"mobile home\", \"tiny house\", \"converted warehouse\"–and new types continue appearing regularly.\nWhat's the most effective long-term solution?",
+  "options": {
+    "A": "Change property_type from an enum to a free-form string and implement a normalization step in post-processing.",
+    "B": "Continuously expand the enum to include newly observed property types and add monitoring for additional edge cases.",
+    "C": "Add few-shot examples to your prompt demonstrating how to map unexpected property types to the closest existing enum value.",
+    "D": "Add an \"other\" value to your enum with a separate property_type_detail string field for specifics when \"other\" is selected."
+  },
+  "correct_answer": "D. Add an \"other\" value to your enum with a separate property_type_detail string field for specifics when \"other\" is selected.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Phân tích lỗi validation 8% do enum đóng:",
+    "points": [
+      "Enum ['house', 'apartment', 'condo', 'townhouse'] là một tập đóng (closed set), trong khi dữ liệu thực tế là một tập mở (open set): các loại bất động sản mới liên tục xuất hiện (\"studio\", \"loft\", \"tiny house\"...).",
+      "Mẫu thiết kế \"other\" + detail field (extensible enum pattern) giữ lại toàn bộ lợi ích của enum cho các giá trị phổ biến (dễ lọc, dễ thống kê, downstream xử lý ổn định), đồng thời cung cấp một lối thoát hợp lệ cho các giá trị ngoài danh mục.",
+      "Trường property_type_detail lưu giữ thông tin gốc (ví dụ \"converted warehouse\") nên không bị mất dữ liệu, và có thể dùng để phân tích tần suất nhằm quyết định khi nào nên thêm một giá trị mới vào enum.",
+      "Đây là giải pháp dài hạn (long-term) vì schema không cần thay đổi mỗi khi có loại mới xuất hiện, và loại bỏ hoàn toàn lỗi validation."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Chuyển sang free-form string + normalization hậu xử lý):",
+        "trap": "Bẫy mất ràng buộc cấu trúc (Loss of structure trap)",
+        "explanation": "Bỏ enum làm mất đi tính nhất quán cho các giá trị phổ biến: mô hình có thể trả về \"House\", \"single-family home\", \"detached house\" cho cùng một loại, đẩy toàn bộ gánh nặng chuẩn hóa sang code hậu xử lý — vốn phải liên tục cập nhật khi có biến thể mới."
+      },
+      "B": {
+        "title": "B sai (Liên tục mở rộng enum):",
+        "trap": "Bẫy bảo trì vô tận (Whack-a-mole maintenance trap)",
+        "explanation": "Đề bài nói rõ \"new types continue appearing regularly\". Mở rộng enum là phản ứng thụ động: mỗi loại mới vẫn gây lỗi validation cho đến khi được thêm vào. Đây không phải giải pháp dài hạn mà là một vòng lặp bảo trì không bao giờ kết thúc."
+      },
+      "C": {
+        "title": "C sai (Few-shot ánh xạ loại lạ về giá trị enum gần nhất):",
+        "trap": "Bẫy ép dữ liệu sai lệch (Lossy coercion trap)",
+        "explanation": "Ép \"mobile home\" hay \"converted warehouse\" thành \"house\" hoặc \"apartment\" làm sai lệch và mất dữ liệu — đầu ra hợp lệ về schema nhưng sai về nghĩa. Downstream không có cách nào biết giá trị đã bị ép."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Docs – Tool use: định nghĩa input_schema (JSON Schema enum); nguyên tắc thiết kế schema trích xuất.",
+    "points": [
+      "Enum phù hợp cho tập giá trị đã biết và ổn định; với tập giá trị mở, nên bổ sung giá trị \"other\" kèm trường mô tả chi tiết để tránh ép dữ liệu hoặc lỗi validation.",
+      "Thiết kế schema nên cho phép mô hình biểu diễn trung thực dữ liệu nguồn thay vì buộc nó chọn một giá trị không chính xác."
+    ]
+  }
+}

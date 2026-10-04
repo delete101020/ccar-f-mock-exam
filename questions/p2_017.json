@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_017",
+  "domain": "Conversation State Management & Messages API (Quản lý trạng thái hội thoại & Messages API)",
+  "topic": "Câu P2.17: Lost Multi-Turn Preferences Because Prior Messages Are Not Sent in the messages Array",
+  "question": "You're Implementing a feature where users refine their playlist preferences through multiple conversation turns. After deploying, you notice Claude's responses don't reflect what us earlier in the same conversation— for example, a user says they love jazz, but two messages later Claude asks what genres they enjoy.\nWhat is the most likely cause?",
+  "options": {
+    "A": "The model's context window has been exceeded by the conversation length",
+    "B": "The Claude API requires a session_id parameter that you haven't configured",
+    "C": "Claude requires a vector database connection to maintain conversation memory",
+    "D": "Your application isn't including prior messages in the messages array"
+  },
+  "correct_answer": "D. Your application isn't including prior messages in the messages array",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Bản chất của Claude Messages API:",
+    "points": [
+      "Messages API là stateless: mỗi request độc lập, Claude không lưu trữ bất kỳ thông tin nào giữa các lần gọi. “Bộ nhớ” của cuộc hội thoại chính là toàn bộ các turn trước mà ứng dụng gửi lại trong mảng `messages`.",
+      "Triệu chứng “user nói thích jazz, hai tin nhắn sau Claude lại hỏi thể loại yêu thích” cho thấy Claude không nhìn thấy turn trước — tức ứng dụng chỉ gửi tin nhắn mới nhất thay vì nối thêm (append) các cặp user/assistant trước đó.",
+      "Chỉ sau vài tin nhắn, hội thoại còn rất ngắn, nên đây là lỗi ở tầng ứng dụng, không phải giới hạn của model.",
+      "Khắc phục: lưu lịch sử hội thoại phía ứng dụng và gửi đầy đủ các message trước đó (theo thứ tự luân phiên user/assistant) trong mỗi request."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Vượt context window):",
+        "trap": "Bẫy đổ lỗi giới hạn context (Context limit red herring)",
+        "explanation": "Chỉ cách hai tin nhắn trong một cuộc hội thoại sở thích âm nhạc — số token cực nhỏ so với context window hàng trăm nghìn tokens. Hơn nữa, vượt context window sẽ gây lỗi API rõ ràng chứ không âm thầm quên."
+      },
+      "B": {
+        "title": "B sai (Thiếu tham số session_id):",
+        "trap": "Bẫy tham số không tồn tại (Nonexistent parameter trap)",
+        "explanation": "Messages API không có tham số session_id để duy trì hội thoại. Trạng thái hội thoại được duy trì hoàn toàn bằng cách gửi lại lịch sử trong `messages`."
+      },
+      "C": {
+        "title": "C sai (Cần kết nối vector database để có bộ nhớ):",
+        "trap": "Bẫy over-engineering bộ nhớ (Unnecessary memory infrastructure trap)",
+        "explanation": "Vector database có thể hữu ích cho bộ nhớ dài hạn xuyên phiên, nhưng không phải điều kiện để Claude nhớ những gì vừa nói trong cùng một hội thoại. Chỉ cần gửi lịch sử message là đủ."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Messages API (Working with messages / Multi-turn conversations):",
+    "points": [
+      "Messages API là stateless: luôn phải gửi toàn bộ lịch sử hội thoại trong mảng `messages` ở mỗi request.",
+      "Các turn được biểu diễn bằng các message luân phiên vai trò `user` và `assistant`."
+    ]
+  }
+}

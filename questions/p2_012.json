@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_012",
+  "domain": "Information Extraction & Structured Output (Trích xuất thông tin & Đầu ra có cấu trúc)",
+  "topic": "Câu P2.12: Reliable Schema-Compliant JSON via Tool Use with Target Schema as input_schema",
+  "question": "Your system must extract event details from calendar invitations and output JSON that strictly conforms to a schema with fields for title, date, time, location, and attendees. Downstream reject any malformed or non- conformant JSON.\nWhat approach provides the most reliable schema compliance?",
+  "options": {
+    "A": "Define a tool with your target schema as input parameters and have Claude call it with the extracted data.",
+    "B": "Pre-fill Claude's response with an opening brace to force JSON output, then complete and parse the response.",
+    "C": "Append instructions like \"Output only valid JSON matching the schema exactly\" and implement retry logic to re-prompt when JSON parsing fails.",
+    "D": "Include detailed JSON formatting instructions and the target schema in your prompt, then parse Claude's text response as JSON."
+  },
+  "correct_answer": "A. Define a tool with your target schema as input parameters and have Claude call it with the extracted data.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Yêu cầu: JSON phải tuân thủ chặt chẽ schema, downstream từ chối mọi output malformed hoặc non-conformant:",
+    "points": [
+      "Định nghĩa một tool có `input_schema` chính là schema đích (title, date, time, location, attendees) và để Claude gọi tool đó: Claude sinh ra arguments dưới dạng JSON có cấu trúc theo schema, được API trả về trong block `tool_use` đã parse sẵn — không cần parse text tự do.",
+      "Đây là kỹ thuật được Anthropic tài liệu hóa cho “JSON mode” / structured extraction: dùng tool như một khuôn đầu ra. Kết hợp `tool_choice` ép gọi đúng tool (`{\"type\": \"tool\", \"name\": ...}`) và `strict: true` (structured outputs) để có đảm bảo tuân thủ schema mạnh nhất.",
+      "Cơ chế tool use đặt schema vào hợp đồng API thay vì vào chỉ dẫn văn bản, nên đáng tin cậy hơn hẳn các phương án dựa trên prompt hoặc prefill."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Prefill dấu { để ép JSON):",
+        "trap": "Bẫy prefill chỉ đảm bảo mở đầu (Prefill-is-not-a-schema trap)",
+        "explanation": "Prefill “{” giúp model bắt đầu bằng JSON, nhưng không đảm bảo tên trường, kiểu dữ liệu, trường bắt buộc hay việc đóng JSON đúng cú pháp. Ngoài ra prefill không được hỗ trợ trên một số model mới/khi bật extended thinking."
+      },
+      "C": {
+        "title": "C sai (Chỉ dẫn “Output only valid JSON” + retry khi parse lỗi):",
+        "trap": "Bẫy xử lý triệu chứng bằng retry (Retry-on-failure trap)",
+        "explanation": "Đây là cách tiếp cận phản ứng: chấp nhận lỗi rồi retry, tăng chi phí và độ trễ. Retry chỉ bắt được lỗi parse, không bắt được JSON hợp lệ nhưng sai schema (thiếu trường, sai kiểu) trừ khi bổ sung validation."
+      },
+      "D": {
+        "title": "D sai (Đưa hướng dẫn và schema vào prompt rồi parse text):",
+        "trap": "Bẫy dựa vào prompt cho định dạng (Prompt-only formatting trap)",
+        "explanation": "Model thường tuân thủ tốt nhưng không có đảm bảo: có thể thêm lời dẫn, markdown code fence, hoặc lệch schema. Với downstream từ chối mọi lỗi, xác suất nhỏ này vẫn gây thất bại."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool use (JSON output via tools) & Structured outputs:",
+    "points": [
+      "Có thể dùng tool với input_schema mong muốn để nhận JSON có cấu trúc từ Claude, kết hợp tool_choice để ép gọi tool.",
+      "Structured outputs (`strict: true` cho tool, hoặc output format JSON schema) đảm bảo output tuân thủ schema đã cung cấp."
+    ]
+  }
+}

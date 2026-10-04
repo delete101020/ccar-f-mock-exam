@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_057",
+  "domain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
+  "topic": "Câu P1.57: Persisting Structured Issue State Across a Long Multi-Issue Session",
+  "question": "A customer raises three separate issues during one session: a refund inquiry (turns 1-15), a subscription question (turns 16-30), and a payment method update (turns 31-45). At turn 48, the customer asks \"What happened with my refund?\" The conversation is approaching context limits.\nWhat strategy best maintains the agent's ability to address all issues throughout the session?",
+  "options": {
+    "A": "Implement sliding window context that retains the most recent 30 turns.",
+    "B": "Rely on MCP tools to re-fetch relevant information on demand when the customer references earlier issues.",
+    "C": "Extract and persist structured issue data (order IDs, amounts, statuses) into a separate context layer.",
+    "D": "Summarize earlier turns into a narrative description, preserving full message history only for the active issue."
+  },
+  "correct_answer": "C. Extract and persist structured issue data (order IDs, amounts, statuses) into a separate context layer.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Bài toán: phiên dài với ba vấn đề tách biệt, context gần đầy, khách hỏi lại vấn đề đầu tiên ở lượt 48:",
+    "points": [
+      "Các dữ kiện quan trọng của từng vấn đề (order ID, số tiền, trạng thái) là dữ liệu nhỏ nhưng cần chính xác tuyệt đối.",
+      "Trích xuất và lưu chúng thành một lớp context có cấu trúc riêng (ví dụ một \"case facts\" block luôn được đưa vào prompt, hoặc memory/state store) giúp thông tin tồn tại độc lập với việc lịch sử hội thoại bị cắt hoặc tóm tắt.",
+      "Nhờ vậy agent trả lời được \"What happened with my refund?\" chính xác bất kể vấn đề đó nằm ở đầu phiên, đồng thời giải phóng context bằng cách loại bỏ các lượt cũ."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Sliding window giữ 30 lượt gần nhất):",
+        "trap": "Bẫy cắt cụt mất dữ kiện (Truncation loss trap)",
+        "explanation": "Ở lượt 48, cửa sổ 30 lượt chỉ còn từ lượt 18 – toàn bộ vấn đề refund (lượt 1-15) bị mất, đúng lúc khách hỏi đến nó."
+      },
+      "B": {
+        "title": "B sai (Dựa vào MCP tool để fetch lại khi cần):",
+        "trap": "Bẫy không biết cần fetch gì (Lost reference trap)",
+        "explanation": "Khi lịch sử bị mất, agent không còn order ID hay ngữ cảnh để biết cần tra cứu gì; fetch lại cũng tốn thêm lượt và không khôi phục được những gì đã trao đổi với khách."
+      },
+      "D": {
+        "title": "D sai (Tóm tắt các lượt cũ thành narrative):",
+        "trap": "Bẫy tóm tắt văn xuôi mất chi tiết (Lossy narrative summary trap)",
+        "explanation": "Tóm tắt dạng văn xuôi dễ làm mất hoặc sai lệch các giá trị chính xác (số tiền, mã đơn, trạng thái) – chính là thứ cần để trả lời khách."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – Effective context engineering for AI agents (structured note-taking / memory):",
+    "points": [
+      "Với tác vụ dài, lưu thông tin quan trọng dưới dạng ghi chú có cấu trúc bên ngoài lịch sử hội thoại để duy trì khả năng truy xuất khi context bị nén.",
+      "Ưu tiên giữ các dữ kiện chính xác (ID, số liệu, trạng thái) ở dạng có cấu trúc thay vì tóm tắt tự do."
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_012",
+  "domain": "Claude Code CLI & Session Management (Quản lý phiên làm việc & Xử lý Code Drift)",
+  "topic": "Câu P1.12: Resuming Sessions with Targeted Re-analysis After Code Changes",
+  "question": "Your codebase exploration tool stores session IDs to allow engineers to continue investigations across work sessions. An engineer spent an hour yesterday analyzing a legacy authentication module, building context about its architecture and dependencies. They want to continue today. The session ID is valid, but version control shows 3 of the 12 files the agent previously read were modified overnight by a teammate's merge.\nWhat approach best balances efficiency and accuracy?",
+  "options": {
+    "A": "Resume the session and inform the agent which specific files changed for targeted re-analysis",
+    "B": "Start a fresh session to ensure the agent works with current codebase state without stale assumptions",
+    "C": "Resume the session without informing the agent about the changed files",
+    "D": "Resume the session and immediately have the agent re-read all 12 previously analyzed files"
+  },
+  "correct_answer": "A. Resume the session and inform the agent which specific files changed for targeted re-analysis",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Cân bằng giữa hiệu năng (efficiency) và tính chính xác (accuracy) khi xảy ra code drift:",
+    "points": [
+      "Bảo toàn giá trị ngữ cảnh tích lũy (Preserving accumulated context): Buổi làm việc 1 giờ hôm qua đã phân tích 12 files, xây dựng sự hiểu biết sâu sắc về kiến trúc tổng thể, dependency graph và luồng logic. Bỏ đi ngữ cảnh này sẽ gây lãng phí lớn.",
+      "Hiện tượng trôi mã nguồn cục bộ (Localized Code Drift): Chỉ có 3 trong số 12 files bị sửa đổi qua đêm (9 files còn lại hoàn toàn nguyên vẹn).",
+      "Chiến lược tái phân tích có mục tiêu (Targeted Re-analysis): Phục hồi session cũ và thông báo chính xác 3 files vừa thay đổi cho agent. Agent chỉ cần đọc lại (Read) 3 files đó để cập nhật sự thay đổi (diff) mà vẫn giữ nguyên kiến trúc của 9 files còn lại, đạt điểm tối ưu hoàn hảo giữa tiết kiệm token và đảm bảo tính chính xác tuyệt đối."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Bắt đầu phiên mới hoàn toàn - Start a fresh session):",
+        "trap": "Bẫy lãng phí token và thời gian (Redundant rework trap)",
+        "explanation": "Bỏ hẳn session cũ và đọc lại từ đầu sẽ triệt tiêu toàn bộ 1 giờ phân tích trước đó, tốn lượng token lớn và làm chậm tiến độ làm việc của kỹ sư."
+      },
+      "C": {
+        "title": "C sai (Phục hồi phiên cũ mà không báo về các file đã đổi):",
+        "trap": "Bẫy giả định trạng thái tĩnh / Hallucination (Stale codebase assumption trap)",
+        "explanation": "Không thông báo về thay đổi khiến agent tiếp tục suy luận dựa trên mã nguồn cũ đã lỗi thời trong context, dẫn đến phân tích sai lệch và hallucination khi viết hoặc review code."
+      },
+      "D": {
+        "title": "D sai (Đọc lại toàn bộ cả 12 files ngay lập tức):",
+        "trap": "Bẫy đọc thừa thãi / Phình to context (Unnecessary context flooding trap)",
+        "explanation": "Đọc lại cả 9 file không hề thay đổi là thao tác dư thừa, làm tăng gấp đôi lượng token của các file này trong context window mà không đem lại giá trị mới."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Nguyên tắc chung (nên đối chiếu thêm tài liệu chính thức của Anthropic):",
+    "points": [
+      "Khi tiếp tục phiên trên codebase đã thay đổi cục bộ, cung cấp danh sách file đã đổi để agent đọc lại có mục tiêu thay vì đọc lại toàn bộ.",
+      "Chỉ nên mở phiên mới kèm tóm tắt khi phần lớn kết quả cũ đã lỗi thời."
+    ]
+  }
+}

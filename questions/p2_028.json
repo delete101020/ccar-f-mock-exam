@@ -1,0 +1,56 @@
+{
+  "id": "ccar_f_p2_028",
+  "domain": "Claude Code Iterative Refinement (Tinh chỉnh lặp & Phối hợp phản hồi trong Claude Code)",
+  "topic": "Câu P2.28: Providing Interacting Formatting Issues Together in One Message",
+  "question": "You've asked Claude Code to build a PDF report generation feature. The initial implementation queries the database correctly, but the output has formatting issues: table columns are too narrow causing content truncation, dates display without proper formatting, and page break handling is incorrect. You've noticed these issues interact— changing column widths affects how dates render, and page breaks depend on content height.\nWhat's the most effective approach for iterating toward a working solution?",
+  "options": {
+    "A": "Address the column width issue first with specific measurements, verify it works, then fix date formatting within the corrected columns, then adjust page breaks— testing after each change.",
+    "B": "Provide all three issues in a single detailed message with exact specifications for each, allowing Claude to address them together in one update.",
+    "C": "Show Claude an example of a correctly formatted report and ask it to match that output, rather than listing the specific technical issues.",
+    "D": "Start fresh with a detailed prompt specifying all formatting requirements upfront."
+  },
+  "correct_answer": "B. Provide all three issues in a single detailed message with exact specifications for each, allowing Claude to address them together in one update.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Điểm mấu chốt của đề bài là cụm \"these issues interact\":",
+    "key_facts": [
+      "Column width ảnh hưởng tới cách date hiển thị (date dài bị cắt hoặc xuống dòng).",
+      "Page break phụ thuộc vào chiều cao nội dung — mà chiều cao lại thay đổi theo column width và date format.",
+      "Phần truy vấn database đã đúng — không cần làm lại từ đầu."
+    ],
+    "explanation": "Khi các vấn đề phụ thuộc lẫn nhau, sửa tuần tự từng cái sẽ khiến mỗi lần sửa sau làm hỏng (hoặc đòi hỏi làm lại) cái đã sửa trước: chỉnh date format làm thay đổi độ rộng cần thiết của cột, chỉnh cột làm thay đổi chiều cao hàng, từ đó làm lệch page break. Đưa cả ba vấn đề cùng lúc, kèm thông số chính xác cho từng cái, cho phép Claude cân nhắc các ràng buộc đồng thời và đưa ra một thiết kế layout nhất quán.",
+    "points": [
+      "Nguyên tắc phối hợp phản hồi: vấn đề độc lập → sửa tuần tự từng cái; vấn đề tương tác → gom vào một message để giải quyết đồng thời.",
+      "Exact specifications (ví dụ: độ rộng cột tối thiểu, định dạng `YYYY-MM-DD`, quy tắc không tách hàng của bảng qua trang) loại bỏ mơ hồ và cho Claude tiêu chí kiểm chứng rõ ràng.",
+      "Giữ nguyên phần đã đúng (database query), chỉ cập nhật phần rendering — tiết kiệm hơn bắt đầu lại."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Sửa tuần tự column → date → page break, test sau mỗi bước):",
+        "trap": "Bẫy sửa tuần tự cho vấn đề phụ thuộc (Sequential fix for coupled issues trap)",
+        "explanation": "Lặp từng bước chỉ tối ưu khi các vấn đề độc lập. Ở đây, sửa date format có thể yêu cầu nới rộng cột lần nữa, và sửa page break có thể yêu cầu thay đổi chiều cao hàng — buộc phải quay lại các bước trước, tạo vòng lặp sửa đi sửa lại."
+      },
+      "C": {
+        "title": "C sai (Chỉ đưa ví dụ báo cáo đúng và yêu cầu khớp theo):",
+        "trap": "Bẫy bỏ qua thông tin chẩn đoán cụ thể (Vague target without diagnostics trap)",
+        "explanation": "Một mẫu tham chiếu có thể hữu ích như bổ sung, nhưng bỏ đi danh sách vấn đề kỹ thuật cụ thể đã quan sát được (truncation, date, page break) khiến Claude phải tự suy luận khác biệt, dễ bỏ sót và thiếu tiêu chí kiểm chứng rõ ràng."
+      },
+      "D": {
+        "title": "D sai (Bắt đầu lại từ đầu với prompt chi tiết):",
+        "trap": "Bẫy đập đi làm lại (Restart from scratch trap)",
+        "explanation": "Phần truy vấn database đã đúng; làm lại từ đầu vứt bỏ công sức đó và có nguy cơ phát sinh lỗi mới ở phần đang chạy tốt. Vấn đề chỉ nằm ở lớp formatting, nên tinh chỉnh có mục tiêu hiệu quả hơn."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Best Practices (Iterative refinement & giving specific feedback):",
+    "points": [
+      "Chỉ dẫn cụ thể (specific) giúp Claude thành công ngay từ lần đầu và giảm số vòng sửa; phản hồi nên nêu rõ vấn đề quan sát được và kỳ vọng chính xác.",
+      "Khi các vấn đề tương tác với nhau, nên cung cấp chúng cùng nhau để Claude giải quyết các ràng buộc đồng thời; khi độc lập, có thể sửa và kiểm chứng từng cái một."
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p3_001",
+  "domain": "Batch Processing & Cost Optimization (Xử lý hàng loạt & Tối ưu chi phí)",
+  "topic": "Câu P3.1: Deciding Batch API Suitability for Non-Blocking CI Security Reviews",
+  "question": "Your CI pipeline performs security-focused code reviews on approximately 50 PRs daily, currently costing $150/day using the synchronous API. Reviews are non-blocking—developers merge after tests pass and address findings in follow-up commits. You're evaluating the Message Batches API for its 50% cost reduction.\nWhat factor most determines whether batch processing is appropriate for this use case?",
+  "options": {
+    "A": "Whether you can structure each review as a single request without multi-turn refinement.",
+    "B": "Whether reducing per-review latency from 30-60 seconds to near-instant matters for your workflow.",
+    "C": "Whether review feedback arriving up to 24 hours after PR creation remains actionable.",
+    "D": "Whether your result processing can handle reviews arriving in a different order than submitted."
+  },
+  "correct_answer": "C. Whether review feedback arriving up to 24 hours after PR creation remains actionable.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Bài toán đưa ra các dữ kiện quan trọng:",
+    "points": [
+      "Reviews là non-blocking: developer merge ngay khi test pass và xử lý findings trong các commit follow-up. Nghĩa là review không nằm trên critical path của việc merge.",
+      "Message Batches API giảm 50% chi phí nhưng đánh đổi bằng độ trễ: phần lớn batch hoàn tất trong vòng dưới 1 giờ, nhưng Anthropic chỉ cam kết xử lý trong tối đa 24 giờ (sau đó request bị expired). Không có SLA về thời gian trả kết quả cụ thể.",
+      "Vì vậy câu hỏi quyết định (deciding factor) là: feedback đến muộn tới 24 giờ sau khi tạo PR có còn actionable không? Nếu developer vẫn có thể sửa trong commit follow-up dù nhận kết quả muộn, batch là lựa chọn phù hợp; nếu feedback muộn bị bỏ qua hoặc code đã lên production, khoản tiết kiệm $75/ngày không đáng đánh đổi."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Cấu trúc review thành single request không multi-turn):",
+        "trap": "Bẫy yếu tố phụ (Secondary constraint trap)",
+        "explanation": "Batch API đúng là chỉ xử lý từng request Messages độc lập (không có vòng lặp tool use tương tác giữa các lượt). Tuy nhiên một security review cho PR vốn dễ dàng đóng gói thành một request duy nhất (diff + instructions → findings). Đây là điều kiện kỹ thuật dễ thỏa mãn, không phải yếu tố quyết định cốt lõi như độ trễ chấp nhận được."
+      },
+      "B": {
+        "title": "B sai (Giảm latency từ 30-60 giây xuống gần như tức thì):",
+        "trap": "Bẫy đảo ngược đặc tính (Inverted trade-off trap)",
+        "explanation": "Batch API không hề giảm latency — ngược lại, nó tăng latency (từ vài chục giây lên tới tối đa 24 giờ) để đổi lấy giảm 50% chi phí. Phương án này mô tả sai bản chất của Batch API."
+      },
+      "D": {
+        "title": "D sai (Xử lý kết quả trả về khác thứ tự submit):",
+        "trap": "Bẫy chi tiết triển khai (Implementation detail trap)",
+        "explanation": "Kết quả batch quả thực có thể không theo thứ tự submit, nhưng mỗi request có custom_id để ghép nối kết quả với PR tương ứng. Đây là chi tiết triển khai đơn giản, không quyết định việc batch có phù hợp với use case hay không."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Message Batches API:",
+    "points": [
+      "Message Batches API xử lý bất đồng bộ (asynchronous) các request Messages với chi phí giảm 50% so với API đồng bộ; hầu hết batch hoàn tất trong vòng 1 giờ nhưng thời gian xử lý tối đa là 24 giờ.",
+      "Batch phù hợp cho các workload không cần phản hồi tức thì (latency-tolerant) như evaluation, phân tích dữ liệu lớn, content moderation hay review không chặn (non-blocking); không phù hợp cho các luồng blocking như pre-merge check.",
+      "Mỗi request trong batch có custom_id để đối chiếu kết quả, vì kết quả không đảm bảo theo thứ tự submit."
+    ]
+  }
+}

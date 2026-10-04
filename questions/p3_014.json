@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_014",
+  "domain": "Batch Processing & Cost Optimization (Xử lý hàng loạt & Tối ưu chi phí)",
+  "topic": "Câu P3.14: Batch-First Extraction with Targeted Resubmission of Failed Contracts",
+  "question": "Your team is extracting structured data from 50,000 legacy legal contracts under a two-week deadline. Initial testing with 500 sample documents shows 82% pass JSON schema first attempt, while the remaining 18% fall due to diverse issues—missing required fields, malformed dates, and incorrectly identified parties. Documents that fail typically need refinements targeting their specific failure modes before extraction succeeds.\nWhich batch processing strategy is the most cost-efficient while still meeting the deadline?",
+  "options": {
+    "A": "Split documents into 10 sequential batches of 5,000 each, analysing results and refining prompts between batches to improve extraction quality progressively.",
+    "B": "Submit all 50,000 documents via batch API, then submit failed extractions in successive batches— refining prompts between each batch—until all documents pass validation.",
+    "C": "Use the real-time API for all 50,000 documents since the batch API's 24-hour processing window creates unacceptable deadline risk.",
+    "D": "Process 2,000 sample documents via real time API to identify failure patterns and refine prompts, then batch process all 50,000 with the optimized prompts."
+  },
+  "correct_answer": "B. Submit all 50,000 documents via batch API, then submit failed extractions in successive batches— refining prompts between each batch—until all documents pass validation.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Bài toán đưa ra các dữ kiện quan trọng:",
+    "points": [
+      "50.000 hợp đồng, deadline hai tuần — đủ thời gian cho nhiều vòng batch (mỗi vòng tối đa 24 giờ, thường dưới 1 giờ). Batch API giảm 50% chi phí, nên xử lý toàn bộ khối lượng qua batch là tối ưu chi phí nhất.",
+      "82% tài liệu pass ngay lần đầu, nghĩa là prompt hiện tại đã đủ tốt cho đa số. 18% lỗi do các nguyên nhân đa dạng (missing fields, malformed dates, sai parties) và 'need refinements targeting their specific failure modes' — tức là cần tinh chỉnh theo từng nhóm lỗi cụ thể chứ không có một bản prompt tối ưu chung.",
+      "Chiến lược: submit toàn bộ qua batch, dùng custom_id để xác định các tài liệu fail validation, rồi chỉ resubmit các tài liệu lỗi trong các batch kế tiếp với prompt được tinh chỉnh theo đúng failure mode (kèm thông tin lỗi validation) cho đến khi tất cả pass. Mọi token đều được tính giá batch và chỉ phần lỗi mới bị xử lý lại."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (10 batch tuần tự 5.000 tài liệu, tinh chỉnh prompt giữa các batch):",
+        "trap": "Bẫy tuần tự hóa không cần thiết (Sequential bottleneck trap)",
+        "explanation": "Tinh chỉnh prompt giữa các batch không xử lý lại các tài liệu đã fail ở batch trước, và việc chờ phân tích sau mỗi batch kéo dài thời gian. Vì lỗi là đặc thù theo từng tài liệu, cải thiện prompt chung tiến triển dần không đảm bảo các tài liệu fail được sửa."
+      },
+      "C": {
+        "title": "C sai (Dùng real-time API cho cả 50.000 tài liệu):",
+        "trap": "Bẫy đánh giá sai rủi ro deadline (Misjudged latency risk trap)",
+        "explanation": "Với deadline hai tuần, cửa sổ 24 giờ của batch không phải rủi ro. Dùng real-time API gấp đôi chi phí và còn bị giới hạn rate limit khi xử lý 50.000 tài liệu."
+      },
+      "D": {
+        "title": "D sai (2.000 mẫu qua real-time API để tối ưu prompt rồi batch toàn bộ):",
+        "trap": "Bẫy tối ưu trước không xử lý lỗi còn sót (Upfront-only optimization trap)",
+        "explanation": "Đội đã có 500 mẫu cho thấy pattern lỗi; chạy thêm 2.000 mẫu bằng giá real-time tốn thêm chi phí. Quan trọng hơn, vì lỗi đa dạng và cần tinh chỉnh theo từng failure mode, một prompt 'optimized' chung vẫn để lại một tỷ lệ tài liệu fail — phương án D không có cơ chế xử lý phần lỗi còn lại."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Message Batches API:",
+    "points": [
+      "Batch API giảm 50% chi phí, xử lý tối đa trong 24 giờ; phù hợp với khối lượng lớn không cần phản hồi tức thì.",
+      "Dùng custom_id để xác định các request thất bại hoặc có kết quả không hợp lệ và chỉ resubmit có mục tiêu (targeted retries) những item đó, kèm điều chỉnh prompt/feedback lỗi validation phù hợp."
+    ]
+  }
+}

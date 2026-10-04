@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_034",
+  "domain": "Claude Code CLI & CI/CD Automation (Claude Code CLI & Tự động hóa CI/CD)",
+  "topic": "Câu P3.34: Per-Invocation Caps with --max-turns and --max-budget-usd in claude -p",
+  "question": "During initial testing of the automated review pipeline, you notice that reviews on large PRs (50+ changed files) sometimes take over 20 minutes and cost $8-12 per run due to extensive agentic loops — Claude reads files, runs analysis tools, and iterates many times. Your team needs each invocation to abort once it reaches a fixed iteration count and a fixed dollar amount, enforced by Claude Code itself rather than the surrounding job runner.\nWhich configuration change directly enforces both of those per-invocation caps?",
+  "options": {
+    "A": "Add --max-turns 10 --max-budget-usd 2.00 to the claude -p invocation to cap iterations and spend.",
+    "B": "Switch the --model flag to a smaller, cheaper model so each iteration uses fewer tokens and lower per- call cost.",
+    "C": "Set timeout-minutes: 5 on the GitHub Actions job step and monitor per-run costs via the Anthropic Console usage dashboard.",
+    "D": "Set --permission-mode dontAsk to auto-deny any tool permission requests not in the explicitly allowed set."
+  },
+  "correct_answer": "A. Add --max-turns 10 --max-budget-usd 2.00 to the claude -p invocation to cap iterations and spend.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Đề bài yêu cầu hai giới hạn per-invocation (số vòng lặp và số tiền) được 'enforced by Claude Code itself':",
+    "points": [
+      "--max-turns giới hạn số lượt agentic trong chế độ non-interactive (print mode, -p); khi đạt giới hạn, Claude Code dừng phiên.",
+      "--max-budget-usd đặt mức chi phí tối đa (USD) cho các lời gọi API trong một lần chạy -p; vượt ngưỡng thì Claude Code tự dừng.",
+      "Hai cờ này được thực thi bên trong tiến trình Claude Code, đúng yêu cầu 'rather than the surrounding job runner', và áp dụng trên từng invocation."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Đổi sang model nhỏ hơn, rẻ hơn):",
+        "trap": "Bẫy giảm chi phí không phải giới hạn cứng (Cost reduction vs hard cap trap)",
+        "explanation": "Model rẻ hơn giảm chi phí mỗi lượt nhưng không đặt giới hạn số lượt hay số tiền; một PR lớn vẫn có thể lặp không giới hạn. Ngoài ra còn có thể giảm chất lượng review."
+      },
+      "C": {
+        "title": "C sai (timeout-minutes trên GitHub Actions + theo dõi Console):",
+        "trap": "Bẫy thực thi ở tầng job runner (External enforcement trap)",
+        "explanation": "timeout-minutes là giới hạn thời gian của job runner - chính là thứ đề bài loại trừ - và không giới hạn số lượt hay số tiền. Dashboard Console chỉ là giám sát sau sự việc, không phải cơ chế cưỡng chế."
+      },
+      "D": {
+        "title": "D sai (--permission-mode dontAsk):",
+        "trap": "Bẫy nhầm kiểm soát quyền với kiểm soát chi phí (Permissions vs budget trap)",
+        "explanation": "Permission mode điều khiển việc tool có được phép chạy hay không, không giới hạn số lượt hay chi tiêu. Agent vẫn có thể lặp nhiều lần với các tool được phép."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – CLI reference & Headless mode / GitHub Actions:",
+    "points": [
+      "--max-turns: giới hạn số lượt agentic trong chế độ print (non-interactive).",
+      "--max-budget-usd: giới hạn số tiền tối đa chi cho API calls trước khi dừng (chỉ ở print mode)."
+    ]
+  }
+}

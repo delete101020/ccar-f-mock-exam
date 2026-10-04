@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_049",
+  "domain": "Customer Support Agent Design & Human Escalation (Thiết kế Agent CSKH & Cơ chế chuyển giao cho người - Human Handoff)",
+  "topic": "Câu P1.49: Honoring Explicit Requests for a Human Agent Immediately",
+  "question": "A customer sends: \"This is frustrating. I've explained my issue twice and nothing is being resolved. I want to talk to a real person NOW.\" The agent has not yet called any tools to investigate their account.\nWhat should the agent do?",
+  "options": {
+    "A": "Acknowledge the frustration and ask one targeted question to understand the specific issue before escalating.",
+    "B": "Briefly explain what the agent can help with and offer to resolve the issue quickly, escalating only if the customer repeats their request.",
+    "C": "Immediately call escalate_to_human with the conversation history.",
+    "D": "First call get_customer and lookup_order to gather account context, then escalate to a human agent."
+  },
+  "correct_answer": "C. Immediately call escalate_to_human with the conversation history.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Tín hiệu trong tin nhắn khách hàng rất rõ ràng:",
+    "points": [
+      "Khách đã giải thích vấn đề hai lần mà chưa được giải quyết, và yêu cầu tường minh: \"I want to talk to a real person NOW.\" Đây là một trigger escalation rõ ràng – yêu cầu trực tiếp gặp người thật.",
+      "Khi khách hàng chủ động và dứt khoát yêu cầu gặp người, agent nên tôn trọng ngay lập tức bằng cách gọi escalate_to_human kèm lịch sử hội thoại (để khách không phải giải thích lần thứ ba), thay vì tiếp tục hỏi thêm hay điều tra.",
+      "Việc trì hoãn để thu thập thêm thông tin hay thuyết phục khách ở lại với bot sẽ làm tăng sự bực bội và vi phạm mong muốn đã được nói rõ của khách."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Hỏi thêm một câu trước khi escalate):",
+        "trap": "Bẫy trì hoãn yêu cầu tường minh (Delaying explicit request trap)",
+        "explanation": "Khách đã giải thích hai lần; hỏi thêm dù chỉ một câu là bắt họ lặp lại lần thứ ba, đi ngược yêu cầu \"NOW\"."
+      },
+      "B": {
+        "title": "B sai (Giới thiệu khả năng của agent, chỉ escalate nếu khách nhắc lại):",
+        "trap": "Bẫy giữ khách ở lại với bot (Deflection trap)",
+        "explanation": "Khách đã nói rõ và dứt khoát; đòi họ phải yêu cầu lại lần nữa là không tôn trọng ý muốn của khách. Cách \"offer to resolve\" chỉ phù hợp khi khách chưa yêu cầu tường minh và vấn đề nằm trong khả năng xử lý."
+      },
+      "D": {
+        "title": "D sai (Gọi get_customer và lookup_order trước rồi mới escalate):",
+        "trap": "Bẫy điều tra trước khi chuyển giao (Investigate-first trap)",
+        "explanation": "Yêu cầu gặp người không phụ thuộc vào kết quả tra cứu; thêm các bước tool call chỉ kéo dài thời gian chờ. Human agent có thể tự tra cứu từ thông tin handoff."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic – Customer support agent guidance (escalation criteria):",
+    "points": [
+      "Các trigger escalation rõ ràng bao gồm: khách hàng yêu cầu gặp người thật, cần ngoại lệ chính sách, hoặc agent không thể tiến triển.",
+      "Yêu cầu tường minh gặp con người nên được tôn trọng ngay, kèm context để khách không phải lặp lại."
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_043",
+  "domain": "Claude Code Configuration & Hooks (Cấu hình Claude Code & Hooks tất định)",
+  "topic": "Câu P2.43: Enforcing Formatting Deterministically with a PostToolUse Hook",
+  "question": "Your team's CLAUDE.md includes a rule: \"Use 4-space indentation and always run Prettier formatting.\" Despite this, code reviews reveal that roughly 30% of files Claude Code generates use inconsistent formatting — sometimes 2-space indentation, sometimes missing trailing commas. Adding emphasis (\"IMPORTANT: You MUST use Prettier formatting\") reduces violations to about 15%, but doesn't eliminate them.\nWhat is the most effective way to ensure all generated code is consistently formatted?",
+  "options": {
+    "A": "Extract the formatting rules into a dedicated skill that Claude loads automatically when generating code, with more detailed examples of correct formatting.",
+    "B": "Add a Stop hook with a prompt-based check that evaluates whether generated code follows formatting standards and prompts Claude to fix violations.",
+    "C": "Configure a Post ToolUse hook with an Edit|Write matcher that automatically runs Prettier on each file Claude modifies.",
+    "D": "Split the formatting rules into path-scoped .claude/rules/ files that load when Claude works on matching file types."
+  },
+  "correct_answer": "C. Configure a Post ToolUse hook with an Edit|Write matcher that automatically runs Prettier on each file Claude modifies.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Bản chất vấn đề: chỉ dẫn mang tính xác suất so với cơ chế tất định (deterministic):",
+    "points": [
+      "CLAUDE.md là context hướng dẫn, không phải cơ chế cưỡng chế. Dù thêm nhấn mạnh (\"IMPORTANT\", \"MUST\") giảm vi phạm từ 30% xuống 15%, mô hình vẫn có thể bỏ sót, vì tuân thủ instruction luôn mang tính xác suất.",
+      "Hooks trong Claude Code là các lệnh shell chạy tất định tại các thời điểm vòng đời (lifecycle events). Hook PostToolUse với matcher \"Edit|Write\" sẽ chạy sau mỗi lần Claude sửa/ghi file, và có thể gọi `prettier --write` trên đúng file vừa thay đổi.",
+      "Kết quả: định dạng được đảm bảo 100% bởi chính công cụ Prettier (formatter tất định) bất kể mô hình viết ra code định dạng thế nào. Đây là ví dụ kinh điển trong tài liệu hooks của Claude Code: \"auto-format code after edits\"."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Tách quy tắc format thành skill kèm ví dụ chi tiết):",
+        "trap": "Bẫy vẫn dựa vào xác suất (Still-probabilistic instruction trap)",
+        "explanation": "Skill chỉ là một cách khác để nạp hướng dẫn vào context. Thêm ví dụ có thể cải thiện tỷ lệ tuân thủ, nhưng không loại bỏ hoàn toàn vi phạm, vì mô hình vẫn tự \"định dạng bằng tay\" thay vì chạy formatter."
+      },
+      "B": {
+        "title": "B sai (Stop hook dùng prompt-based check để đánh giá format):",
+        "trap": "Bẫy dùng LLM để kiểm tra việc tool tất định làm được (LLM-as-formatter-judge trap)",
+        "explanation": "Prompt-based hook dùng mô hình để đánh giá, vẫn mang tính xác suất và tốn thêm token, thêm lượt sửa. Hơn nữa chỉ chạy khi Claude kết thúc phản hồi, không phải sau từng file. Trong khi đó Prettier có thể tự sửa định dạng chính xác tuyệt đối."
+      },
+      "D": {
+        "title": "D sai (Chia quy tắc thành .claude/rules/ theo đường dẫn):",
+        "trap": "Bẫy tổ chức lại instruction (Instruction reorganization trap)",
+        "explanation": "Path-scoped rules giúp nạp đúng hướng dẫn cho đúng loại file, nhưng bản chất vẫn là instruction trong context. Vấn đề ở đây không phải hướng dẫn thiếu hay sai chỗ, mà là instruction không thể đảm bảo tuân thủ tuyệt đối."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Hooks (hooks guide & hooks reference):",
+    "points": [
+      "Hooks cung cấp khả năng kiểm soát tất định (deterministic control) đối với hành vi của Claude Code, đảm bảo một số hành động luôn xảy ra thay vì phụ thuộc vào việc LLM chọn thực hiện.",
+      "Sự kiện PostToolUse chạy sau khi tool hoàn tất; matcher như \"Edit|Write\" giới hạn hook vào các thao tác sửa file. Tự động format (ví dụ chạy Prettier) sau mỗi lần sửa file là use case được tài liệu nêu rõ."
+    ]
+  }
+}

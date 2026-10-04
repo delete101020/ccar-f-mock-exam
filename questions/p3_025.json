@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_025",
+  "domain": "Tool Design & Guardrails (Thiết kế Tool & Cơ chế kiểm soát tất định)",
+  "topic": "Câu P3.25: Tamper-Proof $500 Approval Threshold Enforced Inside the Tool",
+  "question": "Your expense reimbursement agent processes employee requests using a process reimbursement tool. Company policy requires that reimbursements above $500 must be approved before funds are disbursed. \nThe agent handles hundreds of requests daily, and you need the threshold enforcement to be tamper-proof regardless of how the agent is prompted ensures the $500 approval threshold cannot be bypassed?",
+  "options": {
+    "A": "The process reimbursement tool accepts an approved by manager parameter. The system prompt instructs the agent to only set this to true after confirming that a manager approved the request. A nightly audit script reviews all reimbursements where approved by manager was set to true.",
+    "B": "Provide two tools: auto reimburse (hard-coded limit of $500) and manager approval. Include detailed system prompt instructions telling the agent to check the amount and use the appropriate tool. Add a Post ToolUse hook that logs which tool was called for auditing.",
+    "C": "The process reimbursement tool accepts amount and details, and internally enforces the threshold; amounts <$500 are auto-disbursed and the tool returns a success confirmation. Amounts >$500 cause the tool to create a pending approval request and return a status indicating manager review is pending.",
+    "D": "Implement the threshold check in a PreToolUse hook that inspects the amount parameter before process reimbursement executes. If the amount exceeds $500, the hook modifies the context to add a requires approval: true flag, which the tool checks before disbursing."
+  },
+  "correct_answer": "C. The process reimbursement tool accepts amount and details, and internally enforces the threshold; amounts <$500 are auto-disbursed and the tool returns a success confirmation. Amounts >$500 cause the tool to create a pending approval request and return a status indicating manager review is pending.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Yêu cầu then chốt: 'tamper-proof regardless of how the agent is prompted' - tức là quy tắc không được phụ thuộc vào việc mô hình làm theo chỉ dẫn:",
+    "points": [
+      "Business rule quan trọng về tài chính phải được thực thi tất định trong code (deterministic enforcement), không nằm trong prompt. Khi process_reimbursement tự kiểm tra amount bên trong, không có cách nào để agent (dù bị prompt injection hay suy luận sai) giải ngân khoản > $500 mà chưa duyệt.",
+      "Tool chỉ nhận amount và details - không có tham số nào cho phép agent tự khai báo 'đã được duyệt'. Bề mặt tấn công (attack surface) bị loại bỏ hoàn toàn.",
+      "Tool trả về trạng thái rõ ràng (success hoặc pending manager review), giúp agent thông báo chính xác cho nhân viên. Đây là nguyên tắc 'poka-yoke' trong thiết kế tool: làm cho việc dùng sai trở nên bất khả thi."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Tham số approved_by_manager do agent tự đặt + audit hằng đêm):",
+        "trap": "Bẫy tin vào tự khai báo của mô hình (Self-attestation trap)",
+        "explanation": "Agent có thể đặt approved_by_manager = true mà không có duyệt thật, do prompt injection hoặc hiểu nhầm. Audit hằng đêm chỉ phát hiện sau khi tiền đã giải ngân (detective, không phải preventive)."
+      },
+      "B": {
+        "title": "B sai (Hai tool + chỉ dẫn system prompt + PostToolUse log):",
+        "trap": "Bẫy định tuyến dựa vào prompt (Prompt-dependent routing trap)",
+        "explanation": "Mặc dù auto_reimburse có giới hạn cứng, việc chọn đúng tool vẫn phụ thuộc chỉ dẫn prompt; còn PostToolUse hook chỉ ghi log sau khi thực thi, không ngăn chặn được gì. Kiến trúc này phức tạp hơn mà không mạnh hơn phương án C."
+      },
+      "D": {
+        "title": "D sai (PreToolUse hook gắn cờ requires_approval vào context):",
+        "trap": "Bẫy thực thi gián tiếp qua context (Indirect enforcement trap)",
+        "explanation": "Hook không chặn lời gọi mà chỉ 'thêm cờ vào context' rồi trông chờ tool kiểm tra cờ đó - logic bị chia ra hai nơi, dễ lệch và mong manh. Nếu tool đã phải kiểm tra thì đặt luật ngưỡng ngay trong tool là đơn giản và chắc chắn hơn; hook cũng chỉ áp dụng trong runtime cụ thể, còn tool là điểm thực thi duy nhất cho mọi đường gọi."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic – Writing effective tools for agents & Agent SDK / Claude Code hooks documentation:",
+    "points": [
+      "Các ràng buộc bắt buộc (business rules, an toàn tài chính) nên được thực thi bằng code tất định thay vì phụ thuộc chỉ dẫn prompt, vì LLM là hệ thống xác suất.",
+      "Thiết kế tool sao cho khó dùng sai: hạn chế tham số, trả về trạng thái và thông điệp rõ ràng để agent xử lý tiếp."
+    ]
+  }
+}

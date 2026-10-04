@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_032",
+  "domain": "Agent SDK & Multi-Agent Orchestration (Agent SDK & Điều phối đa Agent - Subagent Delegation)",
+  "topic": "Câu P1.32: Coordinator Fails to Delegate Because Task Tool Is Not Allowed",
+  "question": "The coordinator agent has AgentFunctions configured for all four specialized subagents, each with appropriate descriptions and restrictions. During testing, you find the coordinator sometimes fails to delegate—it writes \"I'll ask the web search agent to find sources\" without actually invoking it.\nWhat is the most likely cause?",
+  "options": {
+    "A": "The AgentFunctions are configured correctly, but the coordinator's system prompt includes a statement that prevents it from knowing the available subagent types.",
+    "B": "Subagent context limit descriptions from the coordinator don't provide enough context; you need to configure explicit context content between coordinator and tool descriptions.",
+    "C": "The coordinator's allowed Tools configuration doesn't include \"Task\", so while it can describe delegation, it cannot actually invoke the tool required to spawn subagents.",
+    "D": "The coordinator's max_tokens setting is too low, causing the Task tool invocation to be truncated before the subagent parameter can be specified."
+  },
+  "correct_answer": "C. The coordinator's allowed Tools configuration doesn't include \"Task\", so while it can describe delegation, it cannot actually invoke the tool required to spawn subagents.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Triệu chứng: coordinator nói \"I'll ask the web search agent...\" nhưng không thực sự gọi subagent.",
+    "points": [
+      "Trong Claude Agent SDK / Claude Code, việc spawn subagent được thực hiện thông qua một tool cụ thể (Task tool, nay còn gọi là Agent tool). Coordinator chỉ có thể ủy quyền nếu tool này nằm trong danh sách allowedTools của nó.",
+      "Các agent definitions (mô tả, giới hạn của 4 subagent) đã được cấu hình đúng, nên coordinator biết các subagent tồn tại và có thể mô tả việc ủy quyền bằng văn bản. Nhưng nếu \"Task\" không có trong allowedTools, mô hình không có tool nào để thực hiện hành động đó.",
+      "Kết quả là mô hình chỉ có thể \"nói\" về việc delegate thay vì phát ra một tool_use block — đúng chính xác triệu chứng quan sát được.",
+      "Cách sửa: thêm \"Task\" (Agent) vào allowedTools của coordinator."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (System prompt ngăn coordinator biết các loại subagent):",
+        "trap": "Bẫy mâu thuẫn với triệu chứng (Contradicts observed behavior trap)",
+        "explanation": "Coordinator đã nhắc đúng tên \"web search agent\", chứng tỏ nó biết các subagent tồn tại. Vấn đề không phải nhận thức mà là khả năng thực thi hành động."
+      },
+      "B": {
+        "title": "B sai (Mô tả context limit không đủ):",
+        "trap": "Bẫy thuật ngữ gây nhiễu (Jargon distractor trap)",
+        "explanation": "Phương án này mô tả một cấu hình không tồn tại và không liên quan. Thiếu context giữa coordinator và subagent sẽ dẫn đến subagent làm việc kém, chứ không làm coordinator thất bại trong việc phát ra lời gọi tool."
+      },
+      "D": {
+        "title": "D sai (max_tokens quá thấp làm cắt cụt lời gọi Task):",
+        "trap": "Bẫy nguyên nhân không khớp triệu chứng (Mismatched root cause trap)",
+        "explanation": "Nếu max_tokens quá thấp, response sẽ dừng với stop_reason \"max_tokens\" và có tool_use block bị cắt dở — không phải mô hình viết một câu hoàn chỉnh \"I'll ask...\" rồi kết thúc mà không gọi tool. Triệu chứng này xảy ra lặp lại theo kiểu \"sometimes\" nhất quán với việc thiếu tool, không phải giới hạn token."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Agent SDK Docs – Subagents & Permissions (allowedTools); Claude Code Docs – Subagents.",
+    "points": [
+      "Subagent được gọi thông qua Task/Agent tool; tool này phải được bao gồm trong allowedTools để agent chính có thể ủy quyền.",
+      "allowedTools quyết định chính xác những tool mà agent có thể gọi; một tool không được cho phép thì mô hình không thể thực thi hành động tương ứng."
+    ]
+  }
+}

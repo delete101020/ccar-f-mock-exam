@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_038",
+  "domain": "Prompt Engineering & Few-Shot Prompting (Kỹ thuật Prompt & Ví dụ mẫu Few-shot)",
+  "topic": "Câu P3.38: Annotated Few-Shot Examples to Generalize Code Review Judgment",
+  "question": "After deploying automated code review, developers report that approximately 35% of flagged findings are false positives falling into consistent patterns: style suggestion contradicting team conventions, security warnings for patterns safe in your deployment context, and performance suggestions that would degrade your specific use case. You want to reduce false positives while maintaining the ability to catch genuine issues.\nWhich approach best enables the model to generalize its judgment to novel code patterns it hasn't seen before?",
+  "options": {
+    "A": "Include few-shot examples in your prompt showing annotated code snippets that distinguish acceptable patterns from genuine issues in each category.",
+    "B": "Implement post-processing that uses keyword matching to filter out findings containing terms like \"convention,\" \"context-dependent,\" or \"trade-off.\"",
+    "C": "Add instructions to your system prompt to \"be conservative,\" \"only flag definite issues,\" and \"consider that some patterns may be intentional.\"",
+    "D": "Create a comprehensive written specification of all patterns that should not be flagged, then include this full documentation in the system prompt."
+  },
+  "correct_answer": "A. Include few-shot examples in your prompt showing annotated code snippets that distinguish acceptable patterns from genuine issues in each category.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Câu hỏi tập trung vào khả năng 'generalize its judgment to novel code patterns':",
+    "points": [
+      "False positive rơi vào các mẫu nhất quán (style trái quy ước team, security warning an toàn trong bối cảnh triển khai, performance suggestion phản tác dụng). Few-shot examples có chú thích cho từng category minh họa trực tiếp ranh giới giữa 'chấp nhận được' và 'vấn đề thật'.",
+      "Ví dụ có chú thích lý do (annotated) dạy cho mô hình cách suy luận - vì sao một mẫu được chấp nhận trong bối cảnh này - giúp nó áp dụng cùng logic cho những đoạn code chưa từng gặp, thay vì chỉ ghi nhớ một danh sách.",
+      "Anthropic coi ví dụ đa dạng, liên quan (multishot prompting) là một trong những cách hiệu quả nhất để tăng độ chính xác và tính nhất quán."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Lọc theo từ khóa sau xử lý):",
+        "trap": "Bẫy lọc từ khóa thô (Keyword filter trap)",
+        "explanation": "Keyword matching không hiểu ngữ nghĩa: sẽ loại cả các vấn đề thật có chứa 'trade-off' và bỏ sót false positive không dùng các từ đó. Nó cũng không cải thiện khả năng phán đoán của mô hình."
+      },
+      "C": {
+        "title": "C sai (Chỉ dẫn 'be conservative', 'only flag definite issues'):",
+        "trap": "Bẫy chỉ dẫn mơ hồ (Vague instruction trap)",
+        "explanation": "Chỉ dẫn chung chung không cho biết quy ước nào của team hay bối cảnh triển khai nào là an toàn. Kết quả thường là giảm cả true positive (bỏ sót lỗi thật) mà không sửa đúng các category false positive."
+      },
+      "D": {
+        "title": "D sai (Đặc tả đầy đủ mọi mẫu không được flag):",
+        "trap": "Bẫy liệt kê vét cạn (Exhaustive enumeration trap)",
+        "explanation": "Danh sách mẫu chỉ bao phủ những gì đã biết, không giúp generalize sang mẫu mới - đúng điều đề bài hỏi. Tài liệu dài còn phình prompt và khó bảo trì."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Use examples (multishot prompting) to guide Claude's behavior:",
+    "points": [
+      "Ví dụ liên quan, đa dạng và rõ ràng giúp Claude hiểu yêu cầu tốt hơn, giảm sai lệch và tăng tính nhất quán.",
+      "Ví dụ nên bao phủ các edge case và đủ đa dạng để Claude không bám vào các mẫu bề mặt không mong muốn."
+    ]
+  }
+}

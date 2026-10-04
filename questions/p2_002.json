@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_002",
+  "domain": "Context Management & Multi-Agent Delegation (Quản lý Context & Phân nhánh Subagent)",
+  "topic": "Câu P2.2: Context Degradation in Large Legacy Module Investigation via Subagent Delegation",
+  "question": "An engineer asks your agent to identify untested code paths in a legacy payment processing module spanning 45 files. After reading the first 8 source files, the agent's responses are becoming noticeably less accurate — it's forgetting previously discussed code patterns and hasn't yet located all test files or traced critical payment flows.\nWhat's the most effective approach to complete this investigation?",
+  "options": {
+    "A": "Document all current findings in a summary report, clear context completely, then use that report as the sole reference for continuing the investigation.",
+    "B": "Spawn subagents to investigate specific questions (e.g., \"find all test files for payment processing\", \"trace refund flow dependencies\") while the main agent coordinates findings and preserves high-level understanding.",
+    "C": "Switch to using Grep to search for specific function names instead of reading full files, reducing the content loaded into context for remaining exploration.",
+    "D": "Clear context with /clear, then selectively re-read only the most critical files discovered so far, writing key findings to a scratchpad file that persists between context resets."
+  },
+  "correct_answer": "B. Spawn subagents to investigate specific questions (e.g., \"find all test files for payment processing\", \"trace refund flow dependencies\") while the main agent coordinates findings and preserves high-level understanding.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Các dữ kiện then chốt của bài toán:",
+    "points": [
+      "Triệu chứng suy giảm ngữ cảnh (context degradation): Mới đọc 8/45 file mà agent đã quên các pattern đã thảo luận — context window chính đang bị lấp đầy bởi nội dung file thô (verbose exploration output).",
+      "Công việc còn lại có thể tách thành các câu hỏi độc lập, phạm vi rõ ràng: tìm toàn bộ test files của payment processing, trace dependency của refund flow, v.v. Đây chính là loại tác vụ phù hợp nhất để giao cho subagent.",
+      "Subagent chạy trong context window riêng (isolated context): nó tự đọc hàng chục file, rồi chỉ trả về bản tóm tắt cô đọng (condensed findings) cho agent chính. Agent chính giữ vai trò coordinator, bảo toàn hiểu biết tổng thể (high-level understanding) mà không bị nhiễm hàng nghìn dòng code chi tiết.",
+      "Mô hình orchestrator–worker này cũng cho phép chạy song song các câu hỏi độc lập, rút ngắn thời gian điều tra 37 file còn lại."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Viết report rồi clear toàn bộ context, chỉ dựa vào report):",
+        "trap": "Bẫy mất ngữ cảnh do reset toàn phần (Lossy full reset trap)",
+        "explanation": "Clear hoàn toàn và chỉ giữ một bản report làm nguồn tham chiếu duy nhất khiến agent mất các chi tiết chưa được ghi lại. Quan trọng hơn, nó không giải quyết nguyên nhân gốc: khi tiếp tục đọc 37 file còn lại trong cùng một context, vấn đề suy giảm sẽ tái diễn."
+      },
+      "C": {
+        "title": "C sai (Chuyển sang Grep thay vì đọc full file):",
+        "trap": "Bẫy tối ưu cục bộ (Partial mitigation trap)",
+        "explanation": "Grep giúp giảm lượng nội dung nạp vào context, nhưng việc trace payment flow và xác định untested code paths đòi hỏi hiểu logic trong code, không chỉ tìm tên hàm. Grep đơn thuần cũng không tách biệt được context — mọi kết quả vẫn dồn vào context chính, chỉ làm chậm chứ không chặn được degradation."
+      },
+      "D": {
+        "title": "D sai (/clear rồi re-read file quan trọng, ghi scratchpad):",
+        "trap": "Bẫy vòng lặp reset thủ công (Manual reset loop trap)",
+        "explanation": "Scratchpad file là kỹ thuật hữu ích, nhưng /clear rồi đọc lại file vẫn dồn toàn bộ việc khám phá vào một context duy nhất; với 45 file, agent sẽ phải lặp lại chu kỳ clear–re-read nhiều lần, tốn token và dễ mất mạch suy luận. Subagent delegation giải quyết tận gốc bằng cách cô lập phần khám phá chi tiết."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Subagents & Anthropic Engineering: “How we built our multi-agent research system” / “Effective context engineering for AI agents”:",
+    "points": [
+      "Subagents có context window riêng, giúp tránh làm ô nhiễm context của cuộc hội thoại chính và chỉ trả về kết quả liên quan.",
+      "Nên giao các nhiệm vụ khám phá/tìm kiếm có phạm vi rõ ràng cho subagent, trong khi agent chính điều phối và tổng hợp findings."
+    ]
+  }
+}

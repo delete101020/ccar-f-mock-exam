@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_023",
+  "domain": "Tool Use & Claude Code Built-in Tools (Sử dụng Tool & Công cụ tích hợp của Claude Code)",
+  "topic": "Câu P3.23: Using Grep for Content Search of Dangerous eval() Calls",
+  "question": "You're building a security scanning workflow. \nWhen engineers need to locate all occurrences of a dangerous function like eval() across a large codebase, which tool should your agent use for content search?",
+  "options": {
+    "A": "Use Glob with a pattern like /eval to find files, then Read each matching file.",
+    "B": "Use Grep to search for the pattern \"eval(\" across all files in the codebase.",
+    "C": "Read the project's main entry file and follow import statements to trace where eval might be used.",
+    "D": "Use Bash to run ls -R | grep eval to recursively list files containing eval."
+  },
+  "correct_answer": "B. Use Grep to search for the pattern \"eval(\" across all files in the codebase.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Phân biệt đúng vai trò của các công cụ tích hợp trong Claude Code:",
+    "points": [
+      "Grep là công cụ tìm kiếm nội dung (content search) bên trong file, được xây dựng trên ripgrep, hỗ trợ regex và lọc theo glob/type. Yêu cầu 'locate all occurrences of eval()' chính là bài toán tìm theo nội dung, nên Grep là công cụ đúng.",
+      "Glob chỉ tìm file theo tên/đường dẫn (file pattern matching), không nhìn vào nội dung file. Read dùng để đọc một file đã biết vị trí.",
+      "Grep trả về đúng file và dòng chứa 'eval(' trên toàn codebase lớn trong một lần gọi, tiết kiệm context window và không bỏ sót các file không nằm trong chuỗi import - điều rất quan trọng với một security scan."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Glob với pattern /eval rồi Read từng file):",
+        "trap": "Bẫy nhầm lẫn tìm tên file với tìm nội dung (Filename vs content search trap)",
+        "explanation": "Glob khớp tên/đường dẫn file, không khớp nội dung. Pattern '/eval' chỉ tìm được file hoặc thư mục tên 'eval', bỏ sót mọi file gọi eval() trong mã. Đọc từng file sau đó còn lãng phí context."
+      },
+      "C": {
+        "title": "C sai (Đọc entry file và lần theo import):",
+        "trap": "Bẫy duyệt thủ công không đầy đủ (Manual traversal / Incomplete coverage trap)",
+        "explanation": "Lần theo import tốn rất nhiều lượt Read trên codebase lớn và bỏ sót các file không nằm trong đồ thị import từ entry point (scripts, test, dynamic import, plugin). Với security scan, độ phủ không đầy đủ là không chấp nhận được."
+      },
+      "D": {
+        "title": "D sai (Bash ls -R | grep eval):",
+        "trap": "Bẫy lệnh shell sai ngữ nghĩa (Wrong shell semantics trap)",
+        "explanation": "'ls -R | grep eval' chỉ lọc tên file chứa chữ 'eval', không tìm trong nội dung file. Ngoài ra, Claude Code khuyến nghị dùng công cụ Grep chuyên dụng thay vì grep/find qua Bash để có kết quả có cấu trúc và kiểm soát quyền tốt hơn."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Tools available to Claude (Read, Glob, Grep, Bash...):",
+    "points": [
+      "Glob: tìm file theo pattern tên; Grep: tìm pattern trong nội dung file; Read: đọc nội dung một file cụ thể.",
+      "Hướng dẫn tool của Claude Code ưu tiên dùng Grep/Glob chuyên dụng thay vì các lệnh grep, find, ls qua Bash cho tác vụ tìm kiếm."
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_046",
+  "domain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "topic": "Câu P1.46: Reporting MCP Tool Errors via isError in Tool Results",
+  "question": "When implementing your lookup_order MCP tool, the backend sometimes returns errors (e.g., \"Order not found\" or temporary database failures).\nWhat is the correct pattern for communicating these errors back to the agent?",
+  "options": {
+    "A": "Log the error server-side and return an empty result to avoid confusing the model",
+    "B": "Return a success response with a \"status\" field indicating the error type",
+    "C": "Throw an exception from the tool handler so the agent framework can catch and log it",
+    "D": "Return the error message in the tool result content with the isError flag set to true"
+  },
+  "correct_answer": "D. Return the error message in the tool result content with the isError flag set to true",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Theo đặc tả MCP, có hai loại lỗi khác nhau:",
+    "points": [
+      "Protocol errors (JSON-RPC error): dùng cho lỗi ở tầng giao thức như tool không tồn tại, tham số không hợp lệ.",
+      "Tool execution errors: lỗi nghiệp vụ hoặc backend xảy ra khi tool đã chạy (ví dụ \"Order not found\", database tạm thời lỗi). Những lỗi này phải được trả về trong kết quả tool (content) với cờ `isError: true`.",
+      "Khi lỗi nằm trong tool result, model nhìn thấy thông báo lỗi và có thể tự suy luận bước tiếp theo: hỏi lại khách mã đơn hàng, thử lại sau, hoặc báo cho người dùng. Ở phía Claude API, tương ứng là `tool_result` với `is_error: true`."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Chỉ log phía server, trả kết quả rỗng):",
+        "trap": "Bẫy che giấu lỗi (Silent failure trap)",
+        "explanation": "Kết quả rỗng khiến model không phân biệt được \"không có dữ liệu\" với \"hệ thống lỗi\", dẫn đến kết luận sai hoặc hallucinate. Model cần thông tin lỗi để phục hồi."
+      },
+      "B": {
+        "title": "B sai (Trả response thành công với trường status chứa lỗi):",
+        "trap": "Bẫy tín hiệu mâu thuẫn (Mixed success/error signal trap)",
+        "explanation": "Đánh dấu thành công cho một lần gọi thất bại làm mờ ngữ nghĩa lỗi; client và model có thể coi đó là dữ liệu hợp lệ. MCP đã có cơ chế chuẩn `isError` cho đúng mục đích này."
+      },
+      "C": {
+        "title": "C sai (Throw exception để framework bắt và log):",
+        "trap": "Bẫy lỗi lọt ra ngoài tầm nhìn của model (Exception swallowing trap)",
+        "explanation": "Exception biến thành protocol error hoặc bị framework nuốt, model không nhận được nội dung lỗi có ý nghĩa để quyết định hành động; trải nghiệm agent bị gián đoạn."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Model Context Protocol Specification – Tools (Error Handling) & Claude API Docs – Tool use (is_error):",
+    "points": [
+      "MCP spec: lỗi khi thực thi tool nên được báo trong kết quả với `isError: true` để LLM có thể thấy và xử lý; protocol errors dành cho lỗi giao thức.",
+      "Claude API: `tool_result` có thể đặt `is_error: true` kèm nội dung mô tả lỗi để Claude điều chỉnh hành động."
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_003",
+  "domain": "Tool Design & Human-in-the-Loop (Thiết kế Tool & Cơ chế xác nhận của người dùng)",
+  "topic": "Câu P3.3: Returning Meaningful Context from a Resource Allocation Tool",
+  "question": "Your resource allocation tool returns a simple acknowledgment message after provisioning is requested. Users frequently approve allocations and immediately ask \"how much did that cost?\" or \"which project was that?\" - indicating they confirmed without understanding the request.\nWhat tool design change would most effectively address this?",
+  "options": {
+    "A": "Add a user_acknowledged: boolean parameter that must be set true, with instructions for the agent to only set it after the user explicitly confirms they reviewed the details",
+    "B": "Implement a 60-second hold before execution completes, allowing users time to review pending allocations and cancel if needed",
+    "C": "Add a detail_level parameter with options \"minimal\" or \"comprehensive\" that controls how much context the agent presents in confirmations",
+    "D": "Return structured data including cost estimate, target project, resource specifications, and impact summary in the tool response"
+  },
+  "correct_answer": "D. Return structured data including cost estimate, target project, resource specifications, and impact summary in the tool response",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Phân tích nguyên nhân gốc rễ (root cause):",
+    "points": [
+      "Tool hiện chỉ trả về một acknowledgment đơn giản, nên agent không có dữ liệu nào (cost, project, specs) để trình bày cho người dùng. Câu hỏi 'how much did that cost?' hay 'which project was that?' chứng tỏ thông tin này chưa bao giờ xuất hiện trong context.",
+      "Giải pháp đúng gốc rễ là thay đổi tool response: trả về dữ liệu có cấu trúc gồm cost estimate, target project, resource specifications và impact summary. Khi đó agent có đủ thông tin để trình bày rõ ràng và người dùng hiểu điều mình đang phê duyệt.",
+      "Đây đúng là nguyên tắc 'Return meaningful context from your tools' trong bài 'Writing effective tools for agents' của Anthropic: tool nên trả về thông tin có ý nghĩa, ưu tiên các trường mà agent và người dùng thực sự cần cho bước tiếp theo, thay vì chỉ một thông báo thành công mơ hồ."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Thêm tham số user_acknowledged: boolean):",
+        "trap": "Bẫy xác nhận hình thức (Rubber-stamp confirmation trap)",
+        "explanation": "Một cờ boolean không cung cấp thêm bất kỳ thông tin nào cho người dùng. Người dùng vẫn xác nhận mà không hiểu chi tiết; agent chỉ đơn giản set true sau khi user nói 'ok'. Vấn đề thiếu dữ liệu vẫn tồn tại."
+      },
+      "B": {
+        "title": "B sai (Chờ 60 giây trước khi thực thi):",
+        "trap": "Bẫy trì hoãn không giải quyết gốc rễ (Delay instead of information trap)",
+        "explanation": "Thời gian chờ chỉ hữu ích nếu người dùng có thông tin để xem xét. Khi response không chứa cost hay project, 60 giây chờ chỉ thêm friction mà không giúp người dùng hiểu yêu cầu."
+      },
+      "C": {
+        "title": "C sai (Thêm tham số detail_level minimal/comprehensive):",
+        "trap": "Bẫy cấu hình không cần thiết (Optional verbosity trap)",
+        "explanation": "Đẩy quyết định mức độ chi tiết cho agent khiến hành vi không nhất quán — agent vẫn có thể chọn 'minimal'. Hơn nữa, tham số này điều khiển cách trình bày chứ không đảm bảo tool trả về dữ liệu quan trọng như cost và project."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – \"Writing effective tools for agents\" & Tool Use Documentation:",
+    "points": [
+      "Nguyên tắc 'Return meaningful context': tool response nên chứa thông tin ngữ nghĩa có giá trị cao (high-signal) mà agent cần để hành động tiếp hoặc giải thích cho người dùng.",
+      "Thiết kế response có cấu trúc giúp agent trình bày tóm tắt chính xác, giảm hiểu lầm và tránh phải gọi thêm tool để truy vấn lại thông tin vừa thực hiện."
+    ]
+  }
+}

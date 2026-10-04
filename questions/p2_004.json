@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_004",
+  "domain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Định tuyến động - Dynamic Routing)",
+  "topic": "Câu P2.4: Optimizing Variable Query Complexity via Coordinator-Driven Dynamic Subagent Selection",
+  "question": "In production, you observe that simple fact-checking queries (e.g., \"What year was the Paris Climate Agreement signed?\") traverse all four subagents sequentially, consuming 40+ seconds and significant tokens per query. Complex comparative research benefits from the full pipeline. Your query distribution is diverse and evolving as users discover new applications.\nWhat's the most effective approach to optimize for varying query complexity?",
+  "options": {
+    "A": "Implement pattern-based routing that categorizes queries by structure (single-fact vs. comparative vs. analytical) and maps each category to a predefined subagent combination.",
+    "B": "Create a fast-path for factual questions that bypasses subagents entirely, routing all other queries through the complete pipeline to ensure research thoroughness.",
+    "C": "Train a query complexity classifier on labeled historical data to predict optimal subagent combinations, retraining periodically as query patterns evolve.",
+    "D": "Have the coordinator analyze each query and dynamically decide which subagents to invoke based on its assessment of query requirements."
+  },
+  "correct_answer": "D. Have the coordinator analyze each query and dynamically decide which subagents to invoke based on its assessment of query requirements.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Các dữ kiện quyết định lựa chọn kiến trúc:",
+    "points": [
+      "Truy vấn đơn giản (fact-checking) đang bị ép chạy qua cả 4 subagent tuần tự → lãng phí 40+ giây và token; truy vấn phức tạp thì lại cần đầy đủ pipeline.",
+      "Phân phối truy vấn “diverse and evolving” — người dùng liên tục khám phá ứng dụng mới. Mọi cơ chế phân loại cố định (rule, category, classifier huấn luyện sẵn) sẽ nhanh chóng lỗi thời.",
+      "Giải pháp: để coordinator (LLM) đánh giá từng truy vấn và quyết định động cần gọi subagent nào, bao nhiêu subagent. Đây là mô hình orchestrator–workers trong “Building Effective Agents”: orchestrator tự quyết định subtask dựa trên input cụ thể, phù hợp khi không thể định trước các bước.",
+      "Anthropic cũng khuyến nghị “scale effort to query complexity” trong hệ thống multi-agent research: truy vấn đơn giản chỉ cần ít hoặc không cần subagent, truy vấn phức tạp mới phân chia nhiều subagent. Coordinator thích ứng tự nhiên với query mới mà không cần retrain hay viết thêm rule."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Routing theo pattern với tổ hợp subagent định sẵn):",
+        "trap": "Bẫy phân loại cứng nhắc (Static routing trap)",
+        "explanation": "Pattern-based routing chỉ bao phủ các cấu trúc truy vấn đã biết. Với phân phối truy vấn đang thay đổi, các category cố định sẽ phân loại sai các dạng truy vấn mới và cần bảo trì rule liên tục."
+      },
+      "B": {
+        "title": "B sai (Fast-path cho câu hỏi factual, còn lại chạy full pipeline):",
+        "trap": "Bẫy nhị phân hóa độ phức tạp (Binary fast-path trap)",
+        "explanation": "Chỉ có hai nhánh (bỏ qua hoàn toàn hoặc chạy cả 4 subagent) nên các truy vấn trung bình vẫn bị chạy full pipeline lãng phí. Ngoài ra vẫn cần một cơ chế xác định “factual” — cũng là một bộ phân loại tĩnh."
+      },
+      "C": {
+        "title": "C sai (Huấn luyện classifier trên dữ liệu lịch sử, retrain định kỳ):",
+        "trap": "Bẫy over-engineering ML (Over-engineered classifier trap)",
+        "explanation": "Cần dữ liệu gán nhãn, pipeline huấn luyện và retrain định kỳ — chi phí vận hành lớn, và luôn trễ so với sự thay đổi của truy vấn (chỉ học được pattern đã xảy ra). Coordinator LLM đã có sẵn khả năng hiểu ngôn ngữ để đánh giá truy vấn mà không cần hạ tầng này."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Research – “Building Effective Agents” & Anthropic Engineering – “How we built our multi-agent research system”:",
+    "points": [
+      "Orchestrator-workers: LLM trung tâm phân rã tác vụ động và giao cho worker, phù hợp khi không dự đoán trước được các subtask cần thiết.",
+      "Hệ thống multi-agent research của Anthropic hướng dẫn lead agent điều chỉnh mức nỗ lực (số subagent, số tool call) theo độ phức tạp của truy vấn."
+    ]
+  }
+}

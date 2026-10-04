@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_023",
+  "domain": "Information Extraction & Prompt Engineering (Trích xuất thông tin & Kỹ thuật Prompt - Few-shot Examples)",
+  "topic": "Câu P1.23: Few-shot Examples for Varied Document Structures",
+  "question": "After implementing tool use with strict schema definitions, JSON syntax errors are eliminated, but 5% of extractions still have valid JSON with empty arrays or null values for required fields like citations and methodology. Spot-checking reveals that source documents contain this information, but in varied formats–inline citations vs. bibliographies, methodology sections vs. details embedded in introductions.\nWhat's the most effective way to address these failures?",
+  "options": {
+    "A": "Add few-shot examples demonstrating extractions from documents with varied structures–showing how to identify citations in different formats and locate methodology details across section types.",
+    "B": "Build a regex-based post-processing layer that scans source documents for citation patterns and methodology keywords, populating empty fields when the model fails to extract.",
+    "C": "Implement retry logic that re-sends requests when validation detects empty required fields.",
+    "D": "Modify your schema to make citations and methodology optional, and flag incomplete records for manual review rather than failing validation."
+  },
+  "correct_answer": "A. Add few-shot examples demonstrating extractions from documents with varied structures–showing how to identify citations in different formats and locate methodology details across section types.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Phân tích lỗi còn lại sau khi đã dùng tool use với strict schema:",
+    "points": [
+      "Tool use với strict schema đã loại bỏ lỗi cú pháp JSON — nghĩa là lớp cấu trúc đã ổn. 5% lỗi còn lại là lỗi ngữ nghĩa (semantic): JSON hợp lệ nhưng citations/methodology rỗng hoặc null trong khi tài liệu nguồn thực sự có thông tin.",
+      "Spot-check chỉ ra nguyên nhân gốc: thông tin xuất hiện dưới nhiều dạng khác nhau (inline citations vs bibliography; methodology section riêng vs chi tiết rải rác trong phần introduction). Mô hình chỉ nhận ra dạng \"chuẩn\" và bỏ sót các dạng còn lại.",
+      "Few-shot examples minh họa cách trích xuất từ các cấu trúc tài liệu đa dạng dạy cho mô hình chính xác điều nó đang thiếu: cách nhận diện citation ở nhiều định dạng và cách tìm methodology ở các vị trí khác nhau. Đây là cách sửa đúng nguyên nhân gốc với chi phí thấp.",
+      "Strict schema đảm bảo cấu trúc; few-shot examples đảm bảo chất lượng nội dung — hai kỹ thuật bổ trợ cho nhau."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Lớp regex hậu xử lý điền các trường rỗng):",
+        "trap": "Bẫy regex mong manh (Brittle regex fallback trap)",
+        "explanation": "Chính sự đa dạng định dạng là lý do mô hình bỏ sót; regex còn kém hơn nhiều trong việc xử lý sự đa dạng ngữ nghĩa này. Methodology ẩn trong introduction không thể bắt bằng keyword matching một cách đáng tin cậy, và regex dễ điền dữ liệu sai."
+      },
+      "C": {
+        "title": "C sai (Retry khi validation phát hiện trường rỗng):",
+        "trap": "Bẫy retry không có thông tin mới (Blind retry trap)",
+        "explanation": "Lỗi ở đây là lỗi có hệ thống (systematic): mô hình không biết cách nhận diện các định dạng khác nhau. Gửi lại cùng một request (thậm chí kèm thông báo \"trường rỗng\") không cung cấp kiến thức mới về cách tìm thông tin, nên rất có thể tiếp tục thất bại, đồng thời làm tăng chi phí."
+      },
+      "D": {
+        "title": "D sai (Chuyển các trường thành optional và đẩy sang duyệt thủ công):",
+        "trap": "Bẫy hạ chuẩn chất lượng & chi phí vận hành thủ công (Lowering the bar trap)",
+        "explanation": "Thông tin thực sự có trong tài liệu, nên việc chuyển trường thành optional chỉ hợp thức hóa lỗi bỏ sót thay vì sửa nó. Đẩy sang manual review làm tăng chi phí nhân lực trong khi vấn đề có thể giải quyết ngay ở prompt."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Docs – Prompt engineering: Use examples (multishot prompting); Tool use với JSON schema.",
+    "points": [
+      "Ví dụ nên đa dạng (diverse), bao phủ các edge case và biến thể của dữ liệu đầu vào để mô hình tổng quát hóa đúng.",
+      "Strict schema/tool use đảm bảo đầu ra đúng cấu trúc nhưng không đảm bảo tính đầy đủ về ngữ nghĩa — chất lượng nội dung cần được cải thiện bằng prompt và ví dụ."
+    ]
+  }
+}

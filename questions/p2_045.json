@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_045",
+  "domain": "Claude Code Iterative Workflows (Quy trình làm việc lặp với Claude Code)",
+  "topic": "Câu P2.45: Iterating with Concrete Input/Output Test Cases",
+  "question": "You've asked Claude to write a data migration script, but the initial output doesn't correctly handle records with null values in required fields.\nWhat's the most effective way to iterate toward a working solution?",
+  "options": {
+    "A": "Provide a test case with example input containing null values and the expected output, then ask Claude to fix it.",
+    "B": "Manually edit the generated code to fix the null handling, then continue working with Claude on other parts.",
+    "C": "Describe the null value problem in detail and ask Claude to regenerate the entire script with improved edge case handling.",
+    "D": "Add \"think harder about edge cases\" to your prompt and request a complete rewrite of the migration logic."
+  },
+  "correct_answer": "A. Provide a test case with example input containing null values and the expected output, then ask Claude to fix it.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Bản chất của việc lặp hiệu quả (iterative refinement) với Claude:",
+    "points": [
+      "Vấn đề đã được khoanh vùng rõ: script xử lý sai bản ghi có giá trị null trong trường bắt buộc. Cách nhanh nhất để truyền đạt hành vi mong muốn là đưa ra ví dụ cụ thể: input chứa null và output kỳ vọng (bỏ qua, gán mặc định, ghi log lỗi...).",
+      "Test case cụ thể loại bỏ sự mơ hồ của mô tả bằng lời, đồng thời cung cấp tiêu chí kiểm chứng (verification target) để Claude có thể tự chạy lại và xác nhận bản sửa đúng.",
+      "Anthropic nhấn mạnh việc cho Claude một cách để kiểm chứng công việc (tests, expected outputs) là một trong những yếu tố đòn bẩy cao nhất để nâng chất lượng kết quả."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Tự sửa code thủ công rồi tiếp tục với các phần khác):",
+        "trap": "Bẫy bỏ qua vòng phản hồi (Bypassing the feedback loop trap)",
+        "explanation": "Sửa tay giải quyết được trường hợp trước mắt, nhưng Claude không nắm được quy tắc xử lý null mong muốn, nên dễ lặp lại lỗi tương tự ở các phần khác của migration. Ngoài ra không có test case nào được lưu lại để kiểm chứng."
+      },
+      "C": {
+        "title": "C sai (Mô tả chi tiết vấn đề và yêu cầu regenerate toàn bộ script):",
+        "trap": "Bẫy viết lại toàn bộ (Full regeneration trap)",
+        "explanation": "Mô tả bằng lời vẫn có thể mơ hồ về output mong muốn. Viết lại toàn bộ script có nguy cơ phá vỡ các phần đã đúng và tạo ra lỗi mới, trong khi lỗi chỉ nằm ở một khía cạnh cụ thể."
+      },
+      "D": {
+        "title": "D sai (Thêm \"think harder about edge cases\" và yêu cầu viết lại toàn bộ):",
+        "trap": "Bẫy chỉ dẫn chung chung (Vague instruction trap)",
+        "explanation": "Câu \"think harder\" không cung cấp thông tin gì mới về hành vi mong muốn với giá trị null. Kết hợp với viết lại toàn bộ logic, cách này vừa mơ hồ vừa rủi ro, không đảm bảo hội tụ về giải pháp đúng."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Best practices & Anthropic Prompt Engineering Guidance:",
+    "points": [
+      "Cung cấp cho Claude tiêu chí kiểm chứng (tests, ví dụ input/output kỳ vọng) giúp Claude tự đánh giá và lặp tới khi đạt kết quả đúng.",
+      "Ví dụ cụ thể (examples / few-shot) truyền đạt hành vi mong muốn chính xác hơn mô tả chung chung bằng lời."
+    ]
+  }
+}

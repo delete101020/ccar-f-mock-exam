@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_033",
+  "domain": "Agentic Workflow Patterns & Task Complexity (Mẫu workflow Agent & Độ phức tạp tác vụ)",
+  "topic": "Câu P3.33: Multi-Phase Workflow Benefits Open-Ended Error Handling More Than a Rename",
+  "question": "An engineer submits two requests: • Request A: \"Rename the getUserData function to fetchUserProfile everywhere it's used.\" • Request B: \"Improve error handling throughout the data processing module—add try/catch blocks, meaningful error messages, and ensure failures don't silently corrupt data.\"\nFor which request does specifying an explicit multi-phase workflow (such as analyze propose implement with review) most improve outcome quality?",
+  "options": {
+    "A": "Request B, the error handling task",
+    "B": "Both requests benefit equally",
+    "C": "Request A, the function rename task",
+    "D": "Neither request benefits significantly"
+  },
+  "correct_answer": "A. Request B, the error handling task",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "So sánh bản chất hai yêu cầu:",
+    "points": [
+      "Request A (rename getUserData → fetchUserProfile) là thay đổi cơ học, được xác định rõ: tìm mọi chỗ dùng và đổi tên. Không có quyết định thiết kế nào cần cân nhắc, nên quy trình nhiều pha chỉ tăng chi phí.",
+      "Request B là tác vụ mở, phạm vi rộng ('throughout the module'), cần phán đoán: lỗi nào cần bắt, thông báo gì có ý nghĩa, chỗ nào có nguy cơ hỏng dữ liệu âm thầm. Pha analyze giúp hiểu luồng dữ liệu, pha propose cho phép người dùng duyệt chiến lược trước khi sửa, và review giúp phát hiện chỗ nuốt lỗi.",
+      "Anthropic khuyến nghị quy trình explore → plan → code → verify cho các thay đổi phức tạp, và cho phép bỏ qua lập kế hoạch với những thay đổi nhỏ, rõ ràng."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Cả hai lợi ích như nhau):",
+        "trap": "Bẫy áp dụng quy trình đồng loạt (One-size-fits-all process trap)",
+        "explanation": "Lợi ích của quy trình nhiều pha tỷ lệ với độ mơ hồ và độ phức tạp của tác vụ. Rename gần như không có rủi ro thiết kế, nên lợi ích không thể ngang bằng tác vụ error handling."
+      },
+      "C": {
+        "title": "C sai (Chỉ request A, tác vụ rename):",
+        "trap": "Bẫy nhầm 'phạm vi rộng' với 'phức tạp' (Breadth vs complexity trap)",
+        "explanation": "Rename có thể chạm nhiều file nhưng mỗi thay đổi đều cơ học, có thể kiểm chứng bằng tìm kiếm/compiler. Tác vụ này hưởng lợi từ công cụ tìm kiếm đầy đủ, không phải từ pha analyze/propose."
+      },
+      "D": {
+        "title": "D sai (Không request nào lợi ích đáng kể):",
+        "trap": "Bẫy đánh giá thấp lập kế hoạch (Underestimating planning trap)",
+        "explanation": "Với tác vụ mở như request B, nhảy thẳng vào code dễ dẫn đến try/catch rải rác, nuốt lỗi, hoặc xử lý không nhất quán. Pha analyze/propose cải thiện rõ rệt chất lượng kết quả."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Best Practices (Explore, plan, code, commit) & Plan Mode documentation:",
+    "points": [
+      "Với tác vụ phức tạp hoặc chưa rõ hướng tiếp cận, yêu cầu Claude khám phá và lập kế hoạch trước khi viết code cải thiện đáng kể kết quả.",
+      "Với thay đổi nhỏ, phạm vi rõ (như sửa lỗi chính tả, đổi tên), có thể bỏ qua bước lập kế hoạch."
+    ]
+  }
+}

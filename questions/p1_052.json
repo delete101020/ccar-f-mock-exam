@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_052",
+  "domain": "Tool Error Handling & Agent Resilience (Xử lý lỗi Tool & Khả năng phục hồi của Agent)",
+  "topic": "Câu P1.52: Graceful Degradation When process_refund Times Out",
+  "question": "During a billing dispute resolution, your agent successfully retrieves customer info via get_customer and order details via lookup_order, but when attempting to process the refund via process_refund, the tool returns a timeout error. The agent has enough information to explain the billing, confirm the refund eligibility, and verify refund eligibility, but cannot actually process the refund due to the backend failure.\nWhat approach best balances first-contact resolution with appropriate error handling?",
+  "options": {
+    "A": "Escalate immediately to a human agent since the refund action cannot be completed",
+    "B": "Explain the billing, confirm refund eligibility, acknowledge the system issue preventing immediate processing, and offer escalation or retry later",
+    "C": "Confirm the refund will be processed and close the conversation, since the system has all necessary information to complete it automatically",
+    "D": "Implement automatic retries with exponential backoff for process_refund, keeping the conversation open until the refund is successfully processed"
+  },
+  "correct_answer": "B. Explain the billing, confirm refund eligibility, acknowledge the system issue preventing immediate processing, and offer escalation or retry later",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Cân bằng giữa first-contact resolution và xử lý lỗi minh bạch:",
+    "points": [
+      "Agent đã hoàn thành phần lớn công việc: giải thích hóa đơn và xác nhận khách đủ điều kiện hoàn tiền. Chỉ có bước thực thi cuối cùng bị chặn bởi lỗi backend (timeout).",
+      "Graceful degradation: cung cấp tối đa giá trị có thể (giải thích, xác nhận eligibility), minh bạch về sự cố hệ thống, và trao lựa chọn cho khách (escalate hoặc thử lại sau). Khách nhận được câu trả lời thực chất ngay trong lần liên hệ đầu.",
+      "Cách này không hứa hẹn điều chưa xảy ra và không bỏ phí phần việc đã làm được."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Escalate ngay lập tức):",
+        "trap": "Bẫy escalate quá sớm (Premature escalation trap)",
+        "explanation": "Bỏ qua phần giá trị agent đã có thể cung cấp; một lỗi timeout tạm thời chưa phải lý do để chuyển toàn bộ cho con người, làm giảm first-contact resolution."
+      },
+      "C": {
+        "title": "C sai (Xác nhận sẽ hoàn tiền rồi đóng hội thoại):",
+        "trap": "Bẫy cam kết sai sự thật (False confirmation trap)",
+        "explanation": "Refund thực tế chưa được xử lý; hứa hẹn với khách khi tool đã báo lỗi là thông tin sai, gây mất niềm tin và khiếu nại tiếp theo."
+      },
+      "D": {
+        "title": "D sai (Retry với exponential backoff, giữ hội thoại mở đến khi thành công):",
+        "trap": "Bẫy treo hội thoại vô hạn (Unbounded retry trap)",
+        "explanation": "Không biết backend bao giờ phục hồi; giữ khách chờ vô thời hạn là trải nghiệm tệ. Retry có giới hạn có thể hữu ích, nhưng không thay thế được việc thông báo minh bạch và đưa ra lựa chọn."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude API Docs – Tool use (handling tool errors) & Customer support agent guidance:",
+    "points": [
+      "Khi tool trả lỗi, Claude nên được cung cấp thông tin lỗi để phản hồi người dùng một cách trung thực và đề xuất bước tiếp theo.",
+      "Ưu tiên giải quyết tối đa trong lần liên hệ đầu, đồng thời minh bạch về những gì chưa hoàn thành."
+    ]
+  }
+}

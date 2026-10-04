@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_036",
+  "domain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
+  "topic": "Câu P3.36: Retained Story Bible with Trimming Applied Only to Brainstorming",
+  "question": "Your conversation history includes two types of content: persistent story elements (character backgrounds, plot structure, world rules) that must remain consistent throughout, and extensive brainstorming discussion that's mostly ephemeral. After 40+ turns, you're hitting context limits and users report the assistant \"forgets\" established character traits, breaking narrative consistency.\nWhich approach best ensures persistent story elements remain available to the model while reclaiming context space?",
+  "options": {
+    "A": "Separate persistent story elements into a retained \"story bible\" section at context start, applying trimming or summarization only to brainstorming discussion.",
+    "B": "Store all history in a vector database and retrieve semantically similar passages for each new message, replacing conversation history with retrieved chunks.",
+    "C": "Apply a sliding-window approach keeping only the most recent 25 turns, relying on the model to infer earlier context from recent discussion flow.",
+    "D": "Summarize the entire conversation history into a condensed synopsis every 20 turns, replacing the full history to free up tokens."
+  },
+  "correct_answer": "A. Separate persistent story elements into a retained \"story bible\" section at context start, applying trimming or summarization only to brainstorming discussion.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Đề bài phân loại rõ hai loại nội dung có vòng đời khác nhau:",
+    "points": [
+      "Persistent story elements (nhân vật, cốt truyện, luật thế giới) phải luôn có mặt nguyên vẹn; brainstorming phần lớn là tạm thời. Áp dụng cùng một chiến lược nén cho cả hai là nguyên nhân khiến chi tiết quan trọng bị mất.",
+      "Tách các yếu tố bền vững thành một 'story bible' được giữ lại ở đầu context, chỉ cắt tỉa/tóm tắt phần brainstorming: giải phóng được phần lớn token (vì brainstorming chiếm nhiều nhất) mà vẫn bảo đảm tính nhất quán của truyện.",
+      "Story bible ở vị trí ổn định đầu context còn có thể kết hợp prompt caching, và được cập nhật khi người dùng xác lập yếu tố mới."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Vector DB thay thế lịch sử bằng chunk truy xuất):",
+        "trap": "Bẫy truy xuất theo độ tương đồng không đảm bảo (Retrieval recall trap)",
+        "explanation": "Semantic retrieval chỉ trả về đoạn giống tin nhắn hiện tại; đặc điểm nhân vật không liên quan bề mặt đến câu hỏi sẽ không được lấy lại - chính là lỗi 'quên' cần sửa. Thay hết lịch sử bằng chunk rời rạc còn phá vỡ mạch hội thoại."
+      },
+      "C": {
+        "title": "C sai (Sliding window 25 lượt gần nhất):",
+        "trap": "Bẫy cắt bỏ nội dung nền tảng (Truncating foundational context trap)",
+        "explanation": "Thông tin nhân vật thường được xác lập ở những lượt đầu, nên sẽ bị cắt mất đầu tiên. Trông chờ mô hình 'suy ra' từ luồng gần đây là không đáng tin."
+      },
+      "D": {
+        "title": "D sai (Tóm tắt toàn bộ lịch sử mỗi 20 lượt):",
+        "trap": "Bẫy tóm tắt mất mát đồng loạt (Undifferentiated lossy summarization trap)",
+        "explanation": "Tóm tắt toàn bộ không phân biệt nội dung bền vững và tạm thời, nên chi tiết nhân vật có thể bị lược bỏ hoặc biến dạng qua nhiều vòng tóm tắt lặp lại."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic – Effective context engineering for AI agents (compaction, structured note-taking) & Long context tips:",
+    "points": [
+      "Khi nén context, giữ lại thông tin quan trọng (quyết định, trạng thái, sự thật cốt lõi) và loại bỏ phần dư thừa; tách thông tin bền vững ra khỏi lịch sử tạm thời.",
+      "Đặt tài liệu tham chiếu dài, ổn định ở đầu prompt giúp mô hình sử dụng tốt hơn và thuận lợi cho prompt caching."
+    ]
+  }
+}

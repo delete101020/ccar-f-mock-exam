@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_017",
+  "domain": "Claude Code Workflows & Iterative Refinement (Quy trình làm việc với Claude Code & Tinh chỉnh lặp)",
+  "topic": "Câu P3.17: Test-Driven Iteration for a Complex Graph Traversal Algorithm",
+  "question": "You're implementing a complex graph traversal algorithm with specific performance requirements and edge cases to handle (disconnected nodes, cycles, weighted edges). You want to structure your workflow for efficient iterative refinement with Claude.\nWhat approach will most effectively enable progressive improvement across multiple iterations?",
+  "options": {
+    "A": "Write a test suite covering expected behavior, edge cases, and performance requirements before implementation. Ask Claude to write code that passes the tests, then iterate by sharing test failures with each refinement request.",
+    "B": "Provide Claude with a detailed natural language specification of the algorithm, including all requirements and edge cases. Review each output manually and provide descriptive feedback on what behavior needs to change.",
+    "C": "Provide Claude with a reference implementation from documentation, then ask it to rewrite the code to match your codebase style and add the required edge case handling, comparing outputs against the reference.",
+    "D": "Have Claude extensively research the algorithm and create a detailed implementation plan using extended thinking, then implement the complete solution based on that plan."
+  },
+  "correct_answer": "A. Write a test suite covering expected behavior, edge cases, and performance requirements before implementation. Ask Claude to write code that passes the tests, then iterate by sharing test failures with each refinement request.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Yêu cầu: thuật toán duyệt đồ thị phức tạp với yêu cầu hiệu năng và nhiều edge cases (disconnected nodes, cycles, weighted edges), cần cải tiến dần qua nhiều vòng.",
+    "points": [
+      "Viết test suite trước (test-driven development) biến yêu cầu thành tiêu chí thành công khách quan, kiểm chứng được: mỗi edge case và yêu cầu hiệu năng đều có test tương ứng.",
+      "Mỗi vòng lặp, Claude nhận test failures cụ thể (expected vs actual, stack trace, thời gian chạy) — đây là tín hiệu phản hồi chính xác, tất định, giúp Claude sửa đúng điểm mà không phải suy đoán. Tiến độ đo được qua số test pass.",
+      "Claude Code best practices nêu rõ: 'Write tests, commit; code, iterate, commit' — Claude hoạt động tốt nhất khi có mục tiêu rõ ràng để lặp lại, như test cases hoặc expected output; cung cấp cách để Claude tự kiểm chứng công việc là yếu tố nâng cao chất lượng mạnh nhất."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Spec ngôn ngữ tự nhiên + review thủ công, feedback mô tả):",
+        "trap": "Bẫy phản hồi chủ quan, không tất định (Subjective feedback loop trap)",
+        "explanation": "Feedback mô tả bằng lời thiếu chính xác, dễ bỏ sót edge case và không có cách tự kiểm tra hồi quy (regression) giữa các vòng. Review thủ công cũng chậm và khó mở rộng."
+      },
+      "C": {
+        "title": "C sai (Dùng reference implementation rồi viết lại theo style codebase):",
+        "trap": "Bẫy lệ thuộc bản tham chiếu (Reference dependence trap)",
+        "explanation": "Reference implementation có thể không đáp ứng yêu cầu hiệu năng và edge case cụ thể. So sánh output thủ công với reference không phải là cơ chế kiểm chứng có hệ thống cho các vòng tinh chỉnh."
+      },
+      "D": {
+        "title": "D sai (Extended thinking lập plan chi tiết rồi implement toàn bộ):",
+        "trap": "Bẫy one-shot không có vòng phản hồi (Big-bang implementation trap)",
+        "explanation": "Lập plan kỹ là hữu ích, nhưng phương án này không có cơ chế kiểm chứng hay phản hồi giữa các vòng. Câu hỏi nhấn mạnh 'progressive improvement across multiple iterations' — cần tín hiệu phản hồi khách quan như test."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Best practices for agentic coding:",
+    "points": [
+      "Workflow 'Write tests, commit; code, iterate, commit': yêu cầu Claude viết test dựa trên expected input/output, xác nhận test fail, sau đó viết code để pass và lặp lại cho đến khi tất cả test pass.",
+      "Cung cấp cho Claude cách tự kiểm chứng (tests, expected outputs) giúp Claude lặp lại hiệu quả và cải thiện đáng kể chất lượng kết quả."
+    ]
+  }
+}

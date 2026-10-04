@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_018",
+  "domain": "Claude Code Configuration & Memory Hierarchy (Cấu hình Claude Code & Phân cấp bộ nhớ CLAUDE.md)",
+  "topic": "Câu P3.18: Path-Scoped Rules in .claude/rules for File-Type-Specific Conventions",
+  "question": "Your infrastructure-as-code repository includes Terraform modules (/terraform/), Kubernetes manifests (/kubernetes/), and CI/CD pipeline scripts (/pipelines/). Each requires different conventions, but your single root CLAUDE.md has grown to 500+ lines. When developers work on Kubernetes files, Terraform-specific rules load into context unnecessarily, consuming tokens. \nWhat is the best approach to reorganize so only relevant guidance loads when editing specific file types?",
+  "options": {
+    "A": "Restructure the root CLAUDE.md into clearly labeled sections with headers (e.g., \"## Terraform Conventions\"), improving organization and readability.",
+    "B": "Split content into subdirectory CLAUDE.md files (/terraform/CLAUDE.md, /kubernetes/CLAUDE.md), so Claude loads directory-specific guidance.",
+    "C": "Keep the root CLAUDE.md and use @path/to/import syntax to modularly include tool-specific guidance files from separate documents.",
+    "D": "Create files in .claude/rules/ with YAML frontmatter path-scoping (e.g., paths: [\"terraform/*/\"]), loading rules only when editing matching files."
+  },
+  "correct_answer": "D. Create files in .claude/rules/ with YAML frontmatter path-scoping (e.g., paths: [\"terraform/*/\"]), loading rules only when editing matching files.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Cơ chế nạp hướng dẫn của Claude Code:",
+    "points": [
+      "Root CLAUDE.md luôn được nạp toàn bộ vào context mỗi phiên, nên 500+ dòng Terraform/Kubernetes/pipeline rules đều tiêu tốn token dù developer chỉ sửa một loại file.",
+      "Các file trong .claude/rules/ hỗ trợ YAML frontmatter với trường paths (glob patterns, ví dụ paths: [\"terraform/**/*.tf\"]). Rule có paths chỉ được áp dụng khi Claude làm việc với file khớp pattern — nạp đúng hướng dẫn cho đúng loại file.",
+      "Ưu điểm so với subdirectory CLAUDE.md: path-scoping dựa trên loại file/glob chứ không chỉ theo thư mục, nên áp dụng được cho các file cùng loại nằm rải rác ở nhiều nơi (ví dụ manifest Kubernetes hay pipeline YAML ở thư mục khác), và giữ các rule tập trung, dễ bảo trì trong một chỗ."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Chia root CLAUDE.md thành các section có header):",
+        "trap": "Bẫy tổ chức lại hình thức (Cosmetic reorganization trap)",
+        "explanation": "Thêm header cải thiện khả năng đọc nhưng toàn bộ file vẫn được nạp vào context mỗi phiên. Vấn đề token không hề được giải quyết."
+      },
+      "B": {
+        "title": "B sai (Tách thành subdirectory CLAUDE.md files):",
+        "trap": "Bẫy phạm vi theo thư mục, không theo loại file (Directory-scoped vs file-type-scoped trap)",
+        "explanation": "Subdirectory CLAUDE.md quả thực được nạp khi Claude làm việc trong thư mục đó, nhưng chỉ gắn với vị trí thư mục chứ không gắn với loại file đang edit. Câu hỏi yêu cầu nạp hướng dẫn 'when editing specific file types' — đây đúng là mục đích của path-scoped rules trong .claude/rules/."
+      },
+      "C": {
+        "title": "C sai (Dùng @path/to/import trong root CLAUDE.md):",
+        "trap": "Bẫy import vẫn nạp toàn bộ (Eager import trap)",
+        "explanation": "Cú pháp @import giúp module hóa file, nhưng các file được import vẫn được nạp vào context cùng CLAUDE.md khi khởi động phiên. Tổng token tiêu thụ không giảm."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Memory (CLAUDE.md) & Rules:",
+    "points": [
+      "Các file Markdown trong .claude/rules/ có thể khai báo frontmatter paths với glob patterns để rule chỉ áp dụng khi Claude làm việc với các file khớp pattern.",
+      "CLAUDE.md và các file @import được nạp vào context khi bắt đầu phiên; nên giữ CLAUDE.md gọn và đưa hướng dẫn chuyên biệt vào các rule có phạm vi."
+    ]
+  }
+}

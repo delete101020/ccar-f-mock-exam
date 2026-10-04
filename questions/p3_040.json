@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_040",
+  "domain": "Claude Code Configuration & Project Memory (Cấu hình Claude Code & Bộ nhớ dự án CLAUDE.md)",
+  "topic": "Câu P3.40: Generating Meaningful Tests via Testing Standards in CLAUDE.md",
+  "question": "Your development team is using Claude Code to automate test generation across a large codebase. However, developers are frequently rejecting the generated test suites because Claude creates a high volume of trivial assertions or tests that merely maximize line coverage without validating meaningful behavioral logic or edge cases. You want to guide Claude to generate high-quality, production-ready tests directly without introducing high latency or modifying the core pipeline script.\nWhich strategy best ensures that high-quality, meaningful tests are generated in the first place?",
+  "options": {
+    "A": "Restrict test generation to directories where historical quality metrics show higher acceptance rates, disabling it for areas where generated tests consistently require heavy editing.",
+    "B": "Add post-generation coverage analysis that automatically filters out any generated test that doesn't increase line coverage beyond what existing tests provide.",
+    "C": "Document testing standards in CLAUDE.md including valuable test criteria, available fixtures with intended use cases, and examples distinguishing meaningful behavioral tests from trivial assertions.",
+    "D": "Implement a two-phase generation where a second Claude call scores each test against quality criteria, filtering out low-scoring tests before presenting results to developers."
+  },
+  "correct_answer": "C. Document testing standards in CLAUDE.md including valuable test criteria, available fixtures with intended use cases, and examples distinguishing meaningful behavioral tests from trivial assertions.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Ràng buộc của đề bài: tạo test chất lượng 'in the first place', không tăng độ trễ, không sửa pipeline script:",
+    "points": [
+      "Nguyên nhân gốc là Claude không biết thế nào là test có giá trị đối với team: nó tối ưu theo tín hiệu dễ thấy nhất (line coverage) và sinh trivial assertion. Cần cung cấp tiêu chí chất lượng, fixture có sẵn và ví dụ ngay tại thời điểm sinh.",
+      "CLAUDE.md được Claude Code tự động nạp vào mọi phiên - chỉ cần thêm/commit một file, không phải sửa pipeline và không thêm lượt gọi nào (không tăng latency).",
+      "Ví dụ đối chiếu behavioral test có ý nghĩa với trivial assertion, cùng hướng dẫn về edge case, giúp mô hình sinh test đúng chuẩn ngay từ lần đầu."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Giới hạn theo thư mục có tỷ lệ chấp nhận cao):",
+        "trap": "Bẫy thu hẹp phạm vi thay vì sửa gốc (Scope retreat trap)",
+        "explanation": "Tắt tính năng ở những vùng khó không làm test tốt hơn, chỉ làm giảm giá trị tự động hóa. Nguyên nhân thiếu tiêu chuẩn vẫn còn nguyên."
+      },
+      "B": {
+        "title": "B sai (Lọc theo coverage sau khi sinh):",
+        "trap": "Bẫy dùng sai thước đo (Wrong metric / Post-hoc filtering trap)",
+        "explanation": "Đề bài đã chỉ ra coverage chính là thước đo sai: test chỉ tối đa coverage vẫn vô nghĩa. Lọc thêm theo coverage vừa không đo được giá trị hành vi, vừa đòi sửa pipeline và vẫn là xử lý sau khi sinh."
+      },
+      "D": {
+        "title": "D sai (Gọi Claude lần hai để chấm điểm):",
+        "trap": "Bẫy tăng độ trễ và sửa pipeline (Latency & pipeline change trap)",
+        "explanation": "Vi phạm trực tiếp hai ràng buộc: thêm một lượt gọi (tăng latency) và cần sửa script pipeline. Đồng thời vẫn là lọc sau khi sinh thay vì sinh đúng ngay từ đầu."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Manage Claude's memory (CLAUDE.md) & Best practices:",
+    "points": [
+      "CLAUDE.md dự án được nạp tự động, phù hợp để ghi chuẩn kiểm thử, quy ước và lệnh test cho cả team.",
+      "Cung cấp tiêu chí rõ ràng và ví dụ cụ thể giúp Claude tạo ra kết quả đáp ứng kỳ vọng mà không cần thêm bước hậu kiểm."
+    ]
+  }
+}

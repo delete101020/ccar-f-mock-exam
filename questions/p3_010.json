@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_010",
+  "domain": "Multi-Agent Orchestration & Context Passing (Điều phối đa agent & Truyền ngữ cảnh cho Subagent)",
+  "topic": "Câu P3.10: Passing Complete Findings Directly into the Synthesis Subagent Prompt",
+  "question": "After the web search and document analysis subagents complete their tasks, the coordinator needs to spawn the synthesis subagent to synthesize the findings.\nWhat is the correct approach for providing the synthesis subagent with the information it needs?",
+  "options": {
+    "A": "Provide the subagent with tool definitions that allow it to request outputs from other subagents via callbacks",
+    "B": "Include the complete findings from both subagents directly in the synthesis subagent's prompt",
+    "C": "Pass reference identifiers and configure the subagent with read access to a shared memory store where other subagents deposited their results",
+    "D": "Spawn the subagent with only a brief task description, relying on automatic context inheritance from the coordinator"
+  },
+  "correct_answer": "B. Include the complete findings from both subagents directly in the synthesis subagent's prompt",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Cơ chế context của subagent trong kiến trúc coordinator-subagent:",
+    "points": [
+      "Subagent được khởi tạo với context window riêng, sạch (isolated context) — nó không tự động thừa hưởng lịch sử hội thoại hay kết quả mà coordinator đã nhận. Thông tin duy nhất subagent có là những gì được truyền vào prompt khởi tạo (task description).",
+      "Vì coordinator đã nhận đầy đủ kết quả từ web search subagent và document analysis subagent, cách đúng và đơn giản nhất là đưa trực tiếp toàn bộ findings (kèm metadata như nguồn/trích dẫn) vào prompt của synthesis subagent.",
+      "Cách này tất định, không cần hạ tầng bổ sung, và đảm bảo synthesis subagent có đầy đủ dữ liệu ngay từ đầu để tổng hợp chính xác."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Cung cấp tool callback để yêu cầu output từ subagent khác):",
+        "trap": "Bẫy giao tiếp ngang hàng không tồn tại (Peer-to-peer callback trap)",
+        "explanation": "Các subagent đã hoàn tất nhiệm vụ; trong mô hình hub-and-spoke, giao tiếp đi qua coordinator. Tạo cơ chế callback giữa các subagent làm tăng độ phức tạp và số lượt gọi tool không cần thiết."
+      },
+      "C": {
+        "title": "C sai (Truyền reference IDs và cấp quyền đọc shared memory store):",
+        "trap": "Bẫy hạ tầng thừa (Unnecessary infrastructure trap)",
+        "explanation": "Coordinator đã nắm sẵn findings, nên việc dựng shared memory store và bắt subagent tự truy xuất là thêm hạ tầng, thêm bước gọi tool và thêm điểm lỗi mà không mang lại lợi ích ở quy mô này."
+      },
+      "D": {
+        "title": "D sai (Chỉ đưa mô tả task ngắn, dựa vào context inheritance tự động):",
+        "trap": "Bẫy giả định kế thừa ngữ cảnh (Automatic context inheritance fallacy trap)",
+        "explanation": "Subagent không tự động kế thừa context của coordinator. Chỉ đưa mô tả ngắn sẽ khiến synthesis subagent không có dữ liệu để tổng hợp, dẫn đến kết quả rỗng hoặc hallucination."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Agent SDK / Claude Code Subagents & Anthropic Engineering – Multi-agent research system:",
+    "points": [
+      "Subagents hoạt động trong context window riêng biệt; thông tin cần thiết phải được truyền tường minh qua prompt khi khởi tạo subagent.",
+      "Bài viết 'How we built our multi-agent research system': lead agent phải cung cấp cho subagent mô tả nhiệm vụ chi tiết cùng đầy đủ thông tin đầu vào; mô tả mơ hồ, thiếu context khiến subagent làm sai hoặc trùng lặp công việc."
+    ]
+  }
+}

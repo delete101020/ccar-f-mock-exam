@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_042",
+  "domain": "Claude Code Workflows & Plan Mode (Quy trình làm việc với Claude Code & Plan Mode)",
+  "topic": "Câu P2.42: Direct Execution for a Simple Single-File Change",
+  "question": "You need to add a date validation check ensuring event dates are in the future. This requires adding a conditional statement to one existing function in a single file.\nWhat is the most appropriate approach?",
+  "options": {
+    "A": "Enter plan mode to analyze how the validation might impact other parts of the reservation flow",
+    "B": "Start with extended thinking mode enabled to ensure thorough reasoning about the validation logic",
+    "C": "Use direct execution to make the change",
+    "D": "Enter plan mode first to create a detailed implementation strategy before making the change"
+  },
+  "correct_answer": "C. Use direct execution to make the change",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Bài toán đưa ra các dữ kiện quan trọng:",
+    "points": [
+      "Phạm vi thay đổi cực nhỏ và đã xác định rõ: thêm một câu lệnh điều kiện (conditional) vào một function có sẵn, trong một file duy nhất, với yêu cầu nghiệp vụ rõ ràng (ngày sự kiện phải ở tương lai).",
+      "Theo best practices của Claude Code, plan mode phù hợp cho thay đổi phức tạp, nhiều file, hoặc khi chưa rõ cách tiếp cận. Với thay đổi mà bạn có thể mô tả diff trong một câu, nên để Claude thực hiện trực tiếp (direct execution).",
+      "Direct execution giúp tiết kiệm thời gian và token; mọi sai sót có thể kiểm tra ngay qua diff hoặc test và chỉnh sửa ở lượt tiếp theo."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Vào plan mode để phân tích ảnh hưởng tới reservation flow):",
+        "trap": "Bẫy phân tích quá mức (Over-analysis trap)",
+        "explanation": "Đề bài đã xác định rõ thay đổi chỉ nằm ở một function trong một file. Phân tích tác động toàn bộ reservation flow là quy trình nặng nề không tương xứng với một câu lệnh if."
+      },
+      "B": {
+        "title": "B sai (Bật extended thinking để suy luận kỹ logic validation):",
+        "trap": "Bẫy dùng sai công cụ suy luận (Unnecessary reasoning budget trap)",
+        "explanation": "Extended thinking hữu ích cho bài toán suy luận phức tạp nhiều bước. So sánh ngày với thời điểm hiện tại là logic đơn giản, bật extended thinking chỉ tăng độ trễ và chi phí mà không cải thiện chất lượng."
+      },
+      "D": {
+        "title": "D sai (Vào plan mode để lập chiến lược triển khai chi tiết):",
+        "trap": "Bẫy quy trình hóa thay đổi tầm thường (Process overhead trap)",
+        "explanation": "Lập \"detailed implementation strategy\" cho một thay đổi một dòng điều kiện là lãng phí. Plan mode được dành cho thay đổi lớn, đa file hoặc có nhiều hướng tiếp cận cần cân nhắc."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Best practices & Plan Mode:",
+    "points": [
+      "Plan mode (Shift+Tab) cho phép Claude khám phá và lập kế hoạch read-only trước khi sửa code; được khuyến nghị cho thay đổi phức tạp, nhiều file, hoặc khi chưa chắc cách tiếp cận.",
+      "Với các tác vụ nhỏ, phạm vi rõ ràng (ví dụ sửa typo, thêm một dòng log, thêm một điều kiện), việc lập kế hoạch là không cần thiết; hãy yêu cầu Claude thực hiện trực tiếp."
+    ]
+  }
+}

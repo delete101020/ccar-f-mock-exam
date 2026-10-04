@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_050",
+  "domain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "topic": "Câu P2.50: Exposing Content Catalogs as MCP Resources",
+  "question": "Your productivity agent connects to three MCP servers: an issue tracker (search_issues, get_issue, create_comment), a documentation wiki (search_docs, get_page, list_spaces), and a database explorer (run_query, get_schema, list_databases). When engineers ask cross-system questions like \"What database tables are affected by the authentication refactor in PROJ-1234?\", monitoring shows the agent makes 8-10 sequential tool calls, frequently issues exploratory calls because it lacks visibility into what content each server contains, and exhausts context space before completing complex investigations.\nWhat architectural change best leverages MCP capabilities to address these issues?",
+  "options": {
+    "A": "Consolidate all three servers into a unified MCP server with cross-referencing capabilities",
+    "B": "Expose each server's content catalog as MCP resources—issue summaries, documentation hierarchy, database schemas",
+    "C": "Add a prepare_investigation tool to each server that accepts a natural language question and returns relevant content summaries",
+    "D": "Add an orchestrator that routes questions to a single server based on keywords"
+  },
+  "correct_answer": "B. Expose each server's content catalog as MCP resources—issue summaries, documentation hierarchy, database schemas",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Bài toán đưa ra các dữ kiện quan trọng:",
+    "points": [
+      "Triệu chứng: 8-10 lệnh gọi tuần tự, nhiều lệnh gọi mang tính dò đường (exploratory) vì agent \"lacks visibility into what content each server contains\", và cạn context. Nguyên nhân gốc rễ là thiếu thông tin định hướng về nội dung của từng server.",
+      "MCP định nghĩa ba primitive: Tools (hành động do model gọi), Resources (dữ liệu/ngữ cảnh do ứng dụng cung cấp, định danh bằng URI) và Prompts. Expose danh mục nội dung — tóm tắt issue, cây tài liệu, database schema — dưới dạng resources cho phép agent biết trước có gì ở đâu.",
+      "Khi đã có bản đồ nội dung, agent có thể đi thẳng tới lệnh gọi chính xác (ví dụ get_issue PROJ-1234 → get_schema bảng liên quan) thay vì dò đường, giảm số lệnh gọi và tiết kiệm context."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Gộp ba server thành một MCP server thống nhất):",
+        "trap": "Bẫy hợp nhất nguyên khối (Monolithic consolidation trap)",
+        "explanation": "Gộp server phá vỡ tính module và ranh giới trách nhiệm, tốn công tái kiến trúc lớn, nhưng không tự giải quyết việc agent thiếu khả năng nhìn thấy nội dung. Agent vẫn phải gọi tool dò đường như cũ."
+      },
+      "C": {
+        "title": "C sai (Thêm tool prepare_investigation nhận câu hỏi ngôn ngữ tự nhiên ở mỗi server):",
+        "trap": "Bẫy thêm tool mơ hồ (Vague catch-all tool trap)",
+        "explanation": "Mỗi server chỉ thấy một phần của câu hỏi liên hệ thống, nên tóm tắt trả về dễ không liên quan. Đây vẫn là thêm lệnh gọi tool (3 lần cho 3 server), và đẩy việc hiểu ngôn ngữ tự nhiên vào server thay vì tận dụng primitive Resources của MCP."
+      },
+      "D": {
+        "title": "D sai (Orchestrator route câu hỏi tới một server theo keyword):",
+        "trap": "Bẫy định tuyến đơn nguồn (Single-server routing trap)",
+        "explanation": "Câu hỏi ví dụ đòi hỏi dữ liệu từ cả issue tracker và database (thậm chí wiki). Route tới một server duy nhất theo keyword sẽ làm hỏng chính các truy vấn liên hệ thống cần giải quyết."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Model Context Protocol Specification – Server primitives (Tools, Resources, Prompts):",
+    "points": [
+      "Resources cho phép server expose dữ liệu và ngữ cảnh (file, schema, thông tin ứng dụng) định danh bằng URI để client/model sử dụng làm context.",
+      "Tools dành cho hành động do model gọi. Cung cấp ngữ cảnh định hướng qua resources giúp giảm các lệnh gọi tool dò đường không cần thiết."
+    ]
+  }
+}

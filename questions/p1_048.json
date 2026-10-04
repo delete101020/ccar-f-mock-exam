@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_048",
+  "domain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
+  "topic": "Câu P1.48: Trimming Verbose Tool Outputs to Task-Relevant Fields",
+  "question": "Your agent has called lookup_order multiple times while investigating a customer's return requests. Each response includes 40+ fields (items, shipping details, payment info, status history). Tool outputs now represent the majority of the conversation's context. The customer mentions two more orders they want to discuss.\nWhat's the most effective approach before making additional lookups?",
+  "options": {
+    "A": "Extract only return-relevant fields (items, purchase date, return window, status) from each existing order response, removing verbose details",
+    "B": "Proceed with additional lookups without modifying the existing tool output context",
+    "C": "Have the model generate a natural language summary of each order's key details, replacing structured responses with prose descriptions",
+    "D": "Move all tool responses to a vector database with semantic indexing, retrieving relevant portions as the conversation continues"
+  },
+  "correct_answer": "A. Extract only return-relevant fields (items, purchase date, return window, status) from each existing order response, removing verbose details",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Dữ kiện: tool outputs (40+ fields mỗi đơn) đang chiếm phần lớn context, và sắp có thêm lookup:",
+    "points": [
+      "Phần lớn các trường (shipping details, payment info, status history chi tiết...) không liên quan đến việc xử lý trả hàng. Giữ nguyên chúng làm context phình nhanh và làm loãng sự chú ý của model.",
+      "Trích xuất có chọn lọc các trường liên quan (items, purchase date, return window, status) vẫn giữ dạng dữ liệu có cấu trúc, chính xác – đủ để model ra quyết định về trả hàng – trong khi giải phóng phần lớn không gian context cho các lookup mới.",
+      "Đây là kỹ thuật context engineering phổ biến: lọc/rút gọn tool result (tool result clearing/trimming) theo mục tiêu của tác vụ hiện tại."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Cứ tiếp tục lookup, không chỉnh sửa context):",
+        "trap": "Bẫy bỏ mặc context phình to (Context exhaustion trap)",
+        "explanation": "Thêm hai đơn hàng 40+ fields nữa sẽ đẩy context đến giới hạn, gây suy giảm chất lượng hoặc lỗi vượt context, trong khi phần lớn dữ liệu là nhiễu."
+      },
+      "C": {
+        "title": "C sai (Thay dữ liệu cấu trúc bằng tóm tắt văn xuôi):",
+        "trap": "Bẫy mất độ chính xác do diễn giải (Lossy prose summarization trap)",
+        "explanation": "Văn xuôi do model viết có thể làm sai lệch ngày tháng, mã đơn, trạng thái – những giá trị cần chính xác tuyệt đối để quyết định hoàn tiền. Dữ liệu có cấu trúc nên được giữ ở dạng cấu trúc."
+      },
+      "D": {
+        "title": "D sai (Đưa toàn bộ vào vector database, truy xuất theo ngữ nghĩa):",
+        "trap": "Bẫy over-engineering (RAG cho dữ liệu nhỏ, có cấu trúc)",
+        "explanation": "Thêm hạ tầng vector search cho vài đơn hàng trong một phiên là quá phức tạp; truy xuất ngữ nghĩa còn có thể bỏ sót trường quan trọng. Lọc trường đơn giản và tất định hơn."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – Effective context engineering for AI agents & Writing tools for agents:",
+    "points": [
+      "Context là tài nguyên hữu hạn; nên giữ tập token nhỏ nhất có tín hiệu cao cho tác vụ.",
+      "Tool response nên trả về thông tin liên quan, ngắn gọn; có thể lọc/xóa tool results cũ không còn cần thiết."
+    ]
+  }
+}

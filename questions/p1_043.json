@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_043",
+  "domain": "Agentic Architectures & Multi-Agent Orchestration (Kiến trúc Agent & Điều phối đa Agent - Coordinator/Subagent)",
+  "topic": "Câu P1.43: Parallel Document Analysis Subagents Coordinated by the Orchestrator",
+  "question": "When analyzing complex legal cases that cite multiple precedents, the document analysis subagent processes each sequentially. A landmark case citing 12 precedents takes over 3 minutes to analyze completely.\nWhat's the most effective way to reduce this latency while preserving the coordinator's ability to monitor and debug the system?",
+  "options": {
+    "A": "Create a recursive agent hierarchy where analysis agents subdivide work among child agents until reaching single-precedent granularity.",
+    "B": "Have the coordinator spawn parallel document analysis subagents, each handling a subset of precedents, then aggregate results before synthesis.",
+    "C": "Implement a message queue where precedent analysis tasks are processed asynchronously by a pool of worker agents.",
+    "D": "Enable the document analysis subagent to spawn its own specialized subagents dynamically when it encounters cases with many citations."
+  },
+  "correct_answer": "B. Have the coordinator spawn parallel document analysis subagents, each handling a subset of precedents, then aggregate results before synthesis.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Các dữ kiện quan trọng:",
+    "points": [
+      "Phân tích 12 precedents là các tác vụ phần lớn độc lập với nhau – điều kiện lý tưởng cho mẫu Parallelization (sectioning) trong \"Building Effective Agents\".",
+      "Coordinator spawn nhiều document analysis subagent song song, mỗi subagent xử lý một nhóm precedents, rồi aggregate kết quả trước khi chuyển cho synthesis. Độ trễ giảm gần theo số nhánh song song.",
+      "Yêu cầu thứ hai – giữ khả năng monitor và debug – được đáp ứng vì mọi subagent đều do coordinator tạo ra và trả kết quả trực tiếp về coordinator (hierarchy phẳng một cấp), nên toàn bộ luồng dữ liệu đều quan sát được tại một điểm."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Phân cấp đệ quy đến từng precedent):",
+        "trap": "Bẫy phân cấp sâu khó kiểm soát (Deep recursive hierarchy trap)",
+        "explanation": "Hierarchy nhiều tầng làm tăng số agent, chi phí token và khiến coordinator mất tầm nhìn vào các tầng dưới – đi ngược yêu cầu monitor/debug."
+      },
+      "C": {
+        "title": "C sai (Message queue với pool worker bất đồng bộ):",
+        "trap": "Bẫy hạ tầng phức tạp không cần thiết (Infrastructure over-engineering trap)",
+        "explanation": "Hàng đợi bất đồng bộ tách việc xử lý khỏi coordinator, gây khó truy vết và tổng hợp kết quả, đồng thời thêm hạ tầng vận hành cho một bài toán có thể giải bằng fan-out đơn giản."
+      },
+      "D": {
+        "title": "D sai (Cho subagent tự spawn subagent con động):",
+        "trap": "Bẫy mất khả năng quan sát (Loss of observability trap)",
+        "explanation": "Khi subagent tự tạo agent con, coordinator không còn kiểm soát và nhìn thấy toàn bộ cây thực thi. Ngoài ra, Claude Agent SDK/Claude Code không cho subagent spawn subagent lồng nhau – việc điều phối nên tập trung ở coordinator."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Research: \"Building Effective Agents\" (Parallelization / Orchestrator-workers) & Claude Agent SDK – Subagents:",
+    "points": [
+      "Parallelization (sectioning) phù hợp khi tác vụ có thể chia thành các phần độc lập chạy đồng thời rồi tổng hợp kết quả.",
+      "Orchestrator-workers: orchestrator phân chia công việc, giao cho worker và tổng hợp – giữ điều phối và khả năng quan sát ở một nơi."
+    ]
+  }
+}

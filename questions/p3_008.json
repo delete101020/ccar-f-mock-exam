@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_008",
+  "domain": "Prompt Engineering & Multi-Pass Review Architecture (Kỹ thuật Prompt & Kiến trúc review nhiều lượt)",
+  "topic": "Câu P3.8: Splitting a Multi-Concern Code Review Prompt to Resolve Recall Trade-offs",
+  "question": "Your automated reviewer uses a single prompt covering security issues, API design, and business logic correctness. Your evaluation suite shows strong recall findings (82%) but poor recall for business logic edge cases in quiz scoring (34%). When you add few-shot examples of logic bugs to the prompt, logic recall is 41% but API design recall drops to 68%. \nHow should you address this trade-off to improve detection across both categories?",
+  "options": {
+    "A": "Split the review into separate focused prompts - one for security and API design, another for business logic - each with dedicated examples, then combine findings before posting.",
+    "B": "Upgrade to a more capable model tier, since its stronger reasoning will handle both concern types in a single prompt and eliminate the recall trade-off.",
+    "C": "Provide the full repository as context instead of just the changed files and surrounding code, giving the model deeper visibility into business logic.",
+    "D": "Replace the few-shot examples with a detailed checklist of specific logic edge cases to verify, such as division-by-zero in score calculation or grading thresholds."
+  },
+  "correct_answer": "A. Split the review into separate focused prompts - one for security and API design, another for business logic - each with dedicated examples, then combine findings before posting.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Phân tích dữ kiện từ evaluation suite:",
+    "points": [
+      "Một prompt duy nhất phải bao quát ba mối quan tâm (security, API design, business logic). Thêm few-shot examples cho logic bugs làm tăng logic recall (34% → 41%) nhưng làm giảm API design recall (→ 68%): đây là dấu hiệu attention dilution — các ví dụ và chỉ dẫn cạnh tranh nhau trong cùng một prompt.",
+      "Tách thành các focused prompts (một cho security + API design, một cho business logic), mỗi prompt có examples riêng, giúp mỗi lượt review tập trung vào một nhóm tiêu chí. Hai lượt độc lập nên có thể chạy song song (parallelization – sectioning) và gộp findings trước khi post.",
+      "Đây là mẫu 'Parallelization / Sectioning' trong 'Building Effective Agents': với các tác vụ phức tạp có nhiều cân nhắc, LLM thường hoạt động tốt hơn khi mỗi cân nhắc được xử lý bởi một LLM call riêng, cho phép tập trung vào từng khía cạnh cụ thể."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Nâng cấp lên model tier mạnh hơn):",
+        "trap": "Bẫy nâng cấp mô hình (Model upgrade fallacy trap)",
+        "explanation": "Trade-off xuất phát từ cấu trúc prompt (nhiều concern cạnh tranh nhau), không phải từ năng lực suy luận. Model mạnh hơn tốn chi phí hơn mà không có gì đảm bảo loại bỏ được hiện tượng pha loãng attention."
+      },
+      "C": {
+        "title": "C sai (Cung cấp toàn bộ repository làm context):",
+        "trap": "Bẫy nhồi context (Context flooding trap)",
+        "explanation": "Đưa cả repository vào càng làm loãng sự tập trung và tăng chi phí; vấn đề không phải thiếu visibility mà là một prompt đang phải phục vụ quá nhiều mục tiêu."
+      },
+      "D": {
+        "title": "D sai (Thay few-shot examples bằng checklist edge cases chi tiết):",
+        "trap": "Bẫy hoán đổi kỹ thuật cùng cấu trúc (Same-prompt substitution trap)",
+        "explanation": "Checklist vẫn nằm trong cùng một prompt chung, nên vẫn cạnh tranh attention với các tiêu chí security và API design. Nó chỉ thay đổi hình thức chỉ dẫn chứ không giải quyết nguyên nhân gốc là prompt đa mục tiêu."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Research – \"Building Effective Agents\" & Prompt Engineering (Chain complex prompts):",
+    "points": [
+      "Parallelization (Sectioning): chia một tác vụ thành các subtask độc lập chạy song song; với nhiều cân nhắc khác nhau, mỗi LLM call tập trung vào một khía cạnh thường cho kết quả tốt hơn.",
+      "Prompt engineering: tách các tác vụ phức tạp thành các prompt nhỏ, tập trung giúp mỗi prompt nhận được sự chú ý đầy đủ và dễ tinh chỉnh độc lập."
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_036",
+  "domain": "Multi-Agent Systems & Subagent Delegation (Hệ thống đa Agent & Ủy quyền cho Subagent)",
+  "topic": "Câu P1.36: Goal-Oriented Delegation Instead of Procedural Instructions",
+  "question": "The coordinator provides detailed step-by-step instructions to the web search subagent, specifying exact search queries, source quality criteria (coverage breadth, source diversity), and content type classifications. The coordinator sometimes encounters challenges where instructions fail when the subagent encounters unexpected situations.\nWhat's the most effective way to improve subagent adaptability?",
+  "options": {
+    "A": "Add explicit fallback directives to the detailed instructions: \"if specified searches fail, attempt alternative queries before reporting failure.\"",
+    "B": "Specify research goals and quality criteria (coverage breadth, source diversity, content type) rather than procedural instructions, letting the subagent determine execution.",
+    "C": "Implement a task classification step where the coordinator categorizes requests as \"analytical\" vs \"exploratory\" and uses different instruction sets for each category.",
+    "D": "Remove procedural detail entirely, delegating with simple goals like \"research it thoroughly\" and relying on the subagent's general capabilities."
+  },
+  "correct_answer": "B. Specify research goals and quality criteria (coverage breadth, source diversity, content type) rather than procedural instructions, letting the subagent determine execution.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Vấn đề của chỉ dẫn từng bước (step-by-step procedural instructions):",
+    "points": [
+      "Coordinator chỉ định chính xác các search query và từng bước thực hiện. Khi subagent gặp tình huống không lường trước (query không trả kết quả, nguồn không phù hợp), nó không biết phải làm gì vì chỉ được giao quy trình, không được giao mục tiêu.",
+      "Ủy quyền theo mục tiêu (goal-oriented delegation): coordinator mô tả research goals và quality criteria (coverage breadth, source diversity, content type) — tức là \"thế nào là kết quả tốt\" — và để subagent tự quyết định cách thực hiện.",
+      "Khi gặp tình huống bất ngờ, subagent có thể đối chiếu với mục tiêu và tiêu chí chất lượng để tự điều chỉnh chiến lược tìm kiếm. Đây chính là lợi thế cốt lõi của agent so với workflow cố định.",
+      "Giải pháp vẫn giữ lại các tiêu chí chất lượng cụ thể — không phải bỏ mặc subagent — nên cân bằng giữa định hướng rõ ràng và tính linh hoạt."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Thêm fallback directives vào chỉ dẫn chi tiết):",
+        "trap": "Bẫy vá từng trường hợp (Enumerating edge cases trap)",
+        "explanation": "Thêm fallback chỉ xử lý được một loại thất bại đã lường trước (search thất bại). Các tình huống bất ngờ khác vẫn không được bao phủ. Cách tiếp cận vẫn là procedural, chỉ dài hơn và mong manh hơn."
+      },
+      "C": {
+        "title": "C sai (Phân loại task \"analytical\" vs \"exploratory\" với các bộ chỉ dẫn khác nhau):",
+        "trap": "Bẫy thêm tầng phân loại không sửa gốc (Classification layer trap)",
+        "explanation": "Hai bộ chỉ dẫn procedural vẫn là procedural — vẫn thất bại khi gặp tình huống ngoài dự kiến của từng bộ. Nó chỉ thêm độ phức tạp mà không cải thiện khả năng thích ứng."
+      },
+      "D": {
+        "title": "D sai (Bỏ hết chi tiết, chỉ giao \"research it thoroughly\"):",
+        "trap": "Bẫy ủy quyền mơ hồ (Vague delegation trap)",
+        "explanation": "Đây là thái cực ngược lại. Không có tiêu chí chất lượng, subagent không biết thế nào là \"thorough\", dễ làm trùng việc, chọn nguồn kém hoặc dừng quá sớm/quá muộn. Anthropic nhấn mạnh subagent cần mục tiêu, định dạng đầu ra, và ranh giới nhiệm vụ rõ ràng."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – \"How we built our multi-agent research system\" (Teach the orchestrator how to delegate); Claude Docs – Prompt engineering best practices.",
+    "points": [
+      "Khi delegate, orchestrator nên cung cấp cho subagent mục tiêu (objective), định dạng đầu ra, hướng dẫn về công cụ/nguồn, và ranh giới nhiệm vụ rõ ràng — chỉ dẫn quá mơ hồ khiến subagent làm trùng hoặc hiểu sai.",
+      "Prompt nên cung cấp heuristics và tiêu chí thay vì các quy tắc cứng nhắc, giúp agent thích ứng với tình huống mới."
+    ]
+  }
+}

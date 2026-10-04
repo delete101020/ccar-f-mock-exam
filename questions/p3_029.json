@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_029",
+  "domain": "Information Extraction & Structured Schema Design (Trích xuất thông tin & Thiết kế Schema có cấu trúc)",
+  "topic": "Câu P3.29: Nullable Pros/Cons and an Unclear Sentiment Value to Prevent Fabrication",
+  "question": "The system processes product reviews using tool use with a defined schema: rating (integer 1-5), pros (string array), cons (string array), and overall_sentiment (enum: positive, negative, mixed). Testing reveals two issues with brief or ambiguous reviews (~20% of the dataset): (1) for reviews like \"Great product!\", Claude fabricates specific pros and cons rather than indicating this information isn't explicitly stated, and (2) for sarcastic reviews like \"Well that was... interesting\", Claude picks sentiment arbitrarily since there's no option for ambiguous cases.\nWhat schema modification best addresses both issues?",
+  "options": {
+    "A": "Add an extraction_confidence field (0.0-1.0) for each value, and filter outputs where any confidence falls below a threshold.",
+    "B": "Allow null values for pros/cons, and add \"unclear\" to the sentiment enum.",
+    "C": "Allow empty arrays for pros/cons as valid output, and add \"unclear\" to the sentiment enum.",
+    "D": "Make pros and cons optional fields, and add \"neutral\" and \"unclear\" to the sentiment enum."
+  },
+  "correct_answer": "B. Allow null values for pros/cons, and add \"unclear\" to the sentiment enum.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Cả hai lỗi đều xuất phát từ việc schema không cho mô hình một cách hợp lệ để nói 'không có thông tin' hoặc 'không xác định':",
+    "points": [
+      "Vấn đề (1) - bịa pros/cons: Khi trường bắt buộc phải có giá trị thực, mô hình sẽ 'lấp chỗ trống' để thỏa schema. Cho phép null tạo ra một tín hiệu rõ ràng 'review không nêu thông tin này' (not explicitly stated), khác với việc review có nêu nhưng không có nhược điểm nào.",
+      "Vấn đề (2) - chọn sentiment tùy tiện: Enum chỉ có positive/negative/mixed buộc mô hình đoán với review mỉa mai/mơ hồ. Thêm 'unclear' cung cấp lối thoát hợp lệ, đồng thời giúp downstream lọc các trường hợp này để người duyệt.",
+      "Đây là thay đổi tối thiểu, sửa đúng hai nguyên nhân gốc mà không thêm giá trị enum thừa hay cơ chế lọc phức tạp."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Thêm extraction_confidence và lọc theo ngưỡng):",
+        "trap": "Bẫy độ tin cậy tự đánh giá (Self-reported confidence trap)",
+        "explanation": "Điểm confidence do mô hình tự báo cáo thường không được hiệu chỉnh tốt; mô hình vẫn có thể bịa pros/cons với confidence cao. Lọc theo ngưỡng chỉ loại bỏ kết quả mà không cho schema cách biểu diễn 'không có thông tin' hay 'không rõ'."
+      },
+      "C": {
+        "title": "C sai (Cho phép mảng rỗng + thêm 'unclear'):",
+        "trap": "Bẫy mơ hồ ngữ nghĩa giữa 'không có' và 'không nêu' (Empty vs absent ambiguity trap)",
+        "explanation": "Mảng rỗng vốn đã hợp lệ với kiểu string array nên đây không thực sự là thay đổi schema; quan trọng hơn, [] mang nghĩa 'không có ưu/nhược điểm nào', không phân biệt được với 'review không đề cập'. Đề bài yêu cầu chỉ ra rằng thông tin 'isn't explicitly stated', và null là cách biểu diễn chuẩn cho điều đó."
+      },
+      "D": {
+        "title": "D sai (Optional fields + thêm 'neutral' và 'unclear'):",
+        "trap": "Bẫy thêm giá trị enum thừa (Unnecessary enum expansion trap)",
+        "explanation": "'neutral' không giải quyết lỗi nào được mô tả và tạo thêm sự nhập nhằng giữa neutral/mixed/unclear, khiến mô hình càng chọn tùy tiện. Trường optional bị bỏ hẳn cũng khó phân biệt với lỗi bỏ sót của mô hình."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool use / Structured outputs (JSON schema) & Reducing hallucinations:",
+    "points": [
+      "Cho phép mô hình nói 'không biết' hoặc 'không có thông tin' là kỹ thuật cốt lõi để giảm hallucination; trong schema, điều này thể hiện qua trường nullable.",
+      "Bổ sung giá trị enum như 'unclear'/'other' cho các trường hợp mơ hồ để mô hình không bị ép chọn sai giữa các lựa chọn không phù hợp."
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_037",
+  "domain": "Multi-Agent Systems & Synthesis Quality (Hệ thống đa Agent & Chất lượng tổng hợp - Output Formatting)",
+  "topic": "Câu P1.37: Content-Type-Aware Rendering in the Synthesis Agent",
+  "question": "A user is expanding the research system beyond its single web search agent by adding specialized data sources. They add a financial API agent that returns structured JSON with revenue, margins, and growth rates; a news monitoring agent that returns prose summaries of recent developments; and a patent analysis agent that returns structured lists of technology areas. The synthesis agent combines these into executive briefings. Currently, it converts everything to bullet points, causing financial comparisons to lose tabular clarity and news summaries to lose narrative flow.\nWhat change would most improve briefing quality?",
+  "options": {
+    "A": "Standardize all subagent outputs to JSON with fields for claim, evidence, source, and confidence.",
+    "B": "Update the synthesis agent to render each content type appropriately–financial data as tables, news as prose.",
+    "C": "Add a format conversion layer between subagents and synthesis that transforms all outputs to a common intermediate representation.",
+    "D": "Standardize all subagent outputs to prose summaries with inline citations."
+  },
+  "correct_answer": "B. Update the synthesis agent to render each content type appropriately–financial data as tables, news as prose.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Xác định đúng vị trí gây ra vấn đề:",
+    "points": [
+      "Các subagent đang trả về dữ liệu ở định dạng phù hợp với bản chất của nó: dữ liệu tài chính dạng JSON có cấu trúc, tin tức dạng prose, patent dạng danh sách có cấu trúc. Đầu vào không có vấn đề.",
+      "Lỗi nằm ở synthesis agent: nó áp dụng một định dạng duy nhất (bullet points) cho mọi loại nội dung, làm mất tính so sánh dạng bảng của dữ liệu tài chính và mất mạch kể chuyện của tin tức.",
+      "Cập nhật synthesis agent để render từng loại nội dung phù hợp — dữ liệu tài chính thành bảng, tin tức thành prose, danh sách công nghệ thành list có cấu trúc — sửa đúng nơi phát sinh lỗi với thay đổi tối thiểu.",
+      "Giải pháp này bảo toàn độ phong phú của dữ liệu đầu vào và cải thiện trực tiếp chất lượng executive briefing."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Chuẩn hóa mọi output về JSON claim/evidence/source/confidence):",
+        "trap": "Bẫy đồng nhất hóa làm mất cấu trúc gốc (Lossy standardization trap)",
+        "explanation": "Ép dữ liệu tài chính dạng bảng và tin tức dạng narrative vào một schema claim/evidence chung làm mất cấu trúc tự nhiên của từng loại. Nó cũng không thay đổi việc synthesis agent đang render mọi thứ thành bullet points."
+      },
+      "C": {
+        "title": "C sai (Thêm lớp chuyển đổi về intermediate representation chung):",
+        "trap": "Bẫy thêm tầng trung gian không cần thiết (Unnecessary abstraction layer trap)",
+        "explanation": "Thêm một lớp chuyển đổi làm tăng độ phức tạp, có nguy cơ mất thông tin khi chuyển đổi, và vẫn không giải quyết việc synthesis agent chỉ xuất bullet points. Vấn đề nằm ở khâu render, không phải khâu trung gian."
+      },
+      "D": {
+        "title": "D sai (Chuẩn hóa mọi output thành prose có inline citation):",
+        "trap": "Bẫy đồng nhất hóa làm mất cấu trúc gốc (Lossy standardization trap)",
+        "explanation": "Chuyển dữ liệu tài chính (doanh thu, biên lợi nhuận, tăng trưởng) thành prose làm mất khả năng so sánh dạng bảng — chính là một trong hai vấn đề cần giải quyết. Đây là đổi một kiểu mất mát lấy kiểu khác."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Docs – Prompt engineering: Be clear and direct / Control output format; Anthropic Engineering – multi-agent research system.",
+    "points": [
+      "Chỉ dẫn rõ ràng về định dạng đầu ra mong muốn cho từng loại nội dung giúp Claude tạo đầu ra phù hợp mục đích sử dụng.",
+      "Sửa tại thành phần gây ra lỗi (synthesis/render) thay vì thay đổi các subagent đang hoạt động đúng."
+    ]
+  }
+}

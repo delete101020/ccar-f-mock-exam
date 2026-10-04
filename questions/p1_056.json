@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_056",
+  "domain": "Agent SDK Hooks & Deterministic Guardrails (Hook trong Agent SDK & Rào chắn tất định)",
+  "topic": "Câu P1.56: Enforcing the $500 Refund Escalation Rule with a Tool-Call Hook",
+  "question": "Compliance requires that refunds exceeding $500 must automatically escalate to a human agent–this rule cannot be left to model discretion. Despite clear system prompt instructions, production logs show the agent occasionally processes high-value refunds directly (3% failure rate).\nHow should you achieve guaranteed compliance?",
+  "options": {
+    "A": "Implement a hook to intercept tool calls; when the refund process amount exceeds $500, block it and invoke human escalation.",
+    "B": "Modify the refund tool to return an error with message \"Amount exceeds policy limit–please escalate\" when threshold is exceeded.",
+    "C": "Strengthen the system prompt with emphatic language: \"CRITICAL POLICY: Refunds over $500 MUST trigger human escalation. NEVER process these directly.\"",
+    "D": "Add few-shot examples to the prompt showing correct escalation behavior at various refund amounts ($400, $500, $600)."
+  },
+  "correct_answer": "A. Implement a hook to intercept tool calls; when the refund process amount exceeds $500, block it and invoke human escalation.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Yêu cầu then chốt: \"this rule cannot be left to model discretion\" và cần \"guaranteed compliance\":",
+    "points": [
+      "System prompt đã rõ ràng nhưng vẫn có 3% vi phạm – chứng minh mọi giải pháp dựa trên prompt chỉ là xác suất.",
+      "Hook (ví dụ PreToolUse trong Claude Agent SDK / Claude Code) chạy bằng code tất định ở tầng ứng dụng, chặn tool call TRƯỚC khi thực thi: nếu amount > $500 thì block process_refund và chuyển sang escalation. Model không thể vượt qua cơ chế này.",
+      "Nguyên tắc: các quy tắc compliance bắt buộc phải được thực thi bằng code (deterministic guardrails), không giao cho phán đoán của model."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Tool trả lỗi \"please escalate\" khi vượt ngưỡng):",
+        "trap": "Bẫy giao lại quyết định cho model (Model-dependent recovery trap)",
+        "explanation": "Chặn được hoàn tiền là điểm cộng, nhưng việc escalation vẫn phụ thuộc model đọc lỗi và tự gọi escalate_to_human – không đảm bảo yêu cầu \"automatically escalate\". Hook vừa chặn vừa kích hoạt escalation một cách tất định."
+      },
+      "C": {
+        "title": "C sai (Prompt mạnh hơn với CRITICAL/NEVER):",
+        "trap": "Bẫy prompt nhấn mạnh (Emphatic prompt trap)",
+        "explanation": "Ngôn ngữ nhấn mạnh có thể giảm tỷ lệ lỗi nhưng không bao giờ đảm bảo 100%; prompt hiện tại đã rõ ràng mà vẫn thất bại."
+      },
+      "D": {
+        "title": "D sai (Few-shot examples ở các mức $400/$500/$600):",
+        "trap": "Bẫy few-shot cho ràng buộc cứng (Few-shot for hard constraint trap)",
+        "explanation": "Few-shot cải thiện tính nhất quán nhưng vẫn là hành vi xác suất của model, không đáp ứng yêu cầu compliance tuyệt đối."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Agent SDK / Claude Code Docs – Hooks (PreToolUse):",
+    "points": [
+      "Hooks cho phép chạy code tất định tại các thời điểm trong vòng đời agent, ví dụ PreToolUse có thể chặn (deny/block) một tool call trước khi thực thi.",
+      "Dùng hooks cho các quy tắc phải luôn được thực thi thay vì dựa vào việc model tuân thủ chỉ dẫn."
+    ]
+  }
+}

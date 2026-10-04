@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_016",
+  "domain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
+  "topic": "Câu P2.16: Preserving Prior-Session Conclusions via Progressive Summarization",
+  "question": "After three months of weekly sessions, your conversation history has grown to 85,000 tokens. When users ask \"What did we conclude about the theme of isolation?\", the assistant provides generic literary analysis rather than referencing the group's specific insights from earlier sessions. Discussions often build on previous meetings' conclusions, so maintaining narrative context is important.\nWhat's the most effective approach?",
+  "options": {
+    "A": "Add structured XML tags to mark significant discussion conclusions throughout the conversation history.",
+    "B": "Use semantic embedding to index the full conversation history and retrieve only relevant past exchanges for each user query, replacing the linear conversation format with retrieved segments.",
+    "C": "Implement rolling window truncation to keep only the most recent 25,000 tokens.",
+    "D": "Implement progressive summarization where older conversation blocks are replaced with concise summaries that explicitly extract key conclusions, decisions, and recurring themes, keeping recent exchanges verbatim."
+  },
+  "correct_answer": "D. Implement progressive summarization where older conversation blocks are replaced with concise summaries that explicitly extract key conclusions, decisions, and recurring themes, keeping recent exchanges verbatim.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Các dữ kiện then chốt:",
+    "points": [
+      "Lịch sử hội thoại 85.000 tokens sau ba tháng; các kết luận cụ thể của nhóm bị “chìm” giữa khối hội thoại dài, khiến assistant trả lời chung chung thay vì tham chiếu insight của nhóm.",
+      "Các buổi thảo luận xây dựng trên kết luận của buổi trước → cần giữ mạch tường thuật (narrative context) liên tục, không chỉ các mảnh rời rạc.",
+      "Progressive summarization thay các khối hội thoại cũ bằng bản tóm tắt cô đọng, chủ động trích xuất kết luận, quyết định và chủ đề lặp lại (ví dụ: “Session 6: nhóm kết luận isolation trong tác phẩm là lựa chọn tự nguyện của nhân vật”), trong khi giữ nguyên văn các trao đổi gần đây.",
+      "Kết quả: context gọn hơn, thông tin quan trọng nhất được làm nổi bật rõ ràng và luôn có mặt trong mọi request, mạch hội thoại được bảo toàn — đúng kỹ thuật compaction mà Anthropic mô tả cho các tác vụ dài."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Thêm XML tags đánh dấu kết luận trong lịch sử):",
+        "trap": "Bẫy gắn nhãn mà không giảm nhiễu (Tagging without compression trap)",
+        "explanation": "XML tags giúp cấu trúc hóa, nhưng 85.000 tokens hội thoại vẫn còn nguyên, các kết luận vẫn rải rác giữa khối nội dung lớn. Việc gắn tag xuyên suốt lịch sử cũng cần một bước xử lý tương đương tóm tắt, nhưng không giải quyết vấn đề kích thước và độ loãng."
+      },
+      "B": {
+        "title": "B sai (Semantic embedding để retrieve đoạn liên quan, bỏ định dạng tuyến tính):",
+        "trap": "Bẫy RAG phá vỡ mạch tường thuật (Fragmented retrieval trap)",
+        "explanation": "Retrieval trả về các đoạn rời rạc theo độ tương đồng, mất thứ tự thời gian và quan hệ “kết luận này dựa trên buổi trước”. Thay thế hoàn toàn định dạng hội thoại tuyến tính đi ngược yêu cầu duy trì narrative context, đồng thời thêm hạ tầng vector DB phức tạp."
+      },
+      "C": {
+        "title": "C sai (Rolling window giữ 25.000 tokens gần nhất):",
+        "trap": "Bẫy cắt bỏ mất dữ liệu (Lossy truncation trap)",
+        "explanation": "Cắt bỏ toàn bộ hội thoại cũ hơn đồng nghĩa với xóa chính những kết luận mà người dùng đang hỏi (“What did we conclude...”) — làm vấn đề trầm trọng hơn."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – “Effective context engineering for AI agents” (Compaction) & Anthropic Documentation – Long context tips:",
+    "points": [
+      "Compaction: tóm tắt nội dung hội thoại khi tiến gần giới hạn, giữ lại các quyết định và chi tiết quan trọng, loại bỏ phần dư thừa, rồi tiếp tục với context đã nén.",
+      "Giữ nguyên văn các trao đổi gần nhất trong khi nén lịch sử cũ giúp cân bằng giữa độ chi tiết và kích thước context."
+    ]
+  }
+}

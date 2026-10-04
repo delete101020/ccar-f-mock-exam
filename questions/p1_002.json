@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_002",
+  "domain": "Tool Use & Claude Code File Manipulation",
+  "topic": "Câu P1.2: Helper Function Insertion with Edit vs Write Tool",
+  "question": "Your agent needs to insert a new helper function into the middle of a 150-line utility module, between two existing functions. The Edit tool fails because its old_string parameter cannot find unique text to match – the file has repetitive docstrings, variable names, and structural patterns.\nWhat's the most reliable way to complete this insertion?",
+  "options": {
+    "A": "Use Edit's replace_all parameter to target a common pattern and embed the new function in the replacement text",
+    "B": "Use Read to load the file, add the function at the appropriate location, then Write the updated file",
+    "C": "Use Bash to append the function definition to the end of the file using heredoc syntax",
+    "D": "Use Edit with an extremely long old_string capturing 30+ lines of context to guarantee uniqueness"
+  },
+  "correct_answer": "B. Use Read to load the file, add the function at the appropriate location, then Write the updated file",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Cơ chế các công cụ chỉnh sửa file của Claude Code:",
+    "points": [
+      "Claude Code trang bị các công cụ cốt lõi: View/Read, Edit (chuỗi thay thế chính xác qua old_string và new_string), và Write (ghi đè toàn bộ nội dung file).",
+      "Công cụ Edit bắt buộc old_string phải duy nhất (unique) trong file để tránh ghi đè nhầm vị trí. Nếu file chứa các đoạn lặp lại quá nhiều khiến old_string không thể xác định điểm khớp duy nhất, thao tác Edit sẽ liên tục thất bại.",
+      "Kích thước file được nêu rõ là 150 dòng (khoảng ~1.000–1.500 tokens) – một con số rất nhỏ so với context window của Claude. Việc dùng Read để đọc nội dung file, sau đó dùng Write ghi đè lại toàn bộ nội dung đã chèn hàm mới là giải pháp đơn giản, an toàn tuyệt đối và đáng tin cậy nhất (most reliable), tránh hoàn toàn các lỗi matching chuỗi phức tạp."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Dùng replace_all):",
+        "trap": "Bẫy phá vỡ cấu trúc mã nguồn (Code corruption trap)",
+        "explanation": "replace_all sẽ thay thế mọi nơi xuất hiện pattern đó trong toàn bộ file. Việc chèn hàm vào một pattern chung bằng replace_all sẽ khiến hàm mới bị nhân bản ở nhiều vị trí, làm hỏng toàn bộ logic của module."
+      },
+      "C": {
+        "title": "C sai (Dùng Bash append vào cuối file):",
+        "trap": "Bẫy sai yêu cầu đề bài (Specification violation trap)",
+        "explanation": "Đề bài yêu cầu rõ ràng: 'insert a new helper function into the middle of a 150-line utility module, between two existing functions'. Dùng Bash để append vào cuối file không đáp ứng vị trí cần chèn."
+      },
+      "D": {
+        "title": "D sai (Dùng Edit với chuỗi dài 30+ dòng context):",
+        "trap": "Bẫy mong manh và lãng phí token (Fragile context matching trap)",
+        "explanation": "Việc nhồi 30+ dòng code vào old_string cực kỳ dễ lỗi do vấn đề khoảng trắng (whitespace, indentation, line endings \\n vs \\r\\n). Trong hệ thống tài liệu chuẩn của Claude Code, khi Edit gặp khó khăn trong việc tìm điểm neo duy nhất trên một file ngắn, fallback pattern khuyến nghị là chuyển sang dùng Write toàn bộ file thay vì kéo dài context của Edit."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation & Best Practices (File Editing Tools):",
+    "points": [
+      "The old_string must match exactly one location in the file. If matching becomes ambiguous or fragile in small-to-medium files, overwrite using the file writing tool (Write) with the complete updated content.",
+      "Với các file kích thước nhỏ (< vài trăm dòng), chi phí gọi Write hoàn toàn không đáng kể so với rủi ro vòng lặp sửa lỗi khi Edit thất bại."
+    ]
+  }
+}

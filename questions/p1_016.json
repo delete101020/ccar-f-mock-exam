@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_016",
+  "domain": "Information Extraction & Structured Schema Design (Trích xuất thông tin & Thiết kế Schema có cấu trúc)",
+  "topic": "Câu P1.16: Handling Contract Amendments via Temporal / Multi-Value Schema Design",
+  "question": "Your extraction pipeline processes contracts that frequently include amendments. When a contract contains both original terms and later amendments (e.g., original clause specifies \"30-day payment terms\" while Amendment 1 changes this to \"45 days\"), the model inconsistently extracts one value or the other with no indication of which applies.\nWhat's the most effective approach to improve extraction accuracy for documents with amendments?",
+  "options": {
+    "A": "Implement post-extraction validation using pattern matching to detect amendments and flag those extractions for manual review.",
+    "B": "Preprocess documents with a classifier that identifies and removes superseded sections before the main extraction step.",
+    "C": "Add prompt instructions to always extract the most recent amendment value and ignore superseded original terms.",
+    "D": "Redesign the schema so amended fields capture multiple values, each with source location and effective date."
+  },
+  "correct_answer": "D. Redesign the schema so amended fields capture multiple values, each with source location and effective date.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Bản chất bài toán mâu thuẫn thời gian (Temporal Inconsistency) trong trích xuất hợp đồng:",
+    "points": [
+      "Nguyên nhân gốc rễ (Root Cause): Ép một trường dữ liệu có sự thay đổi theo thời gian (như payment_terms) vào một schema trường đơn (single scalar value) buộc LLM phải phỏng đoán hoặc chọn bừa một trong hai giá trị hợp lệ trong văn bản. Điều này gây ra tính thiếu nhất quán (inconsistency) ngẫu nhiên.",
+      "Mẫu thiết kế Schema có cấu trúc theo ngữ cảnh nguồn (Provenance & Temporal Schema Pattern): Khi thiết kế lại schema để trường có thể chứa danh sách nhiều giá trị kèm siêu dữ liệu (metadata như source location/đoạn trích dẫn và effective date/ngày hiệu lực), mô hình không còn bị ép phải loại trừ thông tin.",
+      "Tối ưu cho downstream processing: Việc trích xuất toàn bộ lịch sử thay đổi kèm bằng chứng nguồn giúp hệ thống hạ tầng hoặc logic nghiệp vụ phía sau (deterministic code) tự động xác định điều khoản nào đang có hiệu lực pháp lý cao nhất một cách minh bạch và có thể kiểm chứng."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Hậu kiểm bằng pattern matching rồi đẩy sang duyệt thủ công):",
+        "trap": "Bẫy chi phí vận hành thủ công (High manual review overhead trap)",
+        "explanation": "Đẩy các hợp đồng có phụ lục sang người duyệt thủ công làm mất đi giá trị tự động hóa của pipeline trích xuất. Pattern matching bằng regex cũng rất dễ bỏ sót các cấu trúc phụ lục đa dạng và phức tạp trong thực tế."
+      },
+      "B": {
+        "title": "B sai (Dùng classifier tiền xử lý để cắt bỏ các điều khoản bị thay thế):",
+        "trap": "Bẫy mất dữ liệu do tiền xử lý phá hủy (Destructive pre-processing trap)",
+        "explanation": "Cắt bỏ văn bản trước khi đưa vào mô hình là cực kỳ nguy hiểm và dễ gây mất mát thông tin quan trọng. Nếu classifier phân loại sai, tài liệu sẽ bị mất dữ liệu vĩnh viễn và mô hình không thể kiểm chứng lại."
+      },
+      "C": {
+        "title": "C sai (Thêm chỉ dẫn prompt yêu cầu chỉ lấy giá trị mới nhất):",
+        "trap": "Bẫy prompt mong manh / Thiếu bằng chứng kiểm chứng (Brittle prompt instruction trap)",
+        "explanation": "Chỉ dựa vào prompt để ép mô hình tự phân giải giá trị mới nhất trong các tài liệu pháp lý phức tạp vẫn rất dễ bị hallucination hoặc nhầm lẫn thứ tự hiệu lực. Quan trọng hơn, kết quả trích xuất ra sẽ thiếu thông tin ngữ cảnh để kiểm chứng (provenance) xem giá trị đó lấy từ trang nào, thuộc phụ lục nào."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Nguyên tắc chung (nên đối chiếu thêm tài liệu chính thức của Anthropic):",
+    "points": [
+      "Dữ liệu bị sửa đổi theo thời gian nên được mô hình hóa bằng mảng giá trị kèm metadata (vị trí nguồn, ngày hiệu lực) thay vì một giá trị đơn.",
+      "Trích xuất kèm vị trí nguồn giúp kiểm chứng, và để code phía sau xác định điều khoản đang có hiệu lực."
+    ]
+  }
+}

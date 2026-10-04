@@ -1,0 +1,53 @@
+{
+  "id": "ccar_f_p1_019",
+  "domain": "Anthropic API Tool Use & Orchestration (Sử dụng Tool trong Anthropic API & Điều phối luồng)",
+  "topic": "Câu P1.19: Forcing Initial Metadata Extraction via Explicit tool_choice",
+  "question": "Your pipeline uses a tool called extract_metadata with a JSON schema for paper details. During testing, the agent sometimes fails to call extract_metadata because it wants to provide direct answers.\nWhat's the most reliable way to ensure metadata extraction always happens first?",
+  "options": {
+    "A": "Set tool_choice to \"auto\" and add a system prompt instruction: \"Always call extract_metadata before answering.\"",
+    "B": "Set tool_choice to \"auto\" and reorder the tool definitions placing extract_metadata first since Claude prioritizes earlier-listed tools.",
+    "C": "Set tool_choice to type \"any\" so Claude must use a tool, combined with system prompt instructions to call extract_metadata first.",
+    "D": "Set tool_choice to type \"tool\", name \"extract_metadata\" and process the enrichment requests in subsequent turns after receiving the extracted metadata."
+  },
+  "correct_answer": "D. Set tool_choice to type \"tool\", name \"extract_metadata\" and process the enrichment requests in subsequent turns after receiving the extracted metadata.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Cơ chế kiểm soát hành vi gọi Tool cưỡng bức (Forced Tool Calling) trong Anthropic API:",
+    "points": [
+      "Nguyên nhân thất bại khi để mặc định: Khi cấu hình `tool_choice: {\"type\": \"auto\"}` (hoặc không set), Claude có toàn quyền quyết định trả lời bằng văn bản thuần túy (`text`) thay vì gọi công cụ (`tool_use`). Điều này dẫn đến tỷ lệ bỏ sót công cụ trích xuất.",
+      "Cơ chế ép buộc gọi tool cụ thể (`tool_choice: {\"type\": \"tool\", \"name\": \"extract_metadata\"}`): Đây là tham số tất định của Anthropic API. Khi được thiết lập, Claude bắt buộc phải sinh ra một lệnh gọi đúng công cụ `extract_metadata` với định dạng JSON hợp lệ, loại trừ hoàn toàn khả năng trả lời bằng direct text.",
+      "Mẫu thiết kế đường ống đa lượt (Multi-turn Orchestration Pipeline): Ở lượt gọi (turn) đầu tiên, ép buộc gọi `extract_metadata` để thu thập dữ liệu có cấu trúc. Sau khi nhận được kết quả trích xuất, hệ thống chuyển sang các lượt tiếp theo để trả lời hoặc làm giàu thông tin (enrichment) với `tool_choice: {\"type\": \"auto\"}`."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (tool_choice auto kèm chỉ dẫn trong system prompt):",
+        "trap": "Bẫy hiểu sai cờ auto (Auto flag fallacy trap)",
+        "explanation": "Chế độ auto vẫn cho phép Claude trả lời bằng text thay vì gọi tool, và chỉ dẫn trong prompt chỉ là xác suất, không phải đảm bảo. Đề bài đã nêu agent đôi khi bỏ qua tool, nên cách này không đáng tin cậy."
+      },
+      "B": {
+        "title": "B sai (Đặt tool_choice: auto và xếp extract_metadata lên đầu danh sách):",
+        "trap": "Bẫy ngụy biện thứ tự định nghĩa (Tool ordering fallacy trap)",
+        "explanation": "Anthropic API không có quy tắc nào đảm bảo mô hình sẽ ưu tiên gọi công cụ xuất hiện đầu tiên trong danh sách. Thứ tự định nghĩa không ngăn được việc mô hình chọn sinh text trực tiếp thay vì gọi tool."
+      },
+      "C": {
+        "title": "C sai (Đặt tool_choice: any kết hợp hướng dẫn trong system prompt):",
+        "trap": "Bẫy nửa vời / Prompt mong manh (Non-specific tool choice trap)",
+        "explanation": "Giá trị `tool_choice: {\"type\": \"any\"}` chỉ ép buộc Claude phải gọi MỘT TRONG CÁC công cụ có sẵn, nhưng không chỉ định công cụ nào. Nếu hệ thống có nhiều công cụ khác, mô hình vẫn có thể gọi nhầm công cụ khác thay vì `extract_metadata`. Hơn nữa, phụ thuộc vào system prompt không đảm bảo tính tất định 100% như việc chỉ định rõ tên tool."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool Use (Function Calling) & tool_choice parameter:",
+    "points": [
+      "Các giá trị của tham số tool_choice:",
+      "- `auto`: Mô hình tự quyết định gọi tool hay trả lời text (mặc định).",
+      "- `any`: Mô hình bắt buộc phải gọi ít nhất một tool, nhưng tự chọn tool nào.",
+      "- `tool`: Ép buộc mô hình bắt buộc phải gọi một tool cụ thể qua thuộc tính `name` (`{\"type\": \"tool\", \"name\": \"...\"}`).",
+      "Nguyên tắc đảm bảo tính tất định: Khi một bước trong pipeline yêu cầu bắt buộc phải trích xuất dữ liệu có cấu trúc trước khi thực hiện logic khác, hãy sử dụng `tool_choice: {\"type\": \"tool\", \"name\": ...}`."
+    ]
+  }
+}

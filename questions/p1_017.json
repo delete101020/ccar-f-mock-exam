@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_017",
+  "domain": "Information Extraction & Quality Assurance / Human-in-the-Loop (Đảm bảo chất lượng trích xuất & Cơ chế người duyệt)",
+  "topic": "Câu P1.17: Allocating Human Review via Calibrated Field-Level Confidence Scores",
+  "question": "After deployment, you find that 12% of extractions contain semantic errors that pass JSON schema validation (e.g., a duration like \"30 minutes\" incorrectly placed in an ingredient quantity field). Human reviewers have capacity to check only 20% of extractions.\nWhich approach most effectively allocates reviewer attention?",
+  "options": {
+    "A": "Prioritize review of all extractions where required fields are empty or explicitly marked as not found.",
+    "B": "Review all extractions from documents with formatting anomalies such as unusual layouts or mixed content types.",
+    "C": "Randomly sample 20% of extractions for review, using corrections to track accuracy and identify error patterns.",
+    "D": "Have the model output field-level confidence scores, then calibrate review thresholds using a labeled validation set."
+  },
+  "correct_answer": "D. Have the model output field-level confidence scores, then calibrate review thresholds using a labeled validation set.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Bản chất bài toán tối ưu năng lực kiểm duyệt (Reviewer Capacity Allocation) cho lỗi ngữ nghĩa ngầm:",
+    "points": [
+      "Đặc thù lỗi ngữ nghĩa hợp lệ về cú pháp (Semantic errors passing schema validation): Lỗi đặt nhầm trường (vd: '30 minutes' vào trường số lượng nguyên liệu) hoàn toàn thỏa mãn JSON schema (vẫn là kiểu string hợp lệ), do đó các bộ kiểm tra cú pháp tự động không thể phát hiện.",
+      "Giới hạn tài nguyên con người (20% capacity): Với tỷ lệ lỗi 12% và năng lực duyệt tối đa 20%, hệ thống cần một cơ chế xếp hạng rủi ro (risk ranking) có độ phân giải cao để tập trung 20% công sức này vào nhóm có nguy cơ lỗi cao nhất.",
+      "Cơ chế Điểm tin cậy cấp trường có hiệu chuẩn (Calibrated Field-Level Confidence Scores): Bắt buộc mô hình trích xuất kèm điểm tự tin (confidence score do chính model tự báo cáo trong output) cho từng trường dữ liệu, sau đó dùng tập kiểm định có gán nhãn (labeled validation set) để hiệu chuẩn ngưỡng (threshold calibration). Những bản ghi có trường rơi vào vùng độ tự tin thấp sẽ được ưu tiên gửi tới reviewer, giúp tối đa hóa tỷ lệ bắt lỗi (recall) trong phạm vi 20% ngân sách kiểm duyệt."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Ưu tiên duyệt các bản ghi có trường bắt buộc bị rỗng hoặc đánh dấu not found):",
+        "trap": "Bẫy trật mục tiêu phát hiện (Missed target trap)",
+        "explanation": "Đề bài nêu rõ lỗi ở đây là 'semantic errors' (dữ liệu bị điền sai trường, ví dụ duration điền vào ingredient quantity). Trường hợp này trường dữ liệu không hề bị rỗng (not empty), do đó cách kiểm tra trường rỗng sẽ hoàn toàn bỏ qua các lỗi ngữ nghĩa này."
+      },
+      "B": {
+        "title": "B sai (Duyệt tài liệu có bất thường về định dạng hoặc layout lạ):",
+        "trap": "Bẫy tương quan giả (Weak correlation / Heuristic trap)",
+        "explanation": "Định dạng tài liệu bất thường chỉ là dấu hiệu phỏng đoán bên ngoài, không phản ánh trực tiếp mức độ sai lệch ngữ nghĩa ở từng trường dữ liệu trích xuất. Nhiều tài liệu layout lạ vẫn trích xuất đúng, trong khi tài liệu chuẩn vẫn có thể bị tráo nhầm trường."
+      },
+      "C": {
+        "title": "C sai (Lấy mẫu ngẫu nhiên 20% - Random sampling):",
+        "trap": "Bẫy phân bổ tài nguyên thụ động / Kém hiệu quả (Inefficient random sampling trap)",
+        "explanation": "Lấy mẫu ngẫu nhiên 20% trên tổng số dữ liệu chỉ bắt được khoảng 20% của 12% lỗi (tức chỉ phát hiện được ~2.4% lỗi trên toàn bộ dataset), để lọt gần 80% số lỗi còn lại. Lấy mẫu ngẫu nhiên chỉ phù hợp để đo lường KPI/đánh giá định kỳ chứ không phải chiến lược phân bổ kiểm duyệt tối ưu cho sản xuất."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Nguyên tắc chung (nên đối chiếu thêm tài liệu chính thức của Anthropic):",
+    "points": [
+      "Khi năng lực duyệt thủ công bị giới hạn, định tuyến theo confidence cấp trường để ưu tiên các trường dễ sai.",
+      "Confidence do model tự báo cần được hiệu chuẩn trên tập validation có nhãn để ngưỡng phản ánh đúng tỷ lệ lỗi thực tế."
+    ]
+  }
+}

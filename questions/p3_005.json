@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_005",
+  "domain": "Model Context Protocol (MCP) & Error Handling (Giao thức ngữ cảnh mô hình & Xử lý lỗi)",
+  "topic": "Câu P3.5: Classifying Protocol Errors vs Tool Execution Errors in MCP",
+  "question": "Your MCP server implements a check_availability tool that queries an external calendar API. During testing, you encounter three error conditions: (1) the tool is called with a malformed request, missing the required user_email parameter (2) the calendar API returns a 404 because the specified user doesn't exist in the calendar system (3) the calendar API returns a 503 because the service is temporarily unavailable.\nHow should each error be reported according to MCP's error handling design?",
+  "options": {
+    "A": "Report all three as tool results with isError: true",
+    "B": "Report errors 1 and 2 as JSON-RPC protocol errors, report error 3 as a tool result with isError: true",
+    "C": "Report error 1 as a JSON-RPC protocol error, report errors 2 and 3 as tool results with isError: true",
+    "D": "Report all three as JSON-RPC protocol errors."
+  },
+  "correct_answer": "C. Report error 1 as a JSON-RPC protocol error, report errors 2 and 3 as tool results with isError: true",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "MCP định nghĩa hai cơ chế báo lỗi riêng biệt cho tools:",
+    "points": [
+      "Protocol errors (JSON-RPC errors): dành cho lỗi ở tầng giao thức như unknown tool, request không thỏa CallToolRequest schema (malformed request / invalid arguments, ví dụ thiếu tham số bắt buộc). Lỗi 1 (thiếu user_email) thuộc nhóm này — request bị từ chối trước khi tool được thực thi.",
+      "Tool execution errors (tool result với isError: true): dành cho lỗi phát sinh trong quá trình thực thi tool như API failure, business logic error, dữ liệu không tồn tại. Lỗi 2 (404 user không tồn tại) và lỗi 3 (503 service tạm thời không khả dụng) đều xảy ra khi tool đã chạy và gọi calendar API.",
+      "Lý do thiết kế: kết quả isError: true được đưa vào context của LLM, giúp model tự nhận biết và phục hồi (ví dụ hỏi lại email đúng khi gặp 404, hoặc thử lại sau khi gặp 503). Protocol errors thì được client/host xử lý ở tầng giao thức."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Báo cả ba lỗi dưới dạng tool result isError: true):",
+        "trap": "Bẫy gộp chung tầng lỗi (Layer conflation trap)",
+        "explanation": "Request thiếu tham số bắt buộc là lỗi vi phạm schema ở tầng giao thức; tool không hề được thực thi. Theo MCP spec, đây là protocol error, không phải tool execution error."
+      },
+      "B": {
+        "title": "B sai (Lỗi 1 và 2 là protocol error, lỗi 3 là isError):",
+        "trap": "Bẫy nhầm lỗi nghiệp vụ thành lỗi giao thức (Business error misclassification trap)",
+        "explanation": "404 'user không tồn tại' là kết quả từ external API khi tool đã thực thi thành công ở tầng giao thức — đây là lỗi nghiệp vụ mà LLM cần thấy để điều chỉnh (ví dụ hỏi lại người dùng). Báo nó như JSON-RPC error sẽ che mất thông tin hữu ích khỏi model."
+      },
+      "D": {
+        "title": "D sai (Báo cả ba lỗi dưới dạng JSON-RPC protocol error):",
+        "trap": "Bẫy ẩn lỗi khỏi model (Hiding errors from the LLM trap)",
+        "explanation": "Nếu mọi lỗi đều là protocol error, model sẽ không nhận được thông tin lỗi dạng tool result để tự phục hồi. MCP spec nêu rõ lỗi trong quá trình thực thi tool phải được báo cáo trong result object với isError: true."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Model Context Protocol Specification – Tools (Error Handling):",
+    "points": [
+      "Protocol Errors: dùng JSON-RPC error chuẩn cho unknown tools, malformed requests/invalid arguments và server errors.",
+      "Tool Execution Errors: báo cáo trong tool result với isError: true cho API failures, business logic errors và các lỗi phát sinh khi thực thi, để LLM có thể nhìn thấy và xử lý."
+    ]
+  }
+}

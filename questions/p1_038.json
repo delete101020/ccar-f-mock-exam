@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_038",
+  "domain": "Multi-Agent Systems & Orchestrator-Worker Pattern (Hệ thống đa Agent & Mẫu Orchestrator-Worker)",
+  "topic": "Câu P1.38: Information Flow Between Subagents via the Coordinator",
+  "question": "The web search agent has gathered several relevant sources for a research topic. The document analysis agent now needs to examine these sources.\nHow does information typically flow between these two specialized subagents?",
+  "options": {
+    "A": "The web search agent directly invokes the document analysis agent, passing the discovered sources as parameters.",
+    "B": "The agents communicate through an event-driven message queue, with the document analysis agent subscribing to web search completion events.",
+    "C": "The coordinator agent receives the web search agent's output and includes relevant findings in the prompt when invoking the document analysis agent.",
+    "D": "Both agents access a shared memory store where the web search agent writes findings and the document analysis agent reads them."
+  },
+  "correct_answer": "C. The coordinator agent receives the web search agent's output and includes relevant findings in the prompt when invoking the document analysis agent.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Mẫu kiến trúc hub-and-spoke (orchestrator-workers) trong hệ thống đa agent:",
+    "points": [
+      "Trong kiến trúc coordinator-subagent của Anthropic, các subagent không giao tiếp trực tiếp với nhau. Coordinator (orchestrator) là trung tâm: nó giao việc cho subagent, nhận kết quả trả về, và quyết định bước tiếp theo.",
+      "Luồng thông tin điển hình: web search agent hoàn thành và trả kết quả về coordinator → coordinator đánh giá, chọn lọc các phát hiện liên quan → coordinator gọi document analysis agent, đưa các nguồn đó vào prompt (task description) của subagent.",
+      "Subagent chạy trong context riêng biệt (isolated context), không thừa hưởng lịch sử hội thoại của coordinator hay subagent khác — vì vậy mọi thông tin cần thiết phải được truyền tường minh qua prompt khi invoke.",
+      "Mô hình này giúp coordinator kiểm soát toàn bộ luồng, lọc thông tin (giữ context subagent gọn), dễ quan sát và debug."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Web search agent gọi trực tiếp document analysis agent):",
+        "trap": "Bẫy giao tiếp ngang hàng (Peer-to-peer invocation trap)",
+        "explanation": "Subagent thường không có quyền spawn subagent khác (trong Claude Code/Agent SDK, subagent không thể tự tạo subagent). Gọi trực tiếp cũng phá vỡ vai trò điều phối của coordinator, khiến nó mất tầm nhìn về tiến độ."
+      },
+      "B": {
+        "title": "B sai (Event-driven message queue):",
+        "trap": "Bẫy áp đặt kiến trúc phân tán truyền thống (Traditional distributed systems trap)",
+        "explanation": "Message queue/pub-sub là mẫu của hệ thống microservices, không phải cách các hệ thống agent của Anthropic vận hành điển hình. Nó thêm hạ tầng phức tạp và loại bỏ vai trò điều phối, đánh giá kết quả của coordinator."
+      },
+      "D": {
+        "title": "D sai (Shared memory store đọc/ghi chung):",
+        "trap": "Bẫy trạng thái chia sẻ thiếu kiểm soát (Uncontrolled shared state trap)",
+        "explanation": "Shared memory có thể dùng để lưu artifact trong một số thiết kế, nhưng không phải luồng thông tin điển hình. Nó khiến coordinator không kiểm soát được thông tin nào được chuyển tiếp, khó đồng bộ thời điểm, và dễ đưa thông tin thừa vào context của agent nhận."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Research – \"Building Effective Agents\" (Orchestrator-workers) & \"How we built our multi-agent research system\"; Claude Code Docs – Subagents.",
+    "points": [
+      "Trong mẫu orchestrator-workers, LLM trung tâm phân rã nhiệm vụ, giao cho các worker và tổng hợp kết quả của chúng.",
+      "Subagent có context window riêng; thông tin từ agent chính đến subagent được truyền qua prompt khi gọi, và kết quả trả về cho agent chính."
+    ]
+  }
+}

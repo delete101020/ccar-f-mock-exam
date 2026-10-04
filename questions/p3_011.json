@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_011",
+  "domain": "Claude Code Built-in Tools & Code Exploration (Công cụ tích hợp sẵn & Khám phá mã nguồn)",
+  "topic": "Câu P3.11: Using Grep to Find All Imports of a Package Across a Monorepo",
+  "question": "Developer Productivity An engineer asks the agent to find all files in the monorepo that import the @company/auth package to understand how authentication is used across services.\nWhich built-in tool is most appropriate for this task?",
+  "options": {
+    "A": "Bash, to execute find . -type d -name \"auth\" and explore matching directories",
+    "B": "Read, starting with package.json files to trace dependency declarations",
+    "C": "Grep, to search for the import statement pattern across file contents",
+    "D": "Glob, to find files with \"auth\" in their filename or path"
+  },
+  "correct_answer": "C. Grep, to search for the import statement pattern across file contents",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Phân biệt chức năng các built-in tools của Claude Code:",
+    "points": [
+      "Yêu cầu là tìm các file import package @company/auth — tức là tìm theo NỘI DUNG file (import/require statement), không phải theo tên file hay thư mục.",
+      "Grep (dựa trên ripgrep) được thiết kế để tìm kiếm pattern trong nội dung file trên toàn codebase, hỗ trợ regex (ví dụ pattern khớp cả `from '@company/auth` lẫn `require('@company/auth`), lọc theo glob/type và trả về danh sách file khớp. Đây là công cụ chính xác và hiệu quả nhất cho tác vụ này.",
+      "Kết quả Grep cho ra danh sách file chính xác, sau đó agent có thể dùng Read cho các file tiêu biểu để hiểu cách authentication được sử dụng."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Bash find thư mục tên 'auth'):",
+        "trap": "Bẫy tìm theo cấu trúc thay vì nội dung (Directory name trap)",
+        "explanation": "find -type d -name auth tìm các thư mục có tên 'auth', không cho biết file nào import package. Các service sử dụng @company/auth thường không có thư mục tên auth. Hơn nữa, Claude Code khuyến nghị dùng tool chuyên dụng thay vì Bash cho tác vụ tìm kiếm."
+      },
+      "B": {
+        "title": "B sai (Read các file package.json để lần theo dependency):",
+        "trap": "Bẫy khai báo dependency khác với sử dụng thực tế (Declaration vs usage trap)",
+        "explanation": "package.json chỉ cho biết package nào khai báo dependency, không cho biết file nào thực sự import (và có thể có hoisting/workspace dependency). Đọc tuần tự từng file trong monorepo cũng rất chậm và tốn context."
+      },
+      "D": {
+        "title": "D sai (Glob tìm file có 'auth' trong tên/đường dẫn):",
+        "trap": "Bẫy nhầm lẫn Glob và Grep (Filename vs content trap)",
+        "explanation": "Glob khớp theo tên file/đường dẫn, không đọc nội dung. File import @company/auth có thể tên bất kỳ (ví dụ orders/handler.ts), còn file tên 'auth' chưa chắc import package này."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Tools available to Claude:",
+    "points": [
+      "Grep: tìm kiếm pattern trong nội dung file; Glob: tìm file theo pattern tên/đường dẫn; Read: đọc nội dung file.",
+      "Best practice: ưu tiên các tool tìm kiếm chuyên dụng (Grep, Glob) thay vì lệnh Bash như find/grep để kết quả hiệu quả và có cấu trúc hơn."
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_041",
+  "domain": "Agentic Architectures & Multi-Agent Orchestration (Kiến trúc Agent & Điều phối đa Agent - Coordinator/Subagent)",
+  "topic": "Câu P1.41: Reducing Follow-up Summary Latency by Avoiding Unnecessary Subagent Spawning",
+  "question": "Production monitoring shows that follow-up queries like \"summarize what we learned about market trends\" consistently take 40+ seconds. Investigation reveals the coordinator spawns the synthesis subagent for each summarization request, passing 80K+ tokens of accumulated findings. The coordinator already has these findings in its context from orchestrating the research.\nWhat's the most effective way to improve response time for these follow-up summaries?",
+  "options": {
+    "A": "Pre-generate and cache summaries at multiple granularities whenever new findings accumulate.",
+    "B": "Enable prompt caching on the synthesis subagent to reduce the overhead of repeatedly transferring the same research findings.",
+    "C": "Have the coordinator handle straightforward summarization requests directly using its existing context, reserving subagent spawning for complex analysis.",
+    "D": "Spawn the synthesis subagent with reduced context and have it request specific findings from the coordinator on-demand."
+  },
+  "correct_answer": "C. Have the coordinator handle straightforward summarization requests directly using its existing context, reserving subagent spawning for complex analysis.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Phân tích chi phí của việc spawn subagent:",
+    "points": [
+      "Mỗi lần spawn synthesis subagent, coordinator phải đóng gói và gửi lại 80K+ tokens findings vào một context mới; subagent phải đọc toàn bộ rồi mới sinh output – đây là nguồn gốc độ trễ 40+ giây.",
+      "Dữ kiện quyết định: coordinator ĐÃ có sẵn các findings này trong context của chính nó. Với yêu cầu đơn giản như \"summarize what we learned\", coordinator có thể trả lời trực tiếp mà không tốn chi phí khởi tạo và truyền context.",
+      "Nguyên tắc \"Building Effective Agents\": chỉ tăng độ phức tạp (thêm agent) khi nó thực sự cải thiện kết quả. Subagent nên được dành cho tác vụ phân tích phức tạp cần context riêng hoặc chạy song song, không phải cho mọi request."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Tạo trước và cache tóm tắt ở nhiều mức chi tiết):",
+        "trap": "Bẫy tính toán trước lãng phí (Speculative precomputation trap)",
+        "explanation": "Sinh tóm tắt ở mọi lần findings thay đổi tốn rất nhiều token cho những bản tóm tắt có thể không bao giờ được dùng, và vẫn không khớp với câu hỏi cụ thể của người dùng (ví dụ: chỉ về \"market trends\")."
+      },
+      "B": {
+        "title": "B sai (Bật prompt caching cho synthesis subagent):",
+        "trap": "Bẫy tối ưu cục bộ (Local optimization trap)",
+        "explanation": "Prompt caching giảm chi phí và phần nào độ trễ xử lý prefix, nhưng vẫn giữ nguyên kiến trúc thừa: spawn một agent mới, truyền 80K tokens cho một việc coordinator tự làm được. Ngoài ra findings tích lũy thay đổi liên tục nên tỷ lệ cache hit không ổn định."
+      },
+      "D": {
+        "title": "D sai (Spawn subagent với context rút gọn và để nó hỏi lại coordinator):",
+        "trap": "Bẫy tăng số vòng giao tiếp (Chatty round-trip trap)",
+        "explanation": "Việc subagent liên tục yêu cầu thêm findings tạo nhiều vòng trao đổi qua lại, thường làm độ trễ tăng thay vì giảm, đồng thời vẫn giữ chi phí spawn không cần thiết."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Research: \"Building Effective Agents\" & Claude Agent SDK – Subagents:",
+    "points": [
+      "Bắt đầu từ giải pháp đơn giản nhất và chỉ thêm agent/bước khi lợi ích rõ ràng vượt chi phí về độ trễ và token.",
+      "Subagent phù hợp cho tác vụ cần cô lập context hoặc song song hóa; với tác vụ mà orchestrator đã có đủ context, xử lý trực tiếp hiệu quả hơn."
+    ]
+  }
+}

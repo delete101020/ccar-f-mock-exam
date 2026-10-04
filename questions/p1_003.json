@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_003",
+  "domain": "Claude Code CLI & Session Management (Quản lý phiên làm việc trong Claude Code)",
+  "topic": "Câu P1.3: Resuming Specific Named Session in Claude Code",
+  "question": "An engineer used Claude Code yesterday to investigate authentication flows in a legacy monolith, building up significant context over a 2-hour session. Today she wants to continue that specific investigation. She's worked on three other codebases since then and knows the session was named \"auth-deep-dive\".\nHow should she resume?",
+  "options": {
+    "A": "Use --continue to pick up where the most recent conversation left off",
+    "B": "Use --session-id with the UUID from yesterday's session transcript file",
+    "C": "Start fresh and re-read the same files",
+    "D": "Use --resume auth-deep-dive to load that specific session by name"
+  },
+  "correct_answer": "D. Use --resume auth-deep-dive to load that specific session by name",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Cơ chế quản lý phiên của Claude Code CLI:",
+    "points": [
+      "Claude Code hỗ trợ đặt tên (tag/name) cho các phiên làm việc và lưu trữ lịch sử ngữ cảnh (conversation history & context) giữa các lần chạy.",
+      "Lệnh/cờ chuẩn để phục hồi một phiên cụ thể theo tên hoặc chọn từ danh sách phiên đã lưu là `claude --resume <session-name-or-id>`.",
+      "Vì kỹ sư đã chủ động đặt tên phiên là \"auth-deep-dive\", việc truyền trực tiếp tên phiên sau cờ `--resume auth-deep-dive` cho phép Claude Code khôi phục chính xác toàn bộ lịch sử trao đổi, sơ đồ tư duy và context 2 giờ trước đó mà không bị ảnh hưởng bởi các phiên làm việc xen ngang."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Dùng --continue):",
+        "trap": "Bẫy ngữ cảnh mới nhất (Most recent session trap)",
+        "explanation": "Cờ --continue (hoặc -c) dùng để tiếp tục ngay phiên gần nhất (most recent session) trong thư mục hiện tại. Đề bài nêu rõ cô ấy đã làm việc trên 3 codebase khác (\"She's worked on three other codebases since then\"), do đó phiên gần nhất không còn là phiên \"auth-deep-dive\" cần tìm."
+      },
+      "B": {
+        "title": "B sai (Dùng --session-id):",
+        "trap": "Bẫy sai tham số CLI (Invalid CLI flag trap)",
+        "explanation": "Trong cú pháp CLI của Claude Code, cờ dùng để phục hồi session là --resume (hỗ trợ cả session name lẫn session ID/UUID). Cờ --session-id không phải là cú pháp chuẩn để resume một phiên làm việc có tên."
+      },
+      "C": {
+        "title": "C sai (Bắt đầu lại từ đầu - Start fresh):",
+        "trap": "Bẫy lãng phí thời gian và token (Inefficient rework trap)",
+        "explanation": "Một phiên làm việc 2 giờ đã tích lũy rất nhiều phân tích, đường đi mã nguồn và kết luận trung gian. Bắt đầu lại từ đầu làm mất toàn bộ ngữ cảnh đã đào sâu và tốn thêm thời gian cũng như token không cần thiết."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Session Management:",
+    "points": [
+      "Cú pháp lệnh claude --continue: Tiếp tục phiên hội thoại gần nhất.",
+      "Cú pháp lệnh claude --resume [name/id]: Phục hồi phiên làm việc cụ thể theo tên đã đặt hoặc UUID, hoặc hiển thị danh sách các phiên gần đây để lựa chọn."
+    ]
+  }
+}

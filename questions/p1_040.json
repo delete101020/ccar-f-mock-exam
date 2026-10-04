@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_040",
+  "domain": "Multi-Agent Orchestration & Source Provenance (Điều phối đa Agent & Bảo toàn nguồn trích dẫn)",
+  "topic": "Câu P1.40: Preserving Citations via Structured Claim-Source Mappings",
+  "question": "In production, final reports frequently contain claims without proper source attribution. Investigation shows that while the web search and document analysis agents correctly attach citations to their outputs, the synthesis agent loses track of which sources support which conclusions when combining findings.\nWhat's the most effective architectural change?",
+  "options": {
+    "A": "Add a verification step where the report generator uses semantic similarity matching against original sources to reconstruct which claims came from which documents.",
+    "B": "Have the coordinator inject source identifier prefixes into text before each handoff, then parse these prefixes at report generation to reconstruct citations.",
+    "C": "Maintain complete transcripts of all subagent interactions and add a citation-resolution agent to analyze logs and determine attributions before report generation.",
+    "D": "Require all subagents to output structured claim-source mappings that the synthesis agent must preserve and merge when combining findings from multiple sources."
+  },
+  "correct_answer": "D. Require all subagents to output structured claim-source mappings that the synthesis agent must preserve and merge when combining findings from multiple sources.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Điểm mất mát thông tin nằm ở bước synthesis – nơi dữ liệu có cấu trúc (claim + citation) bị trộn thành văn xuôi:",
+    "points": [
+      "Dữ kiện then chốt: các agent upstream (web search, document analysis) đã gắn citation đúng. Lỗi xảy ra khi synthesis agent hợp nhất findings và đánh mất liên kết giữa kết luận và nguồn.",
+      "Giải pháp gốc rễ là thiết kế hợp đồng dữ liệu (data contract) có cấu trúc: mỗi subagent xuất ra danh sách claim-source mappings (claim, source_id/URL, excerpt...). Synthesis agent được yêu cầu bảo toàn và merge các mapping này thay vì chỉ viết lại văn bản tự do.",
+      "Khi provenance được mang theo như một phần của schema xuyên suốt pipeline, report generator có sẵn dữ liệu nguồn để trích dẫn – không cần đoán hay tái dựng lại sau đó."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Dùng semantic similarity để tái dựng nguồn sau khi viết báo cáo):",
+        "trap": "Bẫy tái dựng hậu kỳ mang tính xác suất (Post-hoc reconstruction trap)",
+        "explanation": "Đối sánh ngữ nghĩa chỉ là ước lượng: dễ gán nhầm nguồn cho claim tương tự, bỏ sót claim tổng hợp từ nhiều nguồn. Đây là chữa triệu chứng thay vì ngăn việc mất provenance ngay từ đầu."
+      },
+      "B": {
+        "title": "B sai (Chèn tiền tố source ID vào text rồi parse lại):",
+        "trap": "Bẫy mã hóa metadata vào văn bản tự do (In-band text tagging trap)",
+        "explanation": "Tiền tố nhét vào text rất mong manh: khi synthesis agent diễn đạt lại, gộp hoặc cắt câu, các tiền tố dễ bị mất, đặt sai chỗ hoặc bị model viết lại. Parsing chuỗi ở cuối pipeline vì thế không đáng tin cậy."
+      },
+      "C": {
+        "title": "C sai (Lưu toàn bộ transcript và thêm citation-resolution agent):",
+        "trap": "Bẫy over-engineering (Thêm agent/log thay vì sửa data contract)",
+        "explanation": "Thêm một agent đọc log khổng lồ để suy luận attribution làm tăng chi phí, độ trễ và vẫn mang tính suy đoán. Vấn đề được giải quyết rẻ và chắc chắn hơn bằng cách giữ cấu trúc claim-source ngay trong output."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – Multi-agent research system & Claude API Docs – Structured outputs / Citations:",
+    "points": [
+      "Dùng output có cấu trúc (JSON schema / tool input schema) để truyền dữ liệu giữa các agent thay vì văn xuôi tự do.",
+      "Anthropic khuyến nghị giữ nguồn trích dẫn gắn liền với từng claim (như tính năng Citations của Claude API) để đảm bảo khả năng kiểm chứng."
+    ]
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "id": "ccar_f_p1_044",
+  "domain": "Agentic Architectures & Multi-Agent Orchestration (Kiến trúc Agent & Điều phối đa Agent - Coordinator/Subagent)",
+  "topic": "Câu P1.44: Dynamic Coordinator-Based Routing for Evolving Query Distributions",
+  "question": "In production, you're distributing complex queries to specialized subagents. The query distribution is uneven and evolving as users discover new applications.\nWhat's the most effective approach to optimize for query complexity?",
+  "options": {
+    "A": "Have the coordinator assess each incoming query at runtime and decide which subagents to invoke—and how many—based on that query's complexity and the capabilities it requires.",
+    "B": "Create a fast-track path for factual questions that bypasses subagents entirely, routing only analytical queries through the complete pipeline.",
+    "C": "Train a query complexity classifier based on labeled historical data to predict optimal subagent combination.",
+    "D": "Implement pattern-based routing that categorizes queries based on factual vs analytical patterns and maps each to a predefined subagent combination."
+  },
+  "correct_answer": "A. Have the coordinator assess each incoming query at runtime and decide which subagents to invoke—and how many—based on that query's complexity and the capabilities it requires.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Điểm mấu chốt của đề: phân phối truy vấn \"uneven and evolving as users discover new applications\":",
+    "points": [
+      "Khi loại truy vấn liên tục thay đổi, mọi cơ chế định tuyến dựa trên danh mục cố định (pattern, rule, classifier huấn luyện trên dữ liệu cũ) đều nhanh chóng lỗi thời.",
+      "Coordinator (một LLM) có khả năng hiểu ngữ nghĩa từng truy vấn mới và quyết định động cần gọi subagent nào, bao nhiêu subagent – tương ứng mẫu Orchestrator-workers, nơi các subtask không xác định trước mà do orchestrator quyết định theo input.",
+      "Cách này vừa tối ưu chi phí cho truy vấn đơn giản (gọi ít subagent) vừa đủ sức cho truy vấn phức tạp, và tự thích ứng với use case mới mà không cần huấn luyện/viết lại luật.",
+      "Phương án A (đã chỉnh lại câu chữ cho rõ): coordinator quyết định hai thứ cho từng truy vấn tại runtime – loại subagent nào (theo capabilities truy vấn cần) và bao nhiêu subagent (theo độ phức tạp). \"At runtime\" là điểm đối lập trực tiếp với \"predefined\" (D) và \"historical data\" (C)."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Fast-track cho câu hỏi factual, bỏ qua subagent):",
+        "trap": "Bẫy phân loại nhị phân cứng nhắc (Binary split trap)",
+        "explanation": "Chia factual/analytical chỉ là một trục phân loại thô; không tối ưu được các mức độ phức tạp trung gian và không thích ứng với các loại truy vấn mới xuất hiện."
+      },
+      "C": {
+        "title": "C sai (Huấn luyện classifier độ phức tạp từ dữ liệu lịch sử):",
+        "trap": "Bẫy dữ liệu lịch sử lỗi thời (Distribution drift trap)",
+        "explanation": "Classifier học từ dữ liệu quá khứ sẽ suy giảm khi phân phối truy vấn thay đổi, cần gán nhãn và huấn luyện lại liên tục – tốn công và luôn đi sau thực tế."
+      },
+      "D": {
+        "title": "D sai (Routing theo pattern ánh xạ sang tổ hợp subagent định sẵn):",
+        "trap": "Bẫy luật tĩnh (Static rule-based routing trap)",
+        "explanation": "Pattern và tổ hợp subagent định sẵn không bao phủ được những ứng dụng mới người dùng khám phá; truy vấn không khớp pattern sẽ bị định tuyến sai."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Research: \"Building Effective Agents\" (Routing vs Orchestrator-workers):",
+    "points": [
+      "Routing phù hợp khi các danh mục input rõ ràng và ổn định; khi không thể dự đoán trước các subtask, orchestrator-workers linh hoạt hơn.",
+      "Trong orchestrator-workers, LLM trung tâm tự động phân rã và giao việc dựa trên từng input cụ thể.",
+      "Anthropic Engineering: \"How we built our multi-agent research system\" – lead agent tự điều chỉnh mức đầu tư theo độ phức tạp truy vấn (fact-finding đơn giản: 1 subagent; so sánh: 2–4 subagent; nghiên cứu phức tạp: 10+ subagent)."
+    ]
+  }
+}

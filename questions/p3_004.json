@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_004",
+  "domain": "Tool Design & Response Optimization (Thiết kế Tool & Tối ưu phản hồi)",
+  "topic": "Câu P3.4: Cursor-Based Pagination for a Product Search Tool",
+  "question": "Your search products tool queries an external catalog API that returns paginated results (50 items per request). Production logs show queries frequently match 200+ products, and the design that auto-fetches all pages causes 15-20 second delays.\nHow should you redesign the pagination handling?",
+  "options": {
+    "A": "Create separate search products and fetch more results tools for pagination.",
+    "B": "Implement server-side relevance ranking and return only the top 50 most relevant items.",
+    "C": "Add a max pages parameter (default: 2) that controls how many pages are fetched internally.",
+    "D": "Return the first page with total match count and cursor for additional pages."
+  },
+  "correct_answer": "D. Return the first page with total match count and cursor for additional pages.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Bài toán đưa ra các dữ kiện quan trọng:",
+    "points": [
+      "API catalog trả về 50 items mỗi trang; query thường match 200+ sản phẩm; việc auto-fetch toàn bộ các trang gây trễ 15-20 giây và đổ một lượng lớn kết quả vào context của agent.",
+      "Giải pháp chuẩn: trả về trang đầu tiên kèm total match count và cursor cho các trang tiếp theo. Agent nhận phản hồi nhanh, biết được quy mô kết quả (ví dụ: 'hiển thị 50/230') và có thể chủ động lấy thêm hoặc thu hẹp truy vấn khi cần.",
+      "Điều này phù hợp với hướng dẫn 'Writing effective tools for agents' của Anthropic: tối ưu token efficiency của tool response bằng pagination, filtering, truncation với giá trị mặc định hợp lý, đồng thời cung cấp đủ metadata để agent quyết định bước tiếp theo."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Tách thành hai tool search_products và fetch_more_results):",
+        "trap": "Bẫy phân mảnh công cụ (Tool fragmentation trap)",
+        "explanation": "Tách tool không giải quyết được việc agent không biết có bao nhiêu kết quả và còn trang nào hay không. Cursor và total count có thể nằm ngay trong một tool với tham số cursor tùy chọn, không cần nhân bản tool làm tăng độ rối khi chọn tool."
+      },
+      "B": {
+        "title": "B sai (Server-side relevance ranking, chỉ trả về top 50):",
+        "trap": "Bẫy cắt cụt kết quả âm thầm (Silent truncation trap)",
+        "explanation": "Chỉ trả về top 50 mà không cho biết tổng số kết quả và không có cách lấy tiếp sẽ khiến agent mất khả năng truy cập các sản phẩm còn lại. Agent có thể kết luận sai rằng chỉ có 50 kết quả."
+      },
+      "C": {
+        "title": "C sai (Thêm tham số max_pages mặc định 2, fetch nội bộ):",
+        "trap": "Bẫy giảm nhẹ triệu chứng (Symptom mitigation trap)",
+        "explanation": "Vẫn fetch nhiều trang đồng bộ (gây trễ ~2x) và vẫn cắt cụt dữ liệu một cách tùy ý; agent không biết còn bao nhiêu kết quả và không có cursor để tiếp tục từ điểm dừng."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – \"Writing effective tools for agents\":",
+    "points": [
+      "Tối ưu tool response cho token efficiency: áp dụng pagination, range selection, filtering và truncation với các giá trị mặc định hợp lý.",
+      "Khi kết quả bị giới hạn, response nên cho agent biết điều đó (ví dụ total count, cursor/next page) để agent có thể chủ động truy vấn thêm hoặc thu hẹp tìm kiếm."
+    ]
+  }
+}

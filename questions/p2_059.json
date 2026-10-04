@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_059",
+  "domain": "Multi-Agent Orchestration & Tool Scoping (Điều phối đa agent & Giới hạn phạm vi Tool)",
+  "topic": "Câu P2.59: Tool Overload as the Primary Cause of Poor Tool Selection",
+  "question": "You've configured the system so that all four subagents have access to the complete set of 18 tools. During testing, agents frequently call tools outside their specialization—the synthesis agent attempts web searches, and the report generator tries to analyze documents.\nWhat is the primary cause of this poor tool selection behavior?",
+  "options": {
+    "A": "Choosing from 18 tools instead of 4-5 relevant ones increases decision complexity beyond reliable selection thresholds.",
+    "B": "The agents' role descriptions in their system prompts conflict with having access to tools outside that role.",
+    "C": "The tool definitions consume too much context window space, leaving insufficient room for task content.",
+    "D": "The coordinator cannot track which capabilities each subagent has, leading to misrouted tasks."
+  },
+  "correct_answer": "A. Choosing from 18 tools instead of 4-5 relevant ones increases decision complexity beyond reliable selection thresholds.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Bản chất của suy giảm độ chính xác chọn tool:",
+    "points": [
+      "Mỗi subagent phải lựa chọn trong 18 tool, trong khi chỉ 4-5 tool thuộc chuyên môn của nó. Càng nhiều tool khả dụng, không gian quyết định càng lớn, và mô hình càng dễ chọn tool \"trông có vẻ hữu ích\" nhưng nằm ngoài vai trò — ví dụ synthesis agent gọi web search.",
+      "Đây là nguyên nhân chính: độ chính xác chọn tool giảm khi số lượng tool tăng vượt ngưỡng lựa chọn đáng tin cậy. Biện pháp khắc phục tương ứng là giới hạn tool của mỗi subagent theo đúng chuyên môn (least privilege / tool scoping), ví dụ qua trường tools trong định nghĩa subagent.",
+      "Hành vi \"đi lệch vai trò\" là hệ quả trực tiếp của việc tool ngoài vai trò có mặt và hiển thị như một lựa chọn hợp lệ."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Mô tả vai trò mâu thuẫn với quyền truy cập tool):",
+        "trap": "Bẫy nhầm hệ quả với nguyên nhân (Symptom-as-cause trap)",
+        "explanation": "Sự không khớp giữa vai trò và bộ tool là một biểu hiện của thiết kế cấp tool quá rộng, nhưng cơ chế khiến chọn sai là độ phức tạp quyết định khi có quá nhiều lựa chọn. Một \"mâu thuẫn\" bản thân không làm mô hình gọi tool sai một cách hệ thống."
+      },
+      "C": {
+        "title": "C sai (Định nghĩa tool chiếm quá nhiều context):",
+        "trap": "Bẫy quy sai cho context window (Context budget misattribution trap)",
+        "explanation": "18 định nghĩa tool chiếm vài nghìn token, rất nhỏ so với context window của Claude. Triệu chứng là chọn sai tool, không phải thiếu chỗ cho nội dung tác vụ (vốn sẽ biểu hiện qua truncation hay quên ngữ cảnh)."
+      },
+      "D": {
+        "title": "D sai (Coordinator không theo dõi được năng lực subagent):",
+        "trap": "Bẫy đổ lỗi sai tầng (Wrong layer attribution trap)",
+        "explanation": "Vấn đề là chính các subagent gọi tool ngoài chuyên môn khi thực hiện tác vụ được giao, không phải coordinator giao sai tác vụ. Routing của coordinator không giải thích được việc synthesis agent tự gọi web search."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Claude Code / Agent SDK Subagents & \"Writing effective tools for agents\":",
+    "points": [
+      "Subagent có thể được cấu hình với danh sách tool giới hạn (trường tools); Anthropic khuyến nghị chỉ cấp các tool cần thiết cho mục đích của subagent.",
+      "Quá nhiều tool hoặc tool chồng chéo chức năng có thể làm agent bối rối và giảm hiệu quả lựa chọn; ít tool hơn nhưng được chọn lọc kỹ thường cho kết quả tốt hơn."
+    ]
+  }
+}

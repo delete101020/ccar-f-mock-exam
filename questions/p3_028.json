@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_028",
+  "domain": "Claude Code Configuration & Skills (Cấu hình Claude Code & Skills / Slash Commands)",
+  "topic": "Câu P3.28: Sharing a /migrate-component Skill via Project .claude/skills",
+  "question": "Your team frequently migrates React components to Vue. You've written a step-by-step workflow for Claude Code to follow during each migration, and you want every developer on the team to invoke it by typing /migrate-component. The workflow should stay in sync as the team iterates on it.\nWhere should you place the skill file?",
+  "options": {
+    "A": "In ~/.claude/skills/migrate-component/SKILL.md on each developer's machine",
+    "B": "In the project's .claude/settings.json using a skillOverrides entry to register and define the workflow",
+    "C": "In .claude/skills/migrate-component/SKILL.md at the project root, committed to version control",
+    "D": "As a detailed instruction block in the project's root CLAUDE.md file"
+  },
+  "correct_answer": "C. In .claude/skills/migrate-component/SKILL.md at the project root, committed to version control",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Hai yêu cầu của đề bài: (1) mọi developer gọi được bằng /migrate-component, (2) workflow luôn đồng bộ khi team chỉnh sửa:",
+    "points": [
+      "Claude Code tìm skill ở cấp dự án trong .claude/skills/<skill-name>/SKILL.md. Tên thư mục trở thành lệnh /migrate-component, và frontmatter (name, description) cùng nội dung workflow nằm trong SKILL.md.",
+      "Đặt skill trong repo và commit vào version control nghĩa là mọi người clone/pull đều có ngay skill, và mọi thay đổi đi qua code review như mã nguồn - đảm bảo 'stay in sync'.",
+      "Skill chỉ nạp toàn bộ nội dung khi được gọi (progressive disclosure), nên không chiếm context thường trực như khi nhét vào CLAUDE.md."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (~/.claude/skills trên máy từng developer):",
+        "trap": "Bẫy nhầm phạm vi cá nhân và phạm vi dự án (Personal vs project scope trap)",
+        "explanation": "~/.claude/skills là skill cá nhân, chỉ có trên máy đó. Mỗi người phải tự sao chép và cập nhật thủ công, nên các bản sẽ nhanh chóng lệch nhau - trái với yêu cầu đồng bộ."
+      },
+      "B": {
+        "title": "B sai (skillOverrides trong .claude/settings.json):",
+        "trap": "Bẫy cấu hình không tồn tại (Fictitious configuration trap)",
+        "explanation": "settings.json dùng cho permissions, hooks, env, model... chứ không phải nơi định nghĩa nội dung workflow của skill. Skill được định nghĩa bằng file SKILL.md trong thư mục skills."
+      },
+      "D": {
+        "title": "D sai (Khối hướng dẫn trong CLAUDE.md gốc):",
+        "trap": "Bẫy nhầm bộ nhớ thường trực với lệnh gọi theo yêu cầu (Memory vs invocable command trap)",
+        "explanation": "CLAUDE.md được nạp vào mọi phiên như ngữ cảnh chung, không tạo ra lệnh /migrate-component. Nhét workflow dài vào đó còn tốn context ở mọi phiên, kể cả khi không migrate."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Agent Skills & Slash commands:",
+    "points": [
+      "Project skills: .claude/skills/<name>/SKILL.md, được chia sẻ với team qua git; Personal skills: ~/.claude/skills/<name>/SKILL.md, chỉ áp dụng cho người dùng đó.",
+      "Skill có thể được gọi trực tiếp bằng /<name> hoặc được Claude tự kích hoạt dựa trên description."
+    ]
+  }
+}

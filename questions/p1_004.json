@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_004",
+  "domain": "Context Management & Subagent State Recovery (Quản lý Context & Phục hồi trạng thái Subagent)",
+  "topic": "Câu P1.4: Resuming Interrupted Subagent After Minor Code Drift",
+  "question": "An engineer's exploration subagent spent 30 minutes analyzing a legacy payment system, reading 47 files and documenting data flows. The session was interrupted when the engineer's connection dropped. While away, a teammate merged a PR that renamed two utility functions. The engineer wants to continue the same exploration.\nWhat's the most effective approach?",
+  "options": {
+    "A": "Launch a fresh subagent with a summary of prior findings.",
+    "B": "Resume the subagent from its previous transcript and inform it about the renamed functions.",
+    "C": "Launch a fresh subagent and include the prior transcript in the initial prompt for context.",
+    "D": "Resume the subagent from its previous transcript without mentioning the changes–the architecture understanding remains valid."
+  },
+  "correct_answer": "B. Resume the subagent from its previous transcript and inform it about the renamed functions.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Phân tích trạng thái context và mức độ thay đổi của codebase:",
+    "points": [
+      "Giá trị đã tích lũy: Subagent đã dành 30 phút đọc 47 file và ghi lại data flow của hệ thống payment. Phần lớn hiểu biết về kiến trúc này vẫn còn nguyên giá trị, vì lần gián đoạn chỉ do mất kết nối chứ không phải do context bị suy giảm.",
+      "Mức độ thay đổi nhỏ: PR chỉ đổi tên 2 hàm tiện ích. Đây là thay đổi cục bộ, không làm đổi kiến trúc hay luồng dữ liệu, nên không cần bỏ toàn bộ context đã xây dựng.",
+      "Mẫu tối ưu (Resume + targeted update): Resume transcript cũ rồi thông báo cụ thể những gì đã thay đổi (hai hàm đổi tên) để agent tự cập nhật các tham chiếu liên quan. Cách này vừa giữ được kết quả khám phá, vừa tránh dùng thông tin cũ. Nếu thay đổi lớn hoặc rộng (nhiều module bị viết lại) thì mới nên bắt đầu session mới kèm bản tóm tắt."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Subagent mới kèm bản tóm tắt phát hiện):",
+        "trap": "Bẫy bỏ phí context còn giá trị (Over-reset trap)",
+        "explanation": "Bản tóm tắt làm mất các chi tiết đã khám phá (đường đi code, tên class, data flow cụ thể), buộc subagent mới phải đọc lại nhiều file. Cách này chỉ hợp lý khi phần lớn kết quả cũ đã lỗi thời, còn ở đây chỉ có 2 hàm bị đổi tên."
+      },
+      "C": {
+        "title": "C sai (Subagent mới kèm toàn bộ transcript cũ trong prompt):",
+        "trap": "Bẫy nhồi token thô (Raw transcript injection trap)",
+        "explanation": "Nhét nguyên transcript vào prompt ban đầu vẫn phải gánh toàn bộ token của 47 file, mà không có lợi thế của việc resume. Nó cũng không nói cho agent biết điều gì đã thay đổi."
+      },
+      "D": {
+        "title": "D sai (Resume nhưng không đề cập thay đổi):",
+        "trap": "Bẫy giả định trạng thái tĩnh (Stale codebase assumption trap)",
+        "explanation": "Agent không biết hai hàm đã đổi tên nên sẽ tiếp tục dùng tên cũ khi phân tích, viết code hoặc tìm kiếm, dẫn đến kết luận sai về data flow. Hiểu biết về kiến trúc vẫn đúng nhưng các tham chiếu tên hàm thì không."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Session Management & Subagent Resumption:",
+    "points": [
+      "Resume phiên cũ khi context trước đó phần lớn còn hợp lệ, và thông báo cụ thể các file hoặc ký hiệu đã thay đổi để agent phân tích lại có mục tiêu, thay vì đọc lại toàn bộ.",
+      "Chỉ bắt đầu phiên mới kèm bản tóm tắt có cấu trúc khi kết quả công cụ cũ đã lỗi thời trên diện rộng. Nguyên tắc này nhất quán với câu q012."
+    ]
+  }
+}

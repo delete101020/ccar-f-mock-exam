@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_044",
+  "domain": "Claude Code Iterative Workflows (Quy trình làm việc lặp với Claude Code)",
+  "topic": "Câu P2.44: Letting Claude Interview You to Surface Unknown Requirements",
+  "question": "You're implementing a caching layer for API responses to speed up the /products endpoint. You have a rough idea—Redis with a 5-minute TTL—but you're new to production caching and aren't sure what other considerations a robust implementation requires.\nWhat's the most effective way to start your iterative workflow?",
+  "options": {
+    "A": "Ask Claude to interview you about the caching requirements before implementing, surfacing considerations like invalidation strategies, cache layers, consistency guarantees, and failure modes.",
+    "B": "Use plan mode to analyze the current/products endpoint implementation, then provide your caching requirements once Claude explains how the existing code is structured.",
+    "C": "Start with a minimal request: \"Add Redis caching to/products with 5-minute TTL.\" Add features and fix issues through follow-up prompts as problems surface during testing.",
+    "D": "Write a specification with your known requirements and \"TBD\" markers for uncertain areas, having Claude propose solutions for each TBD as it implements."
+  },
+  "correct_answer": "A. Ask Claude to interview you about the caching requirements before implementing, surfacing considerations like invalidation strategies, cache layers, consistency guarantees, and failure modes.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Bài toán đưa ra các dữ kiện quan trọng:",
+    "points": [
+      "Người dùng chỉ có ý tưởng sơ bộ (Redis, TTL 5 phút) và tự thừa nhận \"new to production caching\" — tức là có những yêu cầu họ không biết rằng mình chưa biết (unknown unknowns).",
+      "Yêu cầu Claude phỏng vấn (interview) trước khi triển khai tận dụng kiến thức của Claude để chủ động nêu ra các khía cạnh quan trọng: cache invalidation, cache stampede, tính nhất quán dữ liệu, hành vi khi Redis sập (failure modes), key design... Người dùng chỉ cần đưa ra quyết định cho từng điểm.",
+      "Kết quả là một bản spec đầy đủ trước khi viết code, tránh việc phát hiện thiếu sót muộn trong production. Đây là mẫu được Anthropic gợi ý trong best practices của Claude Code cho các tính năng lớn hoặc chưa rõ yêu cầu."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Dùng plan mode phân tích endpoint hiện tại rồi mới cung cấp yêu cầu):",
+        "trap": "Bẫy giải sai lỗ hổng kiến thức (Wrong knowledge gap trap)",
+        "explanation": "Hiểu cấu trúc code hiện tại là hữu ích, nhưng điểm thiếu hụt của người dùng là kiến thức về caching production, không phải về code. Sau khi Claude giải thích code, người dùng vẫn chỉ đưa ra được yêu cầu \"Redis, 5 phút TTL\" chưa đầy đủ."
+      },
+      "C": {
+        "title": "C sai (Bắt đầu tối giản rồi sửa dần khi lỗi xuất hiện trong test):",
+        "trap": "Bẫy phát hiện vấn đề muộn (Reactive discovery trap)",
+        "explanation": "Các vấn đề caching như invalidation sai, dữ liệu cũ (stale data), hay thundering herd thường không lộ ra trong test cục bộ mà chỉ xuất hiện dưới tải production. Cách tiếp cận phản ứng (reactive) này dễ dẫn đến sự cố thực tế và nhiều vòng sửa chắp vá."
+      },
+      "D": {
+        "title": "D sai (Viết spec với các mục \"TBD\" để Claude tự đề xuất khi triển khai):",
+        "trap": "Bẫy không biết mình thiếu gì (Unknown unknowns trap)",
+        "explanation": "Người dùng chỉ có thể đánh dấu TBD cho những gì họ biết là chưa chắc; các khía cạnh họ không hề nghĩ tới sẽ không xuất hiện trong spec. Thêm nữa, để Claude tự quyết các TBD trong lúc code khiến người dùng mất quyền ra quyết định cho các trade-off quan trọng."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Best practices (khám phá yêu cầu & lập kế hoạch trước khi code):",
+    "points": [
+      "Với tính năng lớn hoặc yêu cầu chưa rõ, Anthropic gợi ý để Claude phỏng vấn bạn (ví dụ dùng AskUserQuestion) về chi tiết triển khai, edge cases và trade-off, sau đó viết thành spec trước khi bắt đầu code.",
+      "Tách giai đoạn khám phá/lập kế hoạch khỏi giai đoạn triển khai giúp tránh việc Claude giải quyết sai vấn đề."
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_015",
+  "domain": "Information Extraction & Pipeline Validation (Trích xuất thông tin & Kiểm thực pipeline)",
+  "topic": "Câu P2.15: Recovering from Pydantic Validation Failures via Error-Feedback Follow-up Request",
+  "question": "Monitoring shows 12% of extractions fall Pydantic validation with specific errors like \"expected float for quantity, got '2 to 3\". Retrying these requests without modification produces failures.\nWhat's the most effective approach to recover from these validation failures?",
+  "options": {
+    "A": "Set temperature to 0 to eliminate output variability and ensure consistent formatting",
+    "B": "Send a follow-up request including the validation error, asking the model to correct its output",
+    "C": "Pre-process source documents to standardize problematic formats before sending them for extraction",
+    "D": "Implement a secondary pipeline using a larger model tier to reprocess documents that fail validation"
+  },
+  "correct_answer": "B. Send a follow-up request including the validation error, asking the model to correct its output",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Dữ kiện then chốt: lỗi validation có thông báo cụ thể (“expected float for quantity, got '2 to 3'”) và retry nguyên trạng vẫn thất bại:",
+    "points": [
+      "Retry không thay đổi gì thất bại vì model không biết mình sai ở đâu — với cùng input, nó có xu hướng tái tạo cùng output (giá trị nguyên văn “2 to 3” từ tài liệu).",
+      "Gửi follow-up request kèm thông báo lỗi validation cụ thể (trường nào, kỳ vọng kiểu gì, nhận được gì) cung cấp đúng thông tin model cần để sửa: ví dụ chuyển “2 to 3” thành một giá trị float theo quy tắc nghiệp vụ, hoặc dùng trường phù hợp.",
+      "Pydantic validation errors vốn có cấu trúc, mô tả rõ ràng — đây là feedback lý tưởng cho vòng lặp validation–retry. Đây là pattern Anthropic khuyến nghị: dùng lỗi validation làm feedback cho lần gọi tiếp theo.",
+      "Có thể kết hợp cải thiện mô tả trường trong schema (cách xử lý khoảng giá trị) để giảm tần suất lỗi về lâu dài."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Đặt temperature = 0):",
+        "trap": "Bẫy nhầm tính ổn định với tính đúng đắn (Determinism-is-not-correctness trap)",
+        "explanation": "Temperature 0 chỉ làm output ổn định hơn — tức model sẽ lặp lại cùng lỗi “2 to 3” một cách nhất quán hơn. Lỗi không đến từ tính ngẫu nhiên mà từ việc model không biết cách chuẩn hóa giá trị."
+      },
+      "C": {
+        "title": "C sai (Tiền xử lý chuẩn hóa định dạng tài liệu nguồn):",
+        "trap": "Bẫy tiền xử lý mong manh (Brittle preprocessing trap)",
+        "explanation": "Phải dự đoán trước mọi dạng bất thường (khoảng giá trị, đơn vị, chữ số viết bằng chữ...) và viết rule cho từng dạng; sửa tài liệu gốc còn có nguy cơ làm sai lệch dữ liệu. Không tận dụng được thông tin lỗi cụ thể đã có sẵn."
+      },
+      "D": {
+        "title": "D sai (Pipeline thứ hai với model tier lớn hơn):",
+        "trap": "Bẫy nâng cấp model thay vì cung cấp feedback (Bigger model fallacy trap)",
+        "explanation": "Model lớn hơn vẫn không biết output trước đã sai ở đâu nếu không có thông báo lỗi; chi phí cao hơn và thêm hạ tầng pipeline riêng, trong khi một follow-up request kèm lỗi là đủ."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Structured outputs / Tool use & Prompt engineering (nguyên tắc chung, nên đối chiếu thêm tài liệu chính thức):",
+    "points": [
+      "Khi output không qua được validation, gửi lại thông báo lỗi cụ thể để Claude sửa (validation-retry loop với feedback) hiệu quả hơn retry nguyên trạng.",
+      "Mô tả trường rõ ràng (định dạng, cách xử lý giá trị mơ hồ) trong schema giúp giảm lỗi ngay từ đầu."
+    ]
+  }
+}

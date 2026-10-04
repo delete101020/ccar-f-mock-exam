@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_014",
+  "domain": "Anthropic API Tool Use & Orchestration (Sử dụng Tool trong Anthropic API & Điều phối luồng)",
+  "topic": "Câu P2.14: Guaranteed Structured Output Across Document Types via tool_choice any",
+  "question": "The extraction pipeline receives documents of varying types—some are invoices, others are contracts, and some are receipts. You've defined separate extraction tools, each with its own schema tailored to the document type. During testing, you observe that with tool_choice: \"auto\", Claude sometimes returns conversational text instead of calling an extraction tool, causing downstream parsing failures. You need guaranteed structured output without knowing the document type in advance.\nWhat's the most effective approach?",
+  "options": {
+    "A": "Consolidate all document types into a single unified-schema extraction tool and force that tool.",
+    "B": "Keep tool_choice: \"auto\" with system prompt instructions requiring tool use.",
+    "C": "Set tool_choice: \"any\" with all extraction tools defined.",
+    "D": "Add a preliminary classification call, then make a second call with tool_choice forced to the identified extraction tool."
+  },
+  "correct_answer": "C. Set tool_choice: \"any\" with all extraction tools defined.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Hai ràng buộc của đề bài: (1) phải đảm bảo luôn có structured output, (2) không biết trước loại tài liệu:",
+    "points": [
+      "`tool_choice: {\"type\": \"any\"}` buộc Claude phải gọi một trong các tool đã định nghĩa — loại bỏ hoàn toàn khả năng trả về conversational text, giải quyết đúng nguyên nhân downstream parsing failures.",
+      "Đồng thời Claude vẫn được tự chọn tool phù hợp (invoice / contract / receipt) dựa trên nội dung tài liệu, nên không cần biết trước loại tài liệu và vẫn giữ được các schema chuyên biệt cho từng loại.",
+      "Giải pháp chỉ cần một API call, không thêm bước classification hay làm mất chất lượng schema — đúng nguyên tắc chọn thay đổi nhỏ nhất, tất định nhất giải quyết nguyên nhân gốc."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Gộp tất cả vào một unified schema và force tool đó):",
+        "trap": "Bẫy schema hợp nhất làm mất chuyên biệt (Schema dilution trap)",
+        "explanation": "Một schema chung cho invoice, contract và receipt sẽ có rất nhiều trường optional không liên quan, làm giảm độ chính xác và khó validate. Nó phá bỏ các schema đã được tinh chỉnh riêng trong khi `any` đạt cùng mức đảm bảo mà vẫn giữ chúng."
+      },
+      "B": {
+        "title": "B sai (Giữ auto + chỉ dẫn yêu cầu dùng tool):",
+        "trap": "Bẫy auto kèm prompt (Auto flag fallacy trap)",
+        "explanation": "Với `auto`, Claude vẫn được phép trả lời bằng text; chỉ dẫn trong system prompt chỉ giảm xác suất chứ không loại bỏ — không đáp ứng yêu cầu “guaranteed”."
+      },
+      "D": {
+        "title": "D sai (Classification call trước, rồi force đúng tool):",
+        "trap": "Bẫy thêm round-trip không cần thiết (Unnecessary two-step trap)",
+        "explanation": "Cách này cũng đảm bảo structured output nhưng tốn gấp đôi số API call, tăng độ trễ và chi phí, và thêm một điểm lỗi (phân loại sai → ép sai tool). `any` cho phép model phân loại và trích xuất trong cùng một lần gọi."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool use (Forcing tool use / tool_choice):",
+    "points": [
+      "`auto`: Claude tự quyết có gọi tool hay không; `any`: Claude phải dùng một trong các tool được cung cấp; `tool`: ép dùng một tool cụ thể; `none`: không dùng tool.",
+      "Dùng `any` khi cần đảm bảo có tool call nhưng muốn Claude tự chọn tool phù hợp nhất."
+    ]
+  }
+}

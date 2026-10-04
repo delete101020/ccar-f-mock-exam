@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_053",
+  "domain": "Tool Design & Dynamic Tool Discovery (Thiết kế Tool & Khám phá Tool động)",
+  "topic": "Câu P2.53: Dynamic Connector Discovery that Gates Tool Availability",
+  "question": "Your agent has access to 50+ specialized API connectors for different external services. As the connector library grew, tool selection accuracy dropped to 58%. You design a search_connectors(description) tool that finds matching connectors, but in testing agents frequently skip searching and call connectors directly (often incorrectly), or search select wrong connectors from the filtered results.\nHow should you design the tool composition pattern to address both issues?",
+  "options": {
+    "A": "Design connectors with built-in compatibility validation that return descriptive errors for mismatched requests.",
+    "B": "Design a find_and_execute(description, params) composite tool that searches and immediately executes the best matching connector.",
+    "C": "Enhance all connector descriptions with detailed usage samples, edge cases, and input requirements. Add few-shot examples showing the correct search-then-use workflow.",
+    "D": "Design search_connectors to dynamically add matched connectors to the agent's available tools. Connectors start unavailable and persist once discovered."
+  },
+  "correct_answer": "D. Design search_connectors to dynamically add matched connectors to the agent's available tools. Connectors start unavailable and persist once discovered.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Bài toán có hai vấn đề cần giải quyết đồng thời:",
+    "points": [
+      "Vấn đề 1: agent bỏ qua search_connectors và gọi thẳng connector (thường sai). Vấn đề 2: ngay cả khi search, agent vẫn chọn sai trong kết quả. Gốc rễ chung là agent phải đối mặt với 50+ tool cùng lúc — bộ lựa chọn quá lớn làm độ chính xác giảm còn 58%.",
+      "Thiết kế connector ban đầu ở trạng thái unavailable và chỉ được thêm vào bộ tool khả dụng khi search_connectors tìm thấy biến bước search thành điều kiện bắt buộc về mặt cấu trúc: agent không thể gọi connector chưa được khám phá, nên không thể bỏ qua bước search.",
+      "Đồng thời, tại mỗi thời điểm agent chỉ chọn trong một tập connector nhỏ, đã lọc, với đầy đủ schema của chúng, giúp tăng độ chính xác chọn tool. Connector đã khám phá được giữ lại để tái sử dụng. Đây là mẫu tool search / deferred tool loading mà Anthropic hỗ trợ cho bộ tool lớn."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Connector tự validate và trả lỗi mô tả khi request không khớp):",
+        "trap": "Bẫy sửa lỗi sau khi đã sai (After-the-fact correction trap)",
+        "explanation": "Lỗi mô tả giúp agent phục hồi sau khi gọi sai, nhưng không ngăn agent bỏ qua search hay chọn sai ngay từ đầu. Mỗi lần sai vẫn tốn một lượt và context."
+      },
+      "B": {
+        "title": "B sai (Tool composite find_and_execute tìm và thực thi ngay):",
+        "trap": "Bẫy tự động hóa mù (Blind auto-execution trap)",
+        "explanation": "Tự động thực thi connector \"khớp nhất\" loại bỏ khả năng agent kiểm tra lựa chọn, nên lỗi chọn sai được thực thi ngay. Hơn nữa agent phải truyền params trước khi biết schema của connector nào sẽ được chọn, và connector trực tiếp vẫn có thể bị gọi thẳng."
+      },
+      "C": {
+        "title": "C sai (Mô tả connector chi tiết hơn và thêm few-shot search-then-use):",
+        "trap": "Bẫy dựa vào instruction (Prompt-only guidance trap)",
+        "explanation": "Mô tả dài hơn cho 50+ connector càng làm phình context, còn few-shot chỉ tăng xác suất tuân thủ quy trình, không ngăn được việc gọi thẳng connector. Vấn đề cấu trúc (quá nhiều tool cùng lúc) vẫn còn nguyên."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool Use (tool search tool / deferred tool loading) & \"Writing effective tools for agents\":",
+    "points": [
+      "Khi có số lượng tool lớn, Anthropic hỗ trợ cơ chế tool search: các tool được đánh dấu tải trễ (deferred) và chỉ được nạp vào context khi được tìm thấy, giúp tiết kiệm context và cải thiện độ chính xác chọn tool.",
+      "Độ chính xác chọn tool giảm khi số lượng tool khả dụng quá lớn; giới hạn tập tool hiển thị tại mỗi thời điểm là thực hành được khuyến nghị."
+    ]
+  }
+}

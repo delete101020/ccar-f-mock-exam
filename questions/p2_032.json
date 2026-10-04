@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_032",
+  "domain": "Anthropic API Tool Use & Error Handling (Sử dụng Tool trong Anthropic API & Xử lý lỗi)",
+  "topic": "Câu P2.32: Instructive Error-Type-Specific tool_result Messages",
+  "question": "Anthropic's tool use documentation states: \"Write instructive error messages. Instead of generic errors like 'failed', include what went wrong and what Claude should try next.\" A billing dispute agent uses lookup_order, which catches all exceptions and returns a tool_result with is_error: true and the message \"execution failed\". Monitoring shows two failure modes: the agent retries the identical call until hitting the turn limit, or it immediately calls escalate_to_human without trying alternative tools.\nWhich change follows the documented recommendation and gives Claude the information it needs to select the correct recovery action for each error type?",
+  "options": {
+    "A": "Implement retry logic with exponential backoff inside each tool implementation so transient errors are resolved transparently within the tool before any failure result is surfaced to Claude in the agentic loop.",
+    "B": "Return error-type-specific messages with is_error: true, e.g., \"order not found-try get_customer to search by phone\" for data errors and \"Database timeout (transient)-retry should succeed\" for infrastructure errors.",
+    "C": "Remove is_error: true and return the error details as normal tool content, so Claude reasons about the response as data rather than treating it as a flagged failure condition that biases retry behavior.",
+    "D": "Add an error classification step in the agentic loop that intercepts tool errors before Claude sees them, tags each as \"retry\" \"try_alternative,\" or \"escalate,\" and adds that recommendation to the tool result."
+  },
+  "correct_answer": "B. Return error-type-specific messages with is_error: true, e.g., \"order not found-try get_customer to search by phone\" for data errors and \"Database timeout (transient)-retry should succeed\" for infrastructure errors.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Nguyên nhân của hai failure mode:",
+    "points": [
+      "Root cause: lookup_order nuốt mọi exception và trả về cùng một thông điệp \"execution failed\". Claude không phân biệt được \"đơn hàng không tồn tại\" (retry vô ích, cần tool khác) với \"database timeout\" (retry sẽ thành công). Không có thông tin, Claude chỉ có thể đoán — hoặc retry mù quáng đến hết turn limit, hoặc escalate sớm.",
+      "Giải pháp đúng tài liệu: giữ `is_error: true` (báo hiệu chuẩn rằng tool thất bại) nhưng nội dung phải nói rõ (1) điều gì đã sai và (2) Claude nên làm gì tiếp theo. Ví dụ data error → gợi ý `get_customer` tìm theo số điện thoại; infrastructure error → nói rõ là transient và retry nên thành công.",
+      "Sửa tại nguồn, tối thiểu và tất định: thay đổi nằm ngay trong tool implementation (nơi biết rõ loại exception), không cần thêm thành phần mới vào agentic loop, và để Claude tự chọn hành động phục hồi phù hợp từng loại lỗi."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Retry với exponential backoff bên trong mỗi tool):",
+        "trap": "Bẫy chỉ xử lý lỗi transient (Transient-only fix trap)",
+        "explanation": "Retry nội bộ có thể giúp lỗi timeout, nhưng với lỗi dữ liệu (\"order not found\") retry vô nghĩa, và khi hết retry Claude vẫn nhận \"execution failed\" chung chung — failure mode escalate sớm hoặc retry lặp vẫn còn nguyên. Nó không làm theo khuyến nghị \"include what went wrong and what Claude should try next\"."
+      },
+      "C": {
+        "title": "C sai (Bỏ is_error: true, trả lỗi như dữ liệu bình thường):",
+        "trap": "Bẫy xóa tín hiệu lỗi chuẩn (Removing the error signal trap)",
+        "explanation": "`is_error` là cơ chế chuẩn để báo Claude rằng tool thất bại; bỏ nó làm mờ ranh giới giữa kết quả hợp lệ và lỗi. Quan trọng hơn, vấn đề là nội dung \"execution failed\" thiếu thông tin — bỏ cờ không thêm thông tin nào."
+      },
+      "D": {
+        "title": "D sai (Thêm bước phân loại lỗi chặn trong agentic loop):",
+        "trap": "Bẫy over-engineering ở sai tầng (Wrong-layer classification trap)",
+        "explanation": "Lớp trung gian trong loop chỉ nhìn thấy \"execution failed\" — nó không có thông tin gốc về exception để phân loại đúng. Thông tin đó chỉ tồn tại trong tool implementation, nên cách tự nhiên là trả thông điệp cụ thể ngay tại đó, thay vì thêm một thành phần phức tạp."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool use: Handling tool use and tool results (errors):",
+    "points": [
+      "Khi tool thất bại, trả về `tool_result` với `is_error: true` và nội dung mô tả lỗi; Claude sẽ dùng thông tin đó để quyết định bước tiếp theo.",
+      "Thông điệp lỗi nên mang tính hướng dẫn (instructive): nói rõ điều gì sai và Claude nên thử gì tiếp theo, thay vì thông báo chung chung như \"failed\"."
+    ]
+  }
+}

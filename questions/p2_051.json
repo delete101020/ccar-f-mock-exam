@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_051",
+  "domain": "Multi-Agent Orchestration & Subagents (Điều phối đa agent & Vòng lặp đánh giá)",
+  "topic": "Câu P2.51: Coordinator Gap Evaluation and Targeted Re-delegation",
+  "question": "The synthesis agent completes its initial pass but flags that three key research questions remain unanswered because the web search and document analysis agents didn't find relevant information on those specific subtopics. The coordinator currently proceeds directly to report generation, producing reports with incomplete coverage.\nWhat change would most effectively improve research completeness?",
+  "options": {
+    "A": "Have the coordinator evaluate synthesis output for gaps, then re-delegate to web search and document analysis with targeted queries before Invoking synthesis again.",
+    "B": "Increase the initial breadth of queries sent to web search and document analysis to reduce the probability of missing relevant information.",
+    "C": "Have the report generation agent note which research questions couldn't be answered, so users understand the limitations of the final output.",
+    "D": "Give the synthesis agent direct access to web search tools so it can autonomously fill knowledge gaps without returning control to the coordinator."
+  },
+  "correct_answer": "A. Have the coordinator evaluate synthesis output for gaps, then re-delegate to web search and document analysis with targeted queries before Invoking synthesis again.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Bài toán đưa ra các dữ kiện quan trọng:",
+    "points": [
+      "Synthesis agent đã chủ động báo cáo 3 câu hỏi nghiên cứu chưa được trả lời, nhưng coordinator bỏ qua tín hiệu này và đi thẳng tới report generation. Nguyên nhân gốc rễ là luồng điều phối thiếu bước đánh giá và vòng lặp phản hồi (feedback loop).",
+      "Coordinator đánh giá output của synthesis để tìm khoảng trống, rồi giao lại cho web search và document analysis với truy vấn nhắm đúng các subtopic còn thiếu, sau đó chạy lại synthesis. Đây là mẫu evaluator-optimizer / orchestrator-workers trong \"Building Effective Agents\".",
+      "Giải pháp giữ nguyên phân tách vai trò (separation of concerns): coordinator vẫn là trung tâm điều phối, các subagent chuyên môn vẫn làm đúng việc của mình, và vòng lặp có thể giới hạn số lần để kiểm soát chi phí."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Tăng độ rộng truy vấn ban đầu):",
+        "trap": "Bẫy xác suất thay vì phản hồi (Probabilistic breadth trap)",
+        "explanation": "Truy vấn rộng hơn chỉ giảm xác suất bỏ sót, không đảm bảo bao phủ các subtopic cụ thể, đồng thời tăng chi phí và nhiễu cho mọi lần chạy. Hệ thống vẫn không có cơ chế phản ứng khi khoảng trống xảy ra."
+      },
+      "C": {
+        "title": "C sai (Report generator ghi chú các câu hỏi chưa trả lời):",
+        "trap": "Bẫy minh bạch thay vì khắc phục (Disclosure instead of fix trap)",
+        "explanation": "Ghi chú giới hạn giúp minh bạch nhưng không cải thiện độ hoàn chỉnh của nghiên cứu, vốn là mục tiêu của câu hỏi. Báo cáo vẫn thiếu nội dung."
+      },
+      "D": {
+        "title": "D sai (Cho synthesis agent truy cập trực tiếp web search):",
+        "trap": "Bẫy phá vỡ phân vai (Role boundary violation trap)",
+        "explanation": "Trao tool ngoài chuyên môn cho synthesis agent làm mờ ranh giới vai trò, tăng độ phức tạp chọn tool và làm coordinator mất khả năng quan sát/kiểm soát luồng nghiên cứu. Hơn nữa synthesis agent chỉ có web search, bỏ qua document analysis."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Research: \"Building Effective Agents\" & Multi-agent research system:",
+    "points": [
+      "Orchestrator-workers: một LLM trung tâm phân rã tác vụ, giao cho worker, và tổng hợp kết quả; Evaluator-optimizer: đánh giá output và lặp lại khi chưa đạt tiêu chí.",
+      "Trong hệ thống nghiên cứu đa agent của Anthropic, lead agent đánh giá kết quả của subagent và quyết định có cần nghiên cứu thêm trước khi kết thúc hay không."
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_011",
+  "domain": "Information Extraction & Pipeline Validation (Trích xuất thông tin & Kiểm thực pipeline)",
+  "topic": "Câu P2.11: Reducing Manual Review via Validation-Error Feedback Retry Loop",
+  "question": "Your invoice extraction uses tool use with strict JSON schemas. JSON syntax errors never occur, but 12% of extractions fail semantic validation--for example, line Item amounts don't extracted total, or vendor IDs don't match valid formats. These failures currently route to manual review.\nWhat's the most effective approach to reduce manual review volume while maintaining accuracy?",
+  "options": {
+    "A": "Retry the extraction up to 3 times when validation fallis, accepting the first result that passes validation.",
+    "B": "Implement post-processing logic that automatically corrects common amors, such as recalculating totais from line items when sums don't match.",
+    "C": "When validation falls, make a follow-up request with the document, extraction, and validation errors for model correction.",
+    "D": "Add stricter schema constraints with detailed field descriptions to prevent the model from generating invalid values initially."
+  },
+  "correct_answer": "C. When validation falls, make a follow-up request with the document, extraction, and validation errors for model correction.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Các dữ kiện then chốt: JSON syntax luôn đúng (nhờ tool use + strict schema), nhưng 12% thất bại ở semantic validation (tổng không khớp, vendor ID sai định dạng):",
+    "points": [
+      "Schema chỉ đảm bảo cấu trúc và kiểu dữ liệu, không đảm bảo ngữ nghĩa nghiệp vụ. Lỗi semantic chỉ phát hiện được bằng validation code chạy sau trích xuất.",
+      "Validation-retry loop với feedback: khi validation thất bại, gửi lại cho model tài liệu gốc + bản trích xuất trước + thông báo lỗi validation cụ thể (ví dụ: “sum of line items 1,240 ≠ total 1,420”, “vendor_id must match V-XXXXXX”). Model biết chính xác cần sửa gì và có tài liệu gốc để đối chiếu lại.",
+      "Cơ chế này tự động khắc phục phần lớn lỗi do trích xuất sai (đọc nhầm, bỏ sót dòng), chỉ những trường hợp vẫn thất bại sau correction (ví dụ: tài liệu gốc thực sự mâu thuẫn) mới chuyển sang manual review — giảm khối lượng review mà vẫn giữ độ chính xác.",
+      "Đây là pattern “validation + retry with error feedback” được khuyến nghị cho pipeline structured extraction."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Retry tối đa 3 lần, nhận kết quả đầu tiên pass):",
+        "trap": "Bẫy retry mù không có feedback (Blind retry trap)",
+        "explanation": "Retry không kèm thông tin lỗi khiến model lặp lại cùng sai lầm với xác suất cao. Tệ hơn, chấp nhận “kết quả đầu tiên pass validation” có thể chọn một bản trích xuất tình cờ pass nhưng vẫn sai ở các trường khác."
+      },
+      "B": {
+        "title": "B sai (Post-processing tự sửa lỗi, tính lại tổng từ line items):",
+        "trap": "Bẫy tự sửa dữ liệu che giấu lỗi (Silent auto-correction trap)",
+        "explanation": "Tính lại total từ line items giả định line items luôn đúng — nếu lỗi nằm ở một line item bị đọc sai, tổng “đã sửa” cũng sai mà không còn cờ cảnh báo. Ghi đè con số in trên hóa đơn làm mất tính kiểm toán và độ chính xác."
+      },
+      "D": {
+        "title": "D sai (Thêm schema constraints chặt hơn và mô tả chi tiết):",
+        "trap": "Bẫy nhầm schema với ngữ nghĩa (Schema-can't-enforce-semantics trap)",
+        "explanation": "Có thể giúp phần nào với định dạng vendor ID (pattern), nhưng JSON schema không thể biểu diễn ràng buộc liên trường như “tổng line items phải bằng total”. Lỗi semantic vẫn xảy ra và vẫn cần cơ chế phục hồi khi validation thất bại."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool use / Structured outputs & Prompt engineering (nguyên tắc chung, nên đối chiếu thêm tài liệu chính thức):",
+    "points": [
+      "Structured outputs/strict tool schema đảm bảo cú pháp và tuân thủ schema, nhưng các ràng buộc nghiệp vụ cần được kiểm tra bằng validation riêng.",
+      "Khi validation thất bại, phản hồi lỗi cụ thể cho model (kèm tài liệu và kết quả trước) để model tự sửa, thay vì retry nguyên trạng."
+    ]
+  }
+}

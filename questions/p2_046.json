@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_046",
+  "domain": "Multi-Agent Orchestration & Subagents (Điều phối đa agent & Subagent song song)",
+  "topic": "Câu P2.46: Parallel Subagent Execution via Multiple Task Calls in One Response",
+  "question": "Production monitoring shows the research phase takes longer than expected. Analysis reveals the coordinator invokes the web search subagent, then invokes the document analysis subagent and waits again. These tasks are independent—neither requires the other's output.\nWhat is the most effective way to run these subagents concurrently?",
+  "options": {
+    "A": "Switch both subagents to use a Haiku-tier model instead of Sonnet to reduce their individual execution time.",
+    "B": "Create an async orchestration layer outside the agent that spawns parallel threads, each running a separate coordinator.",
+    "C": "Structure the coordinator to emit both Task tool calls (for web search and document analysis) in a single response message.",
+    "D": "Add detailed instructions to the coordinator's system prompt explaining the performance benefits of parallel execution at the same time."
+  },
+  "correct_answer": "C. Structure the coordinator to emit both Task tool calls (for web search and document analysis) in a single response message.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Bài toán đưa ra các dữ kiện quan trọng:",
+    "points": [
+      "Coordinator gọi subagent web search, chờ kết quả, rồi mới gọi subagent document analysis. Hai tác vụ độc lập (không phụ thuộc output của nhau), nên việc chạy tuần tự là lãng phí thời gian thuần túy.",
+      "Trong Claude tool use, mô hình có thể phát nhiều khối tool_use trong cùng một assistant message (parallel tool use). Với Agent SDK / Claude Code, việc spawn subagent được thực hiện qua Task tool, nên phát hai lệnh gọi Task trong cùng một response sẽ khiến runtime thực thi hai subagent đồng thời.",
+      "Đây là thay đổi tối thiểu, nằm đúng trong cơ chế sẵn có của agent framework, không cần xây thêm hạ tầng orchestration bên ngoài."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Chuyển subagent sang model Haiku cho nhanh):",
+        "trap": "Bẫy tối ưu sai trục (Wrong optimization axis trap)",
+        "explanation": "Đổi model có thể giảm thời gian từng subagent nhưng vẫn chạy tuần tự, đồng thời có thể giảm chất lượng nghiên cứu. Câu hỏi yêu cầu chạy đồng thời (concurrently), mà đổi model không giải quyết điều đó."
+      },
+      "B": {
+        "title": "B sai (Xây async orchestration layer bên ngoài, mỗi thread một coordinator):",
+        "trap": "Bẫy over-engineering phá vỡ kiến trúc (Architecture fragmentation trap)",
+        "explanation": "Chạy nhiều coordinator song song làm phân mảnh trạng thái điều phối: không coordinator nào có toàn cảnh kết quả để tổng hợp. Đây là giải pháp phức tạp và sai đối tượng, trong khi framework đã hỗ trợ song song ngay trong một coordinator."
+      },
+      "D": {
+        "title": "D sai (Thêm hướng dẫn giải thích lợi ích hiệu năng của chạy song song):",
+        "trap": "Bẫy giải thích thay vì chỉ định cơ chế (Explaining benefits instead of specifying mechanism trap)",
+        "explanation": "Giải thích \"tại sao song song tốt\" không chỉ cho coordinator cách làm cụ thể. Điều cần thiết là cấu trúc hành vi để phát nhiều lệnh gọi Task trong một response; chỉ nói về lợi ích hiệu năng không đảm bảo thay đổi hành vi."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool Use (parallel tool use) & Agent SDK / Claude Code Subagents:",
+    "points": [
+      "Claude có thể gọi nhiều tool trong cùng một response; các khối tool_use độc lập có thể được thực thi song song và trả về các tool_result trong cùng một user message.",
+      "Subagent được khởi chạy qua Task tool; nhiều lệnh gọi Task trong một message cho phép các subagent chạy đồng thời. \"Building Effective Agents\" mô tả Parallelization (sectioning) cho các subtask độc lập."
+    ]
+  }
+}

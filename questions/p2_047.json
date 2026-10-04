@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_047",
+  "domain": "Anthropic API Tool Use & Output Limits (Sử dụng Tool trong Anthropic API & Giới hạn output)",
+  "topic": "Câu P2.47: Avoiding max_tokens Truncation by Splitting the Review",
+  "question": "Your automated review calls the Claude API for each PR, using tool_use with a report_findings tool that returns a JSON array of finding objects (each with file_path, line_number, severity, category, and description). During testing on a large PR touching 30+ files, the response hits the max_tokens limit and the output is truncated mid-JSON, causing your pipeline's parser to fail.\nWhat is the most effective way to handle this?",
+  "options": {
+    "A": "Increase max_tokens to the model's maximum and instruct Claude to keep finding descriptions under 50 words each.",
+    "B": "Switch from tool_use to prompting Claude to return findings as a markdown list.",
+    "C": "Split the review into multiple API calls that each analyze a subset of the changed files, then merge the resulting findings arrays.",
+    "D": "Add retry logic that detects truncated JSON and re-sends the request with instructions to report only critical and high severity findings."
+  },
+  "correct_answer": "C. Split the review into multiple API calls that each analyze a subset of the changed files, then merge the resulting findings arrays.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Bản chất lỗi truncation khi output có cấu trúc quá lớn:",
+    "points": [
+      "PR chạm 30+ file sinh ra rất nhiều finding, khiến tổng output vượt `max_tokens` và response dừng với `stop_reason: \"max_tokens\"` giữa chừng JSON. Nguyên nhân gốc rễ là khối lượng công việc trong một lần gọi quá lớn so với ngân sách output.",
+      "Chia review thành nhiều lần gọi API, mỗi lần xử lý một nhóm file, giữ output mỗi lần nằm gọn trong giới hạn bất kể PR lớn đến đâu. Mảng findings của từng lần được merge bằng code tất định (deterministic).",
+      "Lợi ích phụ: mỗi lần gọi tập trung vào ít file hơn, giảm hiện tượng bỏ sót do attention bị loãng, và các lần gọi có thể chạy song song hoặc retry độc lập."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Tăng max_tokens tối đa và giới hạn mô tả dưới 50 từ):",
+        "trap": "Bẫy nới giới hạn không mở rộng được (Non-scalable ceiling trap)",
+        "explanation": "Tăng max_tokens chỉ dời ngưỡng: một PR lớn hơn nữa vẫn sẽ bị cắt. Rút gọn mô tả làm giảm giá trị của finding mà vẫn không đảm bảo output nằm gọn trong giới hạn."
+      },
+      "B": {
+        "title": "B sai (Bỏ tool_use, chuyển sang markdown list):",
+        "trap": "Bẫy hy sinh cấu trúc (Losing structured output trap)",
+        "explanation": "Markdown không làm output ngắn đi đáng kể nên vẫn bị cắt; đồng thời mất schema có cấu trúc (file_path, line_number, severity...) mà pipeline cần, buộc phải parse văn bản tự do dễ lỗi."
+      },
+      "D": {
+        "title": "D sai (Retry khi phát hiện JSON bị cắt, chỉ báo lỗi critical/high):",
+        "trap": "Bẫy cắt bớt kết quả (Silent coverage loss trap)",
+        "explanation": "Cách này lãng phí một lần gọi bị cắt rồi mới retry, và cố ý bỏ các finding medium/low, làm giảm độ bao phủ của review. Với PR đủ lớn, ngay cả finding critical/high vẫn có thể vượt giới hạn."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Messages API (max_tokens, stop_reason) & Tool Use:",
+    "points": [
+      "`max_tokens` là giới hạn cứng số token output; khi chạm giới hạn, response dừng với `stop_reason: \"max_tokens\"` và nội dung (kể cả tool_use input) có thể không hoàn chỉnh.",
+      "Với tác vụ lớn, nên chia nhỏ công việc (chunking / sectioning) thành các lần gọi độc lập rồi tổng hợp kết quả bằng code, thay vì cố gắng nhồi mọi thứ vào một response."
+    ]
+  }
+}

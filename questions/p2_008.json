@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_008",
+  "domain": "Claude Code Workflows & Plan Mode (Quy trình làm việc Claude Code & Plan Mode)",
+  "topic": "Câu P2.8: Direct Execution vs Plan Mode for a Production Bug with a Clear Stack Trace",
+  "question": "A critical bug is affecting production users. Error logs show exceptions in the OrderProcessing module with a clear stack trace pointing to a specific area, but you haven't worked with this module before.\nWhat's the most effective approach?",
+  "options": {
+    "A": "Use plan mode to analyze the error in context of the module's design, enumerate potential root causes, and prioritize fixes systematically.",
+    "B": "Start with direct execution to gather initial information, then switch to plan mode to design a comprehensive solution before implementing.",
+    "C": "Use direct execution to examine the stack trace, read the relevant code, and implement a fix once you identify the root cause.",
+    "D": "Enter plan mode to explore the module's architecture and dependencies before attempting any fix."
+  },
+  "correct_answer": "C. Use direct execution to examine the stack trace, read the relevant code, and implement a fix once you identify the root cause.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Các dữ kiện then chốt:",
+    "points": [
+      "Bug nghiêm trọng đang ảnh hưởng người dùng production → ưu tiên tốc độ khắc phục.",
+      "Stack trace rõ ràng chỉ đến một khu vực cụ thể → phạm vi đã được khoanh vùng (well-scoped), điểm bắt đầu điều tra đã biết.",
+      "Dù chưa từng làm với module này, việc đọc đúng vùng code mà stack trace chỉ ra là đủ để hiểu và xác định root cause; không cần khám phá toàn bộ kiến trúc module.",
+      "Plan mode phù hợp với thay đổi lớn, phức tạp, mơ hồ, đa file hoặc có nhiều hướng tiếp cận cần cân nhắc. Với một bug đã có định vị rõ, direct execution (đọc stack trace → đọc code liên quan → sửa khi xác định được root cause) là cách tương xứng và nhanh nhất."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Plan mode để liệt kê và ưu tiên các root cause):",
+        "trap": "Bẫy phân tích quá mức (Over-analysis trap)",
+        "explanation": "Liệt kê nhiều root cause tiềm năng là cần thiết khi triệu chứng mơ hồ. Ở đây stack trace đã chỉ rõ vị trí; enumerate và prioritize mang tính hình thức làm chậm việc khắc phục sự cố production."
+      },
+      "B": {
+        "title": "B sai (Direct execution thu thập thông tin rồi chuyển sang plan mode):",
+        "trap": "Bẫy quy trình hai pha không cần thiết (Unnecessary phase switching trap)",
+        "explanation": "Chuyển sang plan mode để “thiết kế giải pháp toàn diện” cho một bug khoanh vùng rõ là thừa. Mục tiêu là sửa đúng root cause, không phải thiết kế lại module."
+      },
+      "D": {
+        "title": "D sai (Plan mode khám phá kiến trúc và dependencies trước):",
+        "trap": "Bẫy khám phá toàn cục (Broad exploration trap)",
+        "explanation": "Khám phá toàn bộ kiến trúc module tiêu tốn thời gian và context trong khi stack trace đã cho điểm vào trực tiếp. Việc “chưa từng làm với module” không đồng nghĩa phải hiểu toàn bộ module trước khi sửa một lỗi cục bộ."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Common workflows & Best practices (Plan Mode, Explore → Plan → Code):",
+    "points": [
+      "Plan mode (read-only) được khuyến nghị cho các thay đổi phức tạp, đa file, hoặc khi cần khám phá codebase lạ trước khi chỉnh sửa lớn.",
+      "Với tác vụ có phạm vi rõ ràng (ví dụ: sửa lỗi đã được định vị), có thể làm trực tiếp mà không cần bước lập kế hoạch riêng."
+    ]
+  }
+}

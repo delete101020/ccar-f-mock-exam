@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_006",
+  "domain": "Code Exploration & Refactoring Strategies (Chiến lược duyệt mã nguồn & Tái cấu trúc)",
+  "topic": "Câu P1.6: Identifying Function Callers Across Wrapper Modules and Aliases",
+  "question": "An engineer asks the agent to find all callers of a function before removing it. The function is defined in a core library but is also exposed through wrapper modules that rename the function for domain-specific use (e.g., calculateTax in the library becomes computeOrderTax in the orders module).\nWhat exploration strategy will most reliably identify all callers?",
+  "options": {
+    "A": "Use Grep to find all files that import from the library or wrapper modules, then read each file to check whether it uses the function.",
+    "B": "Search for the function name in project documentation to understand intended usage patterns and navigate to documented integration points.",
+    "C": "Read the library and wrapper modules to identify all exposed names for the function, then Grep for each name across the codebase.",
+    "D": "Use Grep to search for the function's original name across the codebase."
+  },
+  "correct_answer": "C. Read the library and wrapper modules to identify all exposed names for the function, then Grep for each name across the codebase.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Bản chất bài toán Aliasing / Wrapper re-export và quy trình 2 giai đoạn:",
+    "points": [
+      "Bản chất bài toán Aliasing: Hàm gốc (calculateTax) được bọc lại hoặc đổi tên qua các wrapper module (computeOrderTax). Xóa hàm gốc mà không tìm hết các nơi gọi qua wrapper sẽ gây lỗi runtime crash trên toàn hệ thống.",
+      "Quy trình hai giai đoạn chuẩn xác: (1) Đọc file gốc và các wrapper để lập danh sách toàn diện tất cả các tên gọi (aliases / exported names). (2) Dùng Grep quét từng tên trên toàn bộ codebase.",
+      "Hiệu quả và độ tin cậy: Đảm bảo độ phủ cao nhất có thể (gồm cả các tên bí danh được export qua wrapper); vẫn nên kiểm tra thêm alias đặt ngay tại chỗ import và các lời gọi động nếu có, đồng thời không phải đọc thủ công từng file không liên quan, giúp context window luôn sạch và tối ưu chi phí token."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Grep import rồi đọc thủ công từng file):",
+        "trap": "Bẫy lãng phí token và quá tải context (Context flooding trap)",
+        "explanation": "Một library hoặc wrapper module thường được import bởi hàng chục hoặc hàng trăm file trong dự án. Việc tải và đọc toàn bộ các file này vào context chỉ để kiểm tra xem có dùng hàm hay không là cực kỳ lãng phí token, gây chậm trễ và dễ khiến agent bị bão hòa context."
+      },
+      "B": {
+        "title": "B sai (Tìm trong tài liệu dự án - Project documentation):",
+        "trap": "Bẫy tài liệu lỗi thời (Stale documentation trap)",
+        "explanation": "Tài liệu thường chỉ mô tả các trường hợp sử dụng mẫu ('intended usage patterns'), hiếm khi ghi nhận đầy đủ 100% các điểm gọi thực tế trong mã nguồn, và thường bị lỗi thời so với code hiện hành."
+      },
+      "D": {
+        "title": "D sai (Chỉ Grep tên gốc của hàm):",
+        "trap": "Bẫy bỏ sót do đổi tên (Incomplete alias coverage trap)",
+        "explanation": "Nếu chỉ tìm calculateTax, agent sẽ hoàn toàn bỏ qua tất cả những nơi gọi hàm qua wrapper (như computeOrderTax). Khi kỹ sư xóa hàm, các nơi gọi qua wrapper sẽ lập tức bị crash."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Nguyên tắc chung (nên đối chiếu thêm tài liệu chính thức của Anthropic):",
+    "points": [
+      "Xác định mọi tên mà hàm được export hoặc re-export (alias, wrapper) trước khi tìm kiếm trên toàn codebase.",
+      "Đọc phần định nghĩa và wrapper để lập danh sách tên, rồi dùng Grep cho từng tên."
+    ]
+  }
+}

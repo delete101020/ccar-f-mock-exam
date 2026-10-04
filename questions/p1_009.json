@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_009",
+  "domain": "Context Management & Multi-Agent Delegation (Quản lý Context & Phân nhánh Subagent)",
+  "topic": "Câu P1.9: Handling Exploration Context Saturation via Subagent Delegation",
+  "question": "An engineer asks the agent to investigate error handling in a legacy payment processing module spanning 15 files. After reading the first 8 files, the agent's responses are becoming noticeably less accurate—it's forgetting previously discovered code patterns and hasn't yet located all test files or traced the complete data flow.\nWhat's the most effective approach to complete this investigation?",
+  "options": {
+    "A": "Use Grep to search for specific function names across remaining files, reducing the content loaded into context.",
+    "B": "Close the current context with /clear and start fresh, re-reading only the most critical files.",
+    "C": "Document a summary of findings so far in a file, then start fresh with a new context using that summary as reference.",
+    "D": "Spawn a subagent to explore the remaining files, providing a summary of discovered patterns as its initial context."
+  },
+  "correct_answer": "D. Spawn a subagent to explore the remaining files, providing a summary of discovered patterns as its initial context.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Bản chất bão hòa ngữ cảnh khi điều tra mã nguồn và mẫu Subagent Delegation:",
+    "points": [
+      "Bản chất bão hòa ngữ cảnh: Sau khi đọc 8/15 files, dung lượng context bị phình to làm suy giảm độ chính xác và khả năng truy hồi thông tin (attention dilution). Tuy nhiên, tác vụ điều tra vẫn chưa kết thúc (còn 7 files và các test files).",
+      "Mẫu kiến trúc Subagent Delegation with Distilled Context: Theo chuẩn Anthropic, cách tối ưu nhất là khởi tạo một subagent mới chuyên trách duyệt tiếp các file còn lại. Subagent được cung cấp bản tóm tắt tinh gọn các pattern đã tìm thấy từ 8 file trước đó.",
+      "Hiệu quả kiến trúc: Giữ context của subagent sạch sẽ để đạt độ chính xác cao nhất, đồng thời duy trì tính liên tục của phiên làm việc mà không làm mất công sức điều tra trước đó."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Dùng Grep tìm tên hàm trên các file còn lại):",
+        "trap": "Bẫy không giải quyết gốc rễ (Untreated context bloat trap)",
+        "explanation": "Grep thu hẹp lượng file phải đọc nhưng kết quả vẫn đổ vào context đang bão hòa nên không giải quyết gốc rễ, và Grep chỉ định vị tên hàm chứ chưa dựng được data flow hay tìm hết test file."
+      },
+      "B": {
+        "title": "B sai (Dùng /clear và đọc lại các file critical):",
+        "trap": "Bẫy mất ngữ cảnh và lặp việc (Context loss & redundant rework trap)",
+        "explanation": "Lệnh /clear sẽ xóa toàn bộ các phân tích giá trị từ 8 file đầu, buộc agent phải tốn thời gian và token để đọc lại từ đầu mà vẫn có nguy cơ chạm trần context khi đọc đến file thứ 15."
+      },
+      "C": {
+        "title": "C sai (Lưu tóm tắt vào file rồi reset context thủ công):",
+        "trap": "Bẫy gián đoạn phiên làm việc (Session interruption trap)",
+        "explanation": "Lưu tóm tắt ra file rồi bắt đầu context mới là hướng hợp lệ (tương tự scratchpad ở q007). Tuy nhiên ở đây kém hơn D: tác vụ chưa kết thúc, và subagent có thể đọc nốt 7 file trong context riêng rồi chỉ trả kết quả cô đọng về, trong khi cách này buộc kỹ sư bỏ phiên hiện tại và tự điều hướng thủ công."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Nguyên tắc chung (nên đối chiếu thêm tài liệu chính thức của Anthropic):",
+    "points": [
+      "Khi việc khám phá vượt quá dung lượng context hiệu quả, giao phần còn lại cho subagent kèm bản tóm tắt cô đọng thay vì toàn bộ transcript.",
+      "Subagent đọc code diện rộng trong context riêng và chỉ trả kết quả cô đọng về, giúp phiên chính giữ được sự tập trung."
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_020",
+  "domain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "topic": "Câu P3.20: Structurally Eliminating Tool Overlap by Merging Compensation and Tracking Tools",
+  "question": "After expanding the agent's MCP tools with delivery-specific capabilities [apply_promo_code, update_delivery_address, reconcile_delivery], the total tool count has grown from 1 to 7. We have observed that the agent now shows tool selection accuracy has dropped from 86% to 71%. Log analysis reveals the majority of errors involve the agent selecting between semantically overlapping tools — calling issue_credit when process_refund was correct, and calling check_delivery_status when looking order_allready_returns_the_needed_data.\nWhich approach structurally eliminates the semantic overlap identified in the error source?",
+  "options": {
+    "A": "Consolidate semantically overlapping tools – merge issue_credit and process_refund into a single handle_promotions tool with an action parameter and fold check_delivery_status into lookup_order with an optional include_tracking flag.",
+    "B": "Enable the tool search tool with defer_loading on the six new tools, keeping the original two always loaded, so the agent dynamically discovers specialized tools only when needed.",
+    "C": "Add few-shot examples to the system prompt demonstrating correct selection for each ambiguous tool, such as showing when issue_credit applies versus when process_refund is appropriate.",
+    "D": "Split the tools across two sub-agents — a 'financial resolution' agent with issue_credit, process_refund, return_order, and apply_promo_code and a 'delivery operations' agent with the remaining delivery tools — with a coordinating routing between them."
+  },
+  "correct_answer": "A. Consolidate semantically overlapping tools – merge issue_credit and process_refund into a single handle_promotions tool with an action parameter and fold check_delivery_status into lookup_order with an optional include_tracking flag.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Phân tích nguyên nhân gốc rễ từ log:",
+    "points": [
+      "Accuracy chọn tool giảm từ 86% xuống 71% sau khi mở rộng bộ tool. Log xác định nguồn lỗi chính là semantic overlap giữa các cặp tool: issue_credit vs process_refund, và check_delivery_status vs lookup_order (vốn đã trả về dữ liệu cần thiết).",
+      "Consolidation là cách duy nhất loại bỏ overlap về mặt cấu trúc: gộp issue_credit và process_refund thành một tool với tham số action để phân biệt hình thức bồi hoàn, và gộp check_delivery_status vào lookup_order với cờ include_tracking tùy chọn. Khi mỗi nhu cầu chỉ còn một tool tương ứng, lỗi chọn nhầm giữa các cặp chồng lấn biến mất.",
+      "Nhất quán với P3.19: đây là nguyên tắc 'Writing effective tools for agents' — ít tool hơn với mục đích rõ ràng, khác biệt, hợp nhất các thao tác chồng lấn bằng tham số thay vì giữ nhiều tool gần nghĩa."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Bật tool search tool với defer_loading cho các tool mới):",
+        "trap": "Bẫy giải quyết sai vấn đề (Wrong problem: tool count vs overlap trap)",
+        "explanation": "Tool search tool với defer_loading giảm chi phí context khi có rất nhiều tool. Với chỉ 7 tool, kích thước context không phải vấn đề; và khi agent phát hiện và nạp các tool chuyên biệt, overlap với process_refund/lookup_order vẫn còn nguyên."
+      },
+      "C": {
+        "title": "C sai (Thêm few-shot examples cho từng tool mơ hồ):",
+        "trap": "Bẫy giảm nhẹ xác suất (Probabilistic mitigation trap)",
+        "explanation": "Few-shot examples có thể cải thiện tỷ lệ chọn đúng nhưng chỉ là định hướng xác suất; các cặp tool chồng lấn vẫn tồn tại. Câu hỏi yêu cầu giải pháp 'structurally eliminates the semantic overlap'."
+      },
+      "D": {
+        "title": "D sai (Chia tool cho hai sub-agent với coordinator định tuyến):",
+        "trap": "Bẫy di chuyển overlap thay vì loại bỏ (Relocating the overlap trap)",
+        "explanation": "issue_credit và process_refund vẫn nằm chung trong agent 'financial resolution', nên nhầm lẫn giữa chúng vẫn còn. Kiến trúc đa agent còn thêm lớp lỗi định tuyến của coordinator, tăng độ trễ và độ phức tạp."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – \"Writing effective tools for agents\" & Tool Use Documentation (Tool search tool):",
+    "points": [
+      "Chọn đúng tool cho agent: tránh các tool có chức năng chồng lấn; hợp nhất các thao tác liên quan vào một tool với tham số (ví dụ action) để giảm nhầm lẫn khi chọn tool.",
+      "Tool search tool (defer_loading) phục vụ trường hợp thư viện tool rất lớn chiếm nhiều context, không loại bỏ được overlap ngữ nghĩa giữa các tool."
+    ]
+  }
+}

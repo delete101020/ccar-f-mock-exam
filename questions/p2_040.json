@@ -1,0 +1,56 @@
+{
+  "id": "ccar_f_p2_040",
+  "domain": "Conversation Design & Ambiguity Handling (Thiết kế hội thoại & Xử lý yêu cầu mơ hồ)",
+  "topic": "Câu P2.40: Asking One Targeted Clarifying Question for an Ambiguous Intent",
+  "question": "A new user's first message is \"Set up my focus music,\" This could mean configure preferences, create a playlist, or play music immediately. Your system supports all three actions.\nWhat's the effective approach?",
+  "options": {
+    "A": "Create a new \"Focus\" playlist with curated tracks and notify the user it's ready.",
+    "B": "Ask one clarifying question about action type: play now or configure for later",
+    "C": "Play popular focus tracks Immediately and let the user redirect if needed",
+    "D": "Start preference configuration by asking about genres, temps, and artists they prefer for focus."
+  },
+  "correct_answer": "B. Ask one clarifying question about action type: play now or configure for later",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Các dữ kiện quyết định:",
+    "key_facts": [
+      "User mới — không có lịch sử hay sở thích để suy luận giả định hợp lý.",
+      "Yêu cầu mơ hồ ở cấp độ ý định (intent): ba hành động khác nhau về bản chất (cấu hình, tạo playlist, phát ngay), không chỉ khác nhau về tham số.",
+      "Hệ thống hỗ trợ cả ba, nên chọn sai sẽ thực hiện một hành động mà user không muốn."
+    ],
+    "explanation": "Khi sự mơ hồ nằm ở loại hành động và không có ngữ cảnh để đoán, một câu hỏi làm rõ duy nhất, ngắn gọn, có lựa chọn cụ thể (\"Bạn muốn phát nhạc tập trung ngay bây giờ, hay thiết lập cho lần sau?\") là cách nhanh nhất để đi đúng hướng. Một câu hỏi chi phí thấp, tránh được việc thực hiện sai hành động và phải hoàn tác.",
+    "points": [
+      "Chỉ một câu hỏi — tối thiểu ma sát, khác với việc hỏi dồn nhiều câu.",
+      "Câu hỏi đóng với các lựa chọn rõ ràng giúp user trả lời trong vài từ.",
+      "Sau khi rõ intent, assistant có thể tiến hành với các default hợp lý cho các chi tiết còn lại."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Tự tạo playlist \"Focus\" và thông báo):",
+        "trap": "Bẫy đoán ý định và tạo tác dụng phụ (Assumed intent with side effects trap)",
+        "explanation": "Chọn bừa một trong ba ý định và tạo ra một artifact lâu dài trong tài khoản user. Nếu user chỉ muốn nghe ngay, họ phải chờ, rồi lại phải yêu cầu phát nhạc, và có thể phải xóa playlist không mong muốn."
+      },
+      "C": {
+        "title": "C sai (Phát nhạc ngay và để user điều chỉnh):",
+        "trap": "Bẫy hành động phô trương khi chưa rõ ý định (Premature intrusive action trap)",
+        "explanation": "Phát nhạc ngay là hành động có tác động trực tiếp (âm thanh bật lên bất ngờ) với user mới mà chưa có sở thích nào. Nếu user muốn cấu hình cho lần sau, đây là trải nghiệm đầu tiên kém và vẫn phải sửa hướng."
+      },
+      "D": {
+        "title": "D sai (Bắt đầu hỏi chi tiết về thể loại, tempo, nghệ sĩ):",
+        "trap": "Bẫy hỏi dồn sai tầng (Over-questioning at the wrong level trap)",
+        "explanation": "Mặc định ý định là \"cấu hình\" rồi hỏi nhiều câu chi tiết — vừa có thể sai intent, vừa tạo ma sát lớn với user mới. Nếu user chỉ muốn nghe ngay, chuỗi câu hỏi này hoàn toàn thừa."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Prompt engineering guidance & \"Building Effective Agents\":",
+    "points": [
+      "Có thể chỉ dẫn Claude hỏi lại khi yêu cầu thực sự mơ hồ thay vì đoán, và giới hạn số câu hỏi để tránh ma sát.",
+      "Agent nên dừng lại lấy thông tin từ người dùng khi thiếu thông tin quyết định đến hướng hành động, đặc biệt trước các hành động có tác dụng phụ."
+    ]
+  }
+}

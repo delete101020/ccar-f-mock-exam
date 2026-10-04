@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_018",
+  "domain": "Information Extraction & Pipeline Validation (Trích xuất thông tin & Kiểm thực pipeline)",
+  "topic": "Câu P1.18: Invoice Line-Item Sum Reconciliation and Consistency Flags",
+  "question": "Your extraction pipeline processes invoices and extracts line items, tax amounts, and grand totals. You discover that 8% of documents have extracted line item amounts that don't sum to the extracted grand total—the downstream accounting system has been detecting mismatches.\nWhat's the most effective improvement?",
+  "options": {
+    "A": "Have the model extract line items and the stated grand total as printed, compute the sum in code, and set an is_total_consistent flag that routes mismatches to human review.",
+    "B": "Extract line items and totals independently, then use a second validation model to reconcile discrepancies and output a corrected set of line items and totals.",
+    "C": "Implement post-processing that automatically adjusts line item amounts when the extracted total doesn't match the sum, so stored figures always reconcile.",
+    "D": "Add few-shot examples to the system prompt where extracted line items correctly sum, and instruct the model to double-check its arithmetic before responding."
+  },
+  "correct_answer": "A. Have the model extract line items and the stated grand total as printed, compute the sum in code, and set an is_total_consistent flag that routes mismatches to human review.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Bản chất bài toán số học tất định (Deterministic Arithmetic) kết hợp kiểm soát rủi ro trong trích xuất hóa đơn:",
+    "points": [
+      "Nguyên tắc tách biệt số học và trích xuất: LLM là mô hình xác suất, không phải công cụ tính toán số học chuẩn xác. Việc trích xuất nguyên trạng (verbatim extraction) các dòng hóa đơn (line items) và tổng tiền (grand total) phản ánh trung thực những gì in trên hóa đơn giấy.",
+      "Xác thực bằng code tất định (Deterministic Validation): Thay vì bắt LLM tự tính nhẩm hoặc dựa vào phỏng đoán, pipeline code bên ngoài tính toán `calculated_total = sum(line_items) + tax` và đối chiếu với `extracted_grand_total`.",
+      "Cơ chế cờ cảnh báo (Boolean consistency flag): Đặt cờ `is_total_consistent` cho phép hệ thống kế toán hạ tầng tự động phê duyệt các hóa đơn khớp 100%, đồng thời định tuyến chính xác 8% số hóa đơn có xung đột về phía người duyệt (Human-in-the-loop review) để đối soát mà không phá hủy tính toàn vẹn của dữ liệu gốc."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Dùng model thứ hai để hòa giải chênh lệch):",
+        "trap": "Bẫy lãng phí LLM cho phép toán số học (LLM for math trap)",
+        "explanation": "Dùng một mô hình LLM khác để hòa giải chênh lệch số học làm tăng gấp đôi chi phí và độ trễ nhưng vẫn mang tính xác suất, không thể đảm bảo độ chính xác tuyệt đối như một phép tính cộng trừ đơn giản bằng code."
+      },
+      "C": {
+        "title": "C sai (Tự động điều chỉnh số tiền các dòng line items cho khớp tổng):",
+        "trap": "Bẫy sửa dữ liệu tùy tiện / Vi phạm kiểm toán (Data corruption & Audit violation trap)",
+        "explanation": "Tự ý sửa đổi số liệu chi tiết của từng món hàng để ép cho bằng tổng tiền là vi phạm nghiêm trọng nguyên tắc kiểm toán tài chính (auditability). Có thể lỗi nằm ở việc trích xuất thiếu một mặt hàng, hoặc chính hóa đơn gốc của nhà cung cấp bị in sai số."
+      },
+      "D": {
+        "title": "D sai (Thêm vài ví dụ few-shot vào system prompt):",
+        "trap": "Bẫy trông chờ vài ví dụ để giải quyết tính toán số học (Few-shot math fallacy trap)",
+        "explanation": "Few-shot examples không thể biến LLM thành một công cụ tính toán số học đáng tin cậy trên các hóa đơn dài có hàng chục mặt hàng và thuế suất phức tạp. Việc yêu cầu model tự kiểm tra lại phép tính vẫn mang tính xác suất, không thay thế được kiểm tra bằng code."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Nguyên tắc chung (nên đối chiếu thêm tài liệu chính thức của Anthropic):",
+    "points": [
+      "Dùng code tất định (không dùng LLM) cho các phép kiểm tra số học và tính toàn vẹn dữ liệu.",
+      "Kết hợp cờ nhất quán với định tuyến sang người duyệt, giữ nguyên dữ liệu gốc đã trích xuất."
+    ]
+  }
+}

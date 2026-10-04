@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_011",
+  "domain": "Claude Code CLI & Session Management (Quản lý phiên làm việc & Phân nhánh phiên)",
+  "topic": "Câu P1.11: Branching Analysis Sessions for Independent Test Strategy Exploration",
+  "question": "Your agent has analyzed a complex service module–reading 23 source files, tracing request flows, and identifying error handling patterns. A developer wants to compare two testing strategies before committing to one: end-to-end tests with mocked external services vs. snapshot tests capturing expected outputs. They need to independently develop both approaches to evaluate trade-offs.\nHow should you manage the sessions?",
+  "options": {
+    "A": "Continue in the original session, developing end-to-end tests first, then snapshot tests sequentially.",
+    "B": "Resume the analysis session with fork_session enabled, creating a separate branch for each testing strategy.",
+    "C": "Start two fresh sessions, having each re-read the relevant source files before beginning.",
+    "D": "Export the analysis session's key findings to a file, then create two new sessions that reference this file."
+  },
+  "correct_answer": "B. Resume the analysis session with fork_session enabled, creating a separate branch for each testing strategy.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Đặc thù bài toán phát triển độc lập 2 hướng kiểm thử từ nền tảng 23 files:",
+    "points": [
+      "Kế thừa toàn vẹn ngữ cảnh sâu: Agent đã đọc 23 file nguồn, nắm rõ call stack, type interface và error patterns. Để viết code test cụ thể, agent cần toàn bộ chi tiết mã nguồn này thay vì một bản tóm tắt cấp cao.",
+      "Cơ chế fork_session (Tách nhánh phiên): Cho phép tạo 2 nhánh rẽ độc lập từ đúng trạng thái sau khi đọc 23 files. Mỗi nhánh phát triển một chiến lược test riêng biệt mà không cần đọc lại 23 files.",
+      "Cách ly ngữ cảnh (Context Isolation): Giữ cho code của chiến lược E2E không bị lẫn vào luồng tư duy của snapshot test, tránh gây ô nhiễm context hoặc nhầm lẫn giữa 2 triết lý testing."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Làm tuần tự trong cùng một session):",
+        "trap": "Bẫy ô nhiễm ngữ cảnh (Context pollution / bloat trap)",
+        "explanation": "Viết cả hai bộ test trong cùng một luồng sẽ đẩy dung lượng context lên cực lớn, gây loãng sự chú ý và khiến các mockup của E2E test làm nhiễu logic khi viết snapshot test."
+      },
+      "C": {
+        "title": "C sai (Bắt đầu 2 session mới và đọc lại 23 files):",
+        "trap": "Bẫy lãng phí token và thời gian (Redundant re-reading trap)",
+        "explanation": "Bắt agent đọc lại 23 file mã nguồn ở cả hai phiên mới gây lãng phí nghiêm trọng chi phí token đầu vào và làm chậm tiến độ phát triển của lập trình viên."
+      },
+      "D": {
+        "title": "D sai (Xuất tóm tắt ra file rồi tạo 2 session mới tham chiếu file đó):",
+        "trap": "Bẫy mất chi tiết kỹ thuật sâu (Shallow context / Loss of code details trap)",
+        "explanation": "Bản tóm tắt phù hợp để nắm kiến trúc tổng thể nhưng thường thiếu chi tiết như chữ ký hàm và mock interface cần để viết test hoàn chỉnh, nên agent vẫn phải đọc lại nhiều file nguồn; trong khi fork giữ nguyên toàn bộ ngữ cảnh đã đọc."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code – quản lý session (resume/fork):",
+    "points": [
+      "Dùng fork session khi cần thử nhiều hướng kỹ thuật độc lập dựa trên cùng một khối context lớn đã tích lũy.",
+      "Khi bước tiếp theo là viết code trực tiếp, giữ nguyên context chi tiết hiệu quả hơn chỉ truyền bản tóm tắt khái quát."
+    ]
+  }
+}

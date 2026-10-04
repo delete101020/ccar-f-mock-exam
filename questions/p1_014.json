@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_014",
+  "domain": "Claude Code Exploration Strategies & Context Management (Chiến lược duyệt mã nguồn & Quản lý Context)",
+  "topic": "Câu P1.14: Incremental Code Exploration for Large Codebase Auth Architecture",
+  "question": "An engineer who just joined the team asks the agent to help them understand the authentication and authorization architecture before making security improvements. The codebase has 800+ files across multiple services.\nWhat exploration strategy will most effectively build understanding, given Claude built-in tools and context limits?",
+  "options": {
+    "A": "Use Grep to find authentication entry points, read those files, then follow imports and function calls to map the auth flow incrementally.",
+    "B": "Read all files containing \"auth\", \"login\", \"permission\", or \"token\" in their content or filename.",
+    "C": "Launch parallel subagents to explore different services simultaneously, then synthesize their findings into an architectural overview.",
+    "D": "Read any CLAUDE.md and README files first, then ask the engineer to specify which 10-15 files are most important for understanding the auth system."
+  },
+  "correct_answer": "A. Use Grep to find authentication entry points, read those files, then follow imports and function calls to map the auth flow incrementally.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Đặc thù bài toán duyệt mã nguồn trên codebase quy mô lớn (800+ files, đa dịch vụ):",
+    "points": [
+      "Quản lý giới hạn context window: Với 800+ files, agent không thể nạp mã nguồn tràn lan mà phải tối ưu từng token đầu vào.",
+      "Chiến lược dò vết gia tăng (Incremental Tracing): Dùng Grep để định vị các điểm vào then chốt (entry points như auth middleware, route decorators, token validators). Sau đó đọc các file này và lần theo cây import/function calls để mở rộng dần dần đồ thị luồng xử lý (auth flow).",
+      "Hiệu quả và độ chính xác: Giúp agent hiểu sâu sắc toàn bộ luồng logic mà chỉ nạp đúng những file nằm trên đường đi thực thi (execution path), tránh lãng phí context vào các file không liên quan."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Đọc toàn bộ file chứa từ khóa auth/login/token):",
+        "trap": "Bẫy ngập lụt context do quét diện rộng (Keyword search flooding trap)",
+        "explanation": "Trong codebase 800+ files, các từ khóa này có thể xuất hiện ở hàng trăm files (từ models, utils, types, comments đến test files). Cố đọc tất cả sẽ làm sập hoặc bão hòa context window ngay lập tức."
+      },
+      "C": {
+        "title": "C sai (Chạy parallel subagents đồng thời qua các services):",
+        "trap": "Bẫy song song hóa khi chưa có ranh giới luồng (Premature parallelization trap)",
+        "explanation": "Luồng authentication và authorization giữa các dịch vụ thường có tính phụ thuộc tuần tự (ví dụ: API Gateway -> Auth Service -> Token Verification -> User Service). Chạy song song không có định hướng luồng sẽ dẫn đến phân mảnh kiến thức và lãng phí tài nguyên."
+      },
+      "D": {
+        "title": "D sai (Đọc README rồi bắt kỹ sư chỉ định 10-15 files):",
+        "trap": "Bẫy chuyển gánh nặng sang người dùng (User burden / Passive agent trap)",
+        "explanation": "Đề bài nêu rõ kỹ sư 'just joined the team' (vừa mới gia nhập đội ngũ), nghĩa là họ chưa biết cấu trúc codebase để có thể chỉ ra 10-15 files quan trọng. Agent cần chủ động dùng công cụ tích hợp sẵn để khám phá."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Nguyên tắc chung (nên đối chiếu thêm tài liệu chính thức của Anthropic):",
+    "points": [
+      "Dùng Grep/Glob định vị điểm vào, rồi lần theo import và lời gọi hàm để mở rộng dần, bảo vệ context window.",
+      "Dùng công cụ để tự khám phá thay vì hỏi ngược người dùng những thông tin có thể tự tìm."
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_021",
+  "domain": "Anthropic API Tool Use & Tool Schema Design (Sử dụng Tool trong Anthropic API & Thiết kế Schema tham số)",
+  "topic": "Câu P3.21: Splitting a Unified Order Tool into Operation-Specific Tools for Parameter Accuracy",
+  "question": "Your order management system requires tools for three distinct operations: issuing refunds (requires amount and reason), canceling orders (requires reason), and res (requires shipping address). Each operation shares an order id parameter but has different additional requirements. You notice during testing that with your current frequently omits required parameters or includes irrelevant ones.\nWhat design change will most effectively improve parameter accuracy?",
+  "options": {
+    "A": "Split into three separate tools (each defining only the parameters required for that specific operation.",
+    "B": "Keep one unified tool with all parameters marked optional, but add few-shot examples in the system prompt showing correct parameter combinations for each operation.",
+    "C": "Keep one unified tool but add JSON Schema if-then-else conditionals to enforce that parameters like amount are required only when the operation type is \"refund\".",
+    "D": "Keep one unified tool with a nested operation object parameter whose internal structure varies by operation type, documented in the tool description."
+  },
+  "correct_answer": "A. Split into three separate tools (each defining only the parameters required for that specific operation.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Phân tích nguyên nhân gốc rễ:",
+    "points": [
+      "Ba thao tác (refund, cancel, reship/update shipping) có bộ tham số bắt buộc khác nhau nhưng đang dùng chung một tool. Schema hợp nhất buộc phải đánh dấu hầu hết tham số là optional, nên model không thể dựa vào schema để biết tham số nào là bắt buộc cho thao tác nào — dẫn tới việc bỏ sót tham số cần thiết hoặc thêm tham số không liên quan.",
+      "Tách thành ba tool riêng biệt, mỗi tool chỉ khai báo đúng tham số của mình trong input_schema (ví dụ issue_refund: order_id, amount, reason đều required). Khi đó yêu cầu tham số được thể hiện trực tiếp, rõ ràng trong schema — model nhìn thấy chính xác cần cung cấp gì.",
+      "Đây là thiết kế đơn giản, tương thích tốt nhất với tool use của Claude (và có thể kết hợp strict tool use để đảm bảo đúng schema), đồng thời mỗi tool có mục đích riêng biệt, không chồng lấn ngữ nghĩa."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Giữ một tool với tất cả tham số optional + few-shot examples):",
+        "trap": "Bẫy schema lỏng lẻo (Loose schema trap)",
+        "explanation": "Đánh dấu mọi tham số optional chính là nguyên nhân gây lỗi; few-shot trong system prompt chỉ là định hướng xác suất và không thể ràng buộc schema. Model vẫn có thể bỏ sót amount khi refund."
+      },
+      "C": {
+        "title": "C sai (Dùng JSON Schema if-then-else conditionals):",
+        "trap": "Bẫy schema phức tạp khó hiểu và kém hỗ trợ (Complex conditional schema trap)",
+        "explanation": "Các ràng buộc điều kiện như if/then/else làm schema phức tạp, khó cho model suy luận, và không được hỗ trợ trong strict mode/structured outputs của Claude. Cùng một mục tiêu có thể đạt được đơn giản hơn nhiều bằng ba tool riêng."
+      },
+      "D": {
+        "title": "D sai (Tham số operation dạng object lồng nhau, cấu trúc thay đổi theo loại):",
+        "trap": "Bẫy cấu trúc đa hình chỉ mô tả bằng văn bản (Polymorphic nested object trap)",
+        "explanation": "Cấu trúc bên trong chỉ được 'documented in the tool description' chứ không được schema ràng buộc, nên model vẫn dễ cung cấp sai tham số. Object lồng nhau đa hình còn làm tăng độ phức tạp và tỷ lệ lỗi."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool Use (Defining tools) & \"Writing effective tools for agents\":",
+    "points": [
+      "Định nghĩa tool với input_schema rõ ràng, liệt kê chính xác các tham số required; mô tả tool và tham số chi tiết giúp model gọi tool chính xác.",
+      "Strict tool use / structured outputs chỉ hỗ trợ một tập con JSON Schema (không hỗ trợ các ràng buộc điều kiện phức tạp); thiết kế tool đơn giản, mục đích rõ ràng giúp tăng độ chính xác tham số."
+    ]
+  }
+}

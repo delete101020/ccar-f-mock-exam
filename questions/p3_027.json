@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_027",
+  "domain": "Context Management & RAG Optimization (Quản lý ngữ cảnh & Tối ưu RAG)",
+  "topic": "Câu P3.27: Sliding Window for Accumulated RAG Results to Preserve Conversation History",
+  "question": "Performance analysis reveals your context is composed of accumulated RAG results from all previous queries, which is crowding out conversation history and causing coherence degradation after 15+ turns.\nWhich approach best addresses this issue?",
+  "options": {
+    "A": "Implement semantic deduplication to identify and remove redundant information across the accumulated RAG results and conversation turns",
+    "B": "Implement a sliding window for RAG results from the last 2-3 queries while preserving conversation history",
+    "C": "Shift context budget to favor RAG results while reducing conversation history allocation",
+    "D": "Compress all RAG results into a consolidated summary document that updates incrementally after each retrieval"
+  },
+  "correct_answer": "B. Implement a sliding window for RAG results from the last 2-3 queries while preserving conversation history",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Chẩn đoán đã chỉ rõ nguyên nhân: kết quả RAG tích lũy từ tất cả các truy vấn trước đang lấn át lịch sử hội thoại:",
+    "points": [
+      "Kết quả RAG của các truy vấn cũ phần lớn đã hết giá trị (stale) - chúng phục vụ câu hỏi trước đó. Trong khi đó, lịch sử hội thoại mới là nguồn duy trì mạch lạc (coherence) qua nhiều lượt.",
+      "Sliding window chỉ giữ kết quả RAG của 2-3 truy vấn gần nhất giới hạn trực tiếp phần đang tăng không kiểm soát, đồng thời bảo toàn lịch sử hội thoại - đúng vào nguyên nhân gốc, đơn giản và có thể dự đoán được.",
+      "Nếu cần lại thông tin cũ, hệ thống có thể truy xuất lại (re-retrieve) theo yêu cầu, nên việc bỏ kết quả RAG cũ hầu như không gây mất mát."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Semantic deduplication):",
+        "trap": "Bẫy giải pháp phức tạp chỉ xử lý một phần (Partial / Over-engineered fix trap)",
+        "explanation": "Dedup chỉ loại phần trùng lặp; các kết quả RAG cũ nhưng khác nhau vẫn tiếp tục tích lũy không giới hạn. Ngoài ra, việc dedup cả trên conversation turns có thể xóa nhầm nội dung hội thoại cần cho mạch lạc."
+      },
+      "C": {
+        "title": "C sai (Tăng ngân sách cho RAG, giảm cho lịch sử):",
+        "trap": "Bẫy làm trầm trọng vấn đề (Inverted fix trap)",
+        "explanation": "Đây chính là điều đang gây ra lỗi. Ưu tiên RAG hơn nữa sẽ càng đẩy lịch sử hội thoại ra khỏi context và làm suy giảm mạch lạc nhanh hơn."
+      },
+      "D": {
+        "title": "D sai (Nén tất cả RAG thành bản tóm tắt cập nhật dần):",
+        "trap": "Bẫy tóm tắt mất mát chi tiết (Lossy summarization trap)",
+        "explanation": "Bản tóm tắt cộng dồn vẫn tăng dần theo thời gian, tốn thêm lượt gọi để duy trì, và làm mất chi tiết nguyên văn của các kết quả gần đây - chính là phần cần độ chính xác cao nhất cho câu hỏi hiện tại."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic – Effective context engineering for AI agents & Context window documentation:",
+    "points": [
+      "Context là tài nguyên hữu hạn; nên giữ tập token nhỏ nhất có giá trị cao nhất, loại bỏ các kết quả tool/retrieval cũ đã hết tác dụng (tool result clearing).",
+      "Thông tin cũ có thể được truy xuất lại khi cần (just-in-time retrieval) thay vì giữ vĩnh viễn trong context."
+    ]
+  }
+}

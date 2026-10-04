@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_003",
+  "domain": "Claude Agent SDK & Multi-Agent Orchestration (Claude Agent SDK & Điều phối đa agent)",
+  "topic": "Câu P2.3: Silent Delegation Failure Caused by Missing Task Tool in allowedTools",
+  "question": "The coordinator agent has AgentDefinitions configured for all four specialized subagents, each with appropriate descriptions, prompts, and tool restrictions. During testing, you notice the coordinator correctly reasons about when to delegate — it generates messages like \"I'll ask the web search agent to find sources on this topic\" — but no subagent execution ever occurs. The coordinator then proceeds as if the delegation happened and continues with incomplete information. Logs show no errors.\nWhat is the most likely cause?",
+  "options": {
+    "A": "The coordinator's max_tokens setting is too low, causing the Task tool invocation to be truncated before the subagent type parameter can be specified.",
+    "B": "The AgentDefinitions are configured correctly, but the coordinator's system prompt doesn't explicitly list the available subagent types, preventing the model from knowing they can be invoked.",
+    "C": "Subagent context isolation means task descriptions from the coordinator don't automatically reach subagents; you need to configure explicit context forwarding in ClaudeAgentOptions.",
+    "D": "The coordinator's allowedTools configuration doesn't include \"Task\", so while it can reason about delegation, it cannot invoke the tool required to spawn subagents."
+  },
+  "correct_answer": "D. The coordinator's allowedTools configuration doesn't include \"Task\", so while it can reason about delegation, it cannot invoke the tool required to spawn subagents.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Dấu hiệu chẩn đoán: coordinator suy luận đúng về việc delegate, nhưng không có subagent nào được thực thi và log không có lỗi:",
+    "points": [
+      "Trong Claude Agent SDK, subagent được khởi chạy thông qua tool `Task` (công cụ delegate). AgentDefinitions chỉ khai báo các subagent có sẵn; muốn thực sự gọi chúng, coordinator phải được phép dùng tool `Task` trong `allowedTools`.",
+      "Khi `Task` không có trong `allowedTools`, model không có cách nào phát ra lệnh `tool_use` để spawn subagent. Nó chỉ có thể “nói” về việc delegate bằng text (“I'll ask the web search agent...”) rồi tiếp tục như thể việc đó đã xảy ra — khớp chính xác với triệu chứng.",
+      "Không có lỗi trong log vì không có lời gọi tool nào thất bại: đơn giản là tool không tồn tại trong tập công cụ của coordinator. Đây là lỗi cấu hình (configuration gap), không phải lỗi runtime.",
+      "Cách khắc phục: thêm `\"Task\"` vào `allowedTools` của coordinator (giữ nguyên tool restrictions cho từng subagent)."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (max_tokens quá thấp làm cắt cụt lời gọi Task):",
+        "trap": "Bẫy đổ lỗi cho truncation (Truncation red herring)",
+        "explanation": "Nếu output bị cắt do max_tokens, response sẽ có `stop_reason: \"max_tokens\"` và tool call dở dang — hiện tượng có thể quan sát được, không xảy ra một cách nhất quán và “im lặng” ở mọi lần delegate. Hơn nữa coordinator vẫn đủ token để tiếp tục viết rất nhiều nội dung sau đó."
+      },
+      "B": {
+        "title": "B sai (System prompt không liệt kê subagent types):",
+        "trap": "Bẫy nhầm prompt với cấu hình (Prompt-vs-configuration trap)",
+        "explanation": "Coordinator rõ ràng đã biết về các subagent — nó nhắc đích danh “web search agent”. Mô tả của AgentDefinitions được SDK cung cấp cho model qua định nghĩa tool Task; vấn đề không nằm ở việc model không biết, mà ở việc nó không có tool để gọi."
+      },
+      "C": {
+        "title": "C sai (Context isolation cần cấu hình context forwarding):",
+        "trap": "Bẫy hiểu sai context isolation (Context isolation misconception)",
+        "explanation": "Context isolation chỉ ảnh hưởng đến nội dung subagent nhận được khi đã được spawn (prompt của Task chính là kênh truyền thông tin). Nó không thể giải thích việc subagent hoàn toàn không được thực thi. Cũng không tồn tại tùy chọn “explicit context forwarding” bắt buộc trong ClaudeAgentOptions để subagent chạy."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Agent SDK Documentation – Subagents & Permissions (allowedTools):",
+    "points": [
+      "Subagent được định nghĩa qua `agents` / AgentDefinition và được gọi thông qua tool Task; tool này phải nằm trong tập công cụ được phép của agent cha.",
+      "`allowedTools` quyết định model có thể gọi những tool nào; thiếu tool tương ứng thì model chỉ có thể mô tả hành động bằng text mà không thực thi."
+    ]
+  }
+}

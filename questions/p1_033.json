@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_033",
+  "domain": "Multi-Agent Systems & Structured Handoffs (Hệ thống đa Agent & Chuẩn hóa dữ liệu bàn giao)",
+  "topic": "Câu P1.33: Including Data Dates in Subagent Structured Outputs for Temporal Reasoning",
+  "question": "When researching \"renewable energy adoption,\" the web search agent returns recent statistics (2024: 35% adoption) while the document analysis agent extracts data from internal reports (2022: 18% adoption). The synthesis agent incorrectly flags these as contradictory sources rather than recognizing the data shows growth over time. What change would best enable the synthesis agent to correctly interpret such temporal differences?",
+  "options": {
+    "A": "Add a conflict resolution agent that automatically discards older data when newer data exists for the same metric.",
+    "B": "Configure the web search agent to only return results from the past 6 months.",
+    "C": "Instruct the synthesis agent to always treat the most recent data as authoritative and place older findings in a separate historical appendix.",
+    "D": "Require subagents to include publication or data collection dates in their structured outputs."
+  },
+  "correct_answer": "D. Require subagents to include publication or data collection dates in their structured outputs.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Vì sao synthesis agent hiểu nhầm tăng trưởng là mâu thuẫn?",
+    "points": [
+      "Hai con số 35% (2024) và 18% (2022) không mâu thuẫn — chúng là hai điểm dữ liệu ở hai thời điểm khác nhau, cho thấy xu hướng tăng trưởng. Synthesis agent gắn cờ mâu thuẫn vì nó không có thông tin thời gian đi kèm từng phát hiện.",
+      "Nguyên nhân gốc là thiếu metadata trong dữ liệu bàn giao giữa các agent (handoff data). Khi subagent chỉ trả về giá trị mà không có ngày xuất bản/ngày thu thập, synthesis agent không có căn cứ để suy luận theo thời gian.",
+      "Yêu cầu subagent đưa publication date hoặc data collection date vào structured output là thay đổi mang tính cấu trúc: synthesis agent nhận được đầy đủ ngữ cảnh để tự nhận ra đây là chuỗi thời gian (time series) và trình bày đúng là tăng trưởng.",
+      "Giải pháp này bảo toàn toàn bộ dữ liệu (cả cũ và mới đều có giá trị phân tích) thay vì loại bỏ thông tin."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Thêm conflict resolution agent tự động bỏ dữ liệu cũ):",
+        "trap": "Bẫy loại bỏ dữ liệu có giá trị (Destructive conflict resolution trap)",
+        "explanation": "Dữ liệu 2022 không sai mà là điểm mốc để thể hiện xu hướng tăng trưởng. Tự động bỏ dữ liệu cũ làm mất insight quan trọng nhất (tốc độ tăng từ 18% lên 35%). Hơn nữa, agent này cũng cần biết ngày của dữ liệu — tức vẫn phụ thuộc vào việc có metadata thời gian."
+      },
+      "B": {
+        "title": "B sai (Chỉ lấy kết quả web search trong 6 tháng gần nhất):",
+        "trap": "Bẫy giới hạn nguồn sai chỗ (Misplaced filtering trap)",
+        "explanation": "Bộ lọc này không giải quyết vấn đề: dữ liệu 2022 đến từ document analysis agent (báo cáo nội bộ), không phải web search. Nó cũng làm giảm độ bao phủ nghiên cứu một cách tùy tiện."
+      },
+      "C": {
+        "title": "C sai (Luôn coi dữ liệu mới nhất là chuẩn, đưa dữ liệu cũ vào phụ lục):",
+        "trap": "Bẫy quy tắc cứng nhắc thiếu thông tin đầu vào (Rigid recency rule trap)",
+        "explanation": "Synthesis agent không biết dữ liệu nào mới hơn nếu output không chứa ngày tháng. Ngoài ra, quy tắc \"luôn ưu tiên mới nhất\" vẫn đóng khung vấn đề như một xung đột cần chọn thắng-thua, thay vì nhận diện đó là xu hướng theo thời gian."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – \"How we built our multi-agent research system\"; nguyên tắc thiết kế structured output cho subagent.",
+    "points": [
+      "Subagent nên trả về kết quả có cấu trúc kèm metadata (nguồn, ngày, phương pháp) để agent tổng hợp có đủ ngữ cảnh khi kết hợp kết quả.",
+      "Bảo toàn provenance và ngữ cảnh thời gian giúp agent tổng hợp phân biệt giữa mâu thuẫn thật và khác biệt do thời điểm."
+    ]
+  }
+}

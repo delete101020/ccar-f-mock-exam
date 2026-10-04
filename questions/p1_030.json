@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_030",
+  "domain": "Batch Processing & Cost Optimization (Xử lý hàng loạt & Tối ưu chi phí với Message Batches API)",
+  "topic": "Câu P1.30: Routing by Latency Requirement: Batch API vs Real-time Messages API",
+  "question": "Your extraction system processes two document types: standard monthly reports (archived after processing) and urgent exception reports (must trigger business alerts within 30 minutes of receipt). Both use the same JSON schema. You want to minimize API costs while meeting latency requirements.\nHow should you architect the processing pipeline?",
+  "options": {
+    "A": "Submit all documents to the Batch API with custom_ids for tracking. When results arrive, immediately process urgent documents and trigger delayed alerts for exceptions.",
+    "B": "Submit all documents to the real-time Messages API to ensure consistent processing latency across document types.",
+    "C": "Queue all documents and submit hourly batches, flagging urgent documents for expedited handling when batch results return.",
+    "D": "Route standard reports to the Batch API for 50% cost savings, and route urgent exception reports to the real-time Messages API."
+  },
+  "correct_answer": "D. Route standard reports to the Batch API for 50% cost savings, and route urgent exception reports to the real-time Messages API.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Hai loại tài liệu có yêu cầu độ trễ hoàn toàn khác nhau:",
+    "points": [
+      "Standard monthly reports: chỉ lưu trữ sau khi xử lý, không có yêu cầu độ trễ gắt → ứng viên lý tưởng cho Message Batches API (giảm 50% chi phí, xử lý trong tối đa 24 giờ).",
+      "Urgent exception reports: phải kích hoạt alert trong vòng 30 phút → không thể dùng Batch API vì Batch API không có cam kết thời gian hoàn thành ngắn (có thể lên tới 24 giờ).",
+      "Kiến trúc định tuyến theo yêu cầu độ trễ (latency-based routing): mỗi loại tài liệu đi theo kênh phù hợp nhất — tối ưu chi phí cho phần lớn khối lượng và đảm bảo SLA cho phần khẩn cấp.",
+      "Cả hai kênh dùng chung một JSON schema nên logic trích xuất không đổi, chỉ khác lớp gửi request."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Gửi tất cả qua Batch API, xử lý urgent khi có kết quả):",
+        "trap": "Bẫy hiểu sai SLA của Batch API (Batch latency misconception trap)",
+        "explanation": "Batch API có thể mất tới 24 giờ và không có cơ chế ưu tiên. Alert cho tài liệu khẩn cấp sẽ bị trễ hàng giờ, vi phạm yêu cầu 30 phút. Chính đáp án cũng thừa nhận \"delayed alerts\"."
+      },
+      "B": {
+        "title": "B sai (Gửi tất cả qua real-time Messages API):",
+        "trap": "Bẫy bỏ qua tối ưu chi phí (Missed cost optimization trap)",
+        "explanation": "Đáp ứng được SLA nhưng bỏ phí khoản giảm 50% cho phần lớn tài liệu (báo cáo tháng) vốn không cần xử lý ngay. \"Consistent latency\" không phải yêu cầu của bài toán; yêu cầu là minimize cost while meeting latency."
+      },
+      "C": {
+        "title": "C sai (Gom batch theo giờ, đánh dấu urgent để ưu tiên):",
+        "trap": "Bẫy cơ chế ưu tiên không tồn tại (Non-existent priority trap)",
+        "explanation": "Batch API không có chế độ \"expedited\" — thời gian xử lý vẫn có thể lên tới 24 giờ dù batch được submit mỗi giờ. Cộng thêm tối đa 1 giờ chờ gom batch, tài liệu khẩn cấp không thể đảm bảo alert trong 30 phút."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude API Docs – Message Batches API & Messages API.",
+    "points": [
+      "Batch API phù hợp cho các tác vụ không cần phản hồi ngay (bulk evaluation, phân tích dữ liệu lớn) với chi phí giảm 50%; thời gian xử lý tối đa 24 giờ.",
+      "Các tác vụ yêu cầu độ trễ thấp hoặc có SLA ngắn nên dùng Messages API đồng bộ."
+    ]
+  }
+}

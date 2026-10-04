@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_013",
+  "domain": "Context Window Management & Tool Definitions (Quản lý Context Window & Định nghĩa Tool)",
+  "topic": "Câu P2.13: Accuracy Drop on Near-Limit Documents Due to Tool Definitions Consuming Context",
+  "question": "Your extraction system uses tool_use with a JSON schema containing 12 fields and detailed descriptions, totaling approximately 2,500 tokens for the complete tool definition. Processing documents under 150K tokens yields 98% accuracy. For documents between 175-190K tokens, accuracy drops to 71%, with information from the final third consistently missed. The model's context window is 200K tokens.\nWhat is the most likely cause?",
+  "options": {
+    "A": "Tool definitions consume input context tokens. Combined with system prompts and document content, the total approaches the context limit, degrading end-of-document processing.",
+    "B": "Very long documents exceed the model's effective attention span regardless of context limits, causing accuracy degradation for content farther from the prompt instructions.",
+    "C": "The model distributes attention proportionally across input length, causing fields mentioned only once near the document's end to receive insufficient processing focus.",
+    "D": "Schemas exceeding 8-10 fields increase decision complexity during parameter generation, reducing extraction accuracy independent of document length."
+  },
+  "correct_answer": "A. Tool definitions consume input context tokens. Combined with system prompts and document content, the total approaches the context limit, degrading end-of-document processing.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Các con số trong đề bài là manh mối chẩn đoán:",
+    "points": [
+      "Tài liệu < 150K tokens: 98% accuracy; tài liệu 175–190K tokens: 71%, phần cuối tài liệu bị bỏ sót một cách nhất quán. Context window là 200K tokens.",
+      "Tool definitions (≈2.500 tokens cho schema 12 trường), system prompt bổ sung của tool use, system prompt của ứng dụng và không gian dành cho output đều tiêu thụ cùng một context window với tài liệu. Với tài liệu 190K, tổng input đã sát giới hạn 200K.",
+      "Khi tổng tiến gần giới hạn, phần nội dung ở cuối là phần chịu ảnh hưởng đầu tiên (bị cắt bớt ở bước tiền xử lý hoặc xử lý kém đi), khớp với triệu chứng “final third consistently missed” chỉ ở nhóm tài liệu dài nhất.",
+      "Hướng khắc phục: tính toán ngân sách token đầy đủ (dùng token counting API), chunk các tài liệu vượt ngưỡng an toàn, hoặc rút gọn tool definitions/system prompt."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Tài liệu dài vượt “effective attention span”):",
+        "trap": "Bẫy giải thích chung chung (Vague attention-span trap)",
+        "explanation": "Giải thích này không gắn với các dữ kiện định lượng của đề (2.500 tokens tool definition, ngưỡng 200K, sụt giảm đột ngột chỉ ở dải 175–190K). Nếu là giới hạn attention chung, accuracy sẽ giảm dần theo độ dài chứ không phải ổn định 98% đến 150K rồi rơi mạnh sát ngưỡng context."
+      },
+      "C": {
+        "title": "C sai (Attention phân bổ theo tỷ lệ độ dài input):",
+        "trap": "Bẫy cơ chế attention bịa đặt (Fabricated mechanism trap)",
+        "explanation": "Không có cơ chế nào được tài liệu hóa theo kiểu “attention phân bổ tỷ lệ khiến trường xuất hiện một lần ở cuối bị bỏ qua”. Nếu đúng, lỗi cũng xảy ra với tài liệu 150K, mâu thuẫn với accuracy 98%."
+      },
+      "D": {
+        "title": "D sai (Schema > 8–10 trường làm giảm accuracy):",
+        "trap": "Bẫy ngưỡng số trường tùy tiện (Arbitrary field-count trap)",
+        "explanation": "Cùng một schema 12 trường đạt 98% với tài liệu ngắn — chứng tỏ độ phức tạp schema không phải nguyên nhân. Phương án này mâu thuẫn trực tiếp với dữ kiện “independent of document length”."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Context windows, Tool use (pricing / token usage of tool definitions) & Token counting:",
+    "points": [
+      "Tool definitions (tên, mô tả, input_schema) và system prompt tool use được tính vào input tokens của request, chiếm chỗ trong context window.",
+      "Nên dùng token counting để ước lượng tổng token trước khi gửi và chia nhỏ tài liệu khi tổng tiến sát giới hạn context."
+    ]
+  }
+}

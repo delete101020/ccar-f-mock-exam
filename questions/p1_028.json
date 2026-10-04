@@ -1,0 +1,55 @@
+{
+  "id": "ccar_f_p1_028",
+  "domain": "Batch Processing & Cost Optimization (Xử lý hàng loạt & Tối ưu chi phí với Message Batches API)",
+  "topic": "Câu P1.28: Choosing Batch Submission Frequency to Meet a 30-Hour SLA",
+  "question": "Documents arrive continuously throughout business hours and need structured data extracted. To reduce costs, you want to use the Message Batches API (50% discount, up-to-24-hour processing window). Your SLA specifies that extraction results must be available within 30 hours of document arrival with 99.9% reliability.\nWhich batching strategy is most appropriate?",
+  "options": {
+    "A": "Submit batches every 6 hours containing documents from that window",
+    "B": "Use the real-time API for all documents instead of batch processing",
+    "C": "Submit a single batch at end of day containing all documents from that day",
+    "D": "Submit batches every 4 hours containing documents from that window"
+  },
+  "correct_answer": "D. Submit batches every 4 hours containing documents from that window",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Tính toán độ trễ tối đa (worst-case latency) cho mỗi chiến lược:",
+    "key_facts": [
+      "Message Batches API: giảm 50% chi phí, nhưng thời gian xử lý có thể lên tới 24 giờ.",
+      "SLA: kết quả phải sẵn sàng trong 30 giờ kể từ khi tài liệu đến, với độ tin cậy 99.9%.",
+      "Độ trễ tối đa = thời gian chờ trong cửa sổ gom batch + tối đa 24 giờ xử lý."
+    ],
+    "explanation": "Một tài liệu đến ngay đầu cửa sổ gom phải chờ hết cửa sổ rồi mới được submit. Với cửa sổ 4 giờ: 4 + 24 = 28 giờ, còn 2 giờ đệm (buffer) cho việc submit, polling và xử lý kết quả. Với cửa sổ 6 giờ: 6 + 24 = 30 giờ — đúng bằng giới hạn SLA, không còn bất kỳ biên an toàn nào, không thể đạt 99.9% reliability.",
+    "points": [
+      "Submit batch mỗi 4 giờ giữ được lợi ích giảm 50% chi phí của Batch API.",
+      "Worst-case 28 giờ nằm an toàn dưới ngưỡng SLA 30 giờ, chừa buffer cho overhead vận hành (thời gian tạo batch, polling kết quả, ghi kết quả ra hệ thống đích)."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Submit batch mỗi 6 giờ):",
+        "trap": "Bẫy biên an toàn bằng 0 (Zero-margin SLA trap)",
+        "explanation": "6 giờ chờ + 24 giờ xử lý tối đa = 30 giờ, chạm đúng giới hạn SLA. Bất kỳ độ trễ nhỏ nào (submit chậm vài phút, polling, ghi kết quả) đều vi phạm SLA, không thể đảm bảo 99.9%."
+      },
+      "B": {
+        "title": "B sai (Dùng real-time API cho mọi tài liệu):",
+        "trap": "Bẫy bỏ qua cơ hội tiết kiệm chi phí (Missed cost optimization trap)",
+        "explanation": "SLA 30 giờ hoàn toàn cho phép xử lý bất đồng bộ. Dùng real-time API đáp ứng SLA nhưng bỏ phí khoản giảm 50% chi phí — trái với mục tiêu \"to reduce costs\" của đề bài."
+      },
+      "C": {
+        "title": "C sai (Submit một batch duy nhất cuối ngày):",
+        "trap": "Bẫy cửa sổ gom quá dài (Oversized batching window trap)",
+        "explanation": "Tài liệu đến đầu giờ làm việc phải chờ khoảng 8-10 giờ (hoặc lâu hơn) trước khi được submit, cộng thêm tối đa 24 giờ xử lý → vượt quá 30 giờ, vi phạm SLA."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude API Docs – Message Batches API (Batch processing).",
+    "points": [
+      "Message Batches API giảm 50% chi phí so với gọi API chuẩn; phần lớn batch hoàn thành trong vòng 1 giờ nhưng thời gian xử lý tối đa có thể lên tới 24 giờ, sau đó batch hết hạn.",
+      "Khi thiết kế với SLA, cần tính worst-case = thời gian chờ gom batch + 24 giờ, và chừa biên an toàn."
+    ]
+  }
+}

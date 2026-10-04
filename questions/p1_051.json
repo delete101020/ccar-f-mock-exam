@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_051",
+  "domain": "Customer Support Agent Design & Human Escalation (Thiết kế Agent CSKH & Cơ chế chuyển giao cho người - Human Handoff)",
+  "topic": "Câu P1.51: Mid-Process Escalation with a Structured Handoff",
+  "question": "Your agent is handling a billing dispute. After calling get_customer and lookup_order, it identifies that the dispute involves a promotional pricing error requiring manager approval–beyond the agent's authorization level.\nHow should the workflow handle this mid-process escalation?",
+  "options": {
+    "A": "Call escalate_to_human passing only the customer's original message.",
+    "B": "Compile a structured handoff with customer details, order info, and the identified issue before calling escalate_to_human.",
+    "C": "Attempt the refund with process_refund anyway, escalating only if the system rejects the transaction.",
+    "D": "Persist the complete conversation and tool response history to a database, then call escalate_to_human with a reference ID."
+  },
+  "correct_answer": "B. Compile a structured handoff with customer details, order info, and the identified issue before calling escalate_to_human.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Tình huống: agent đã thu thập dữ liệu (get_customer, lookup_order) và xác định được vấn đề nằm ngoài thẩm quyền:",
+    "points": [
+      "Lỗi giá khuyến mãi cần manager approval – agent không được tự xử lý, nên escalation là đúng.",
+      "Giá trị đã được agent tạo ra (thông tin khách hàng, đơn hàng, vấn đề đã xác định) phải được chuyển tiếp trong một handoff có cấu trúc, để manager phê duyệt ngay mà không cần điều tra lại hay hỏi lại khách.",
+      "Handoff có cấu trúc, tự đầy đủ (self-contained) là mẫu chuẩn cho mid-process escalation: người nhận không phụ thuộc vào việc phải đọc lại hoặc truy xuất toàn bộ lịch sử."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Chỉ chuyển tin nhắn gốc của khách):",
+        "trap": "Bẫy vứt bỏ công điều tra (Discarding investigation context trap)",
+        "explanation": "Toàn bộ kết quả tra cứu và chẩn đoán bị mất; manager phải bắt đầu lại từ đầu, kéo dài thời gian xử lý."
+      },
+      "C": {
+        "title": "C sai (Cứ thử process_refund, chỉ escalate nếu hệ thống từ chối):",
+        "trap": "Bẫy vượt quyền hạn (Authorization bypass trap)",
+        "explanation": "Agent đã biết hành động cần manager approval; cố tình thực hiện là vi phạm chính sách và dựa vào backend để chặn – có thể dẫn đến hoàn tiền sai không thể đảo ngược."
+      },
+      "D": {
+        "title": "D sai (Lưu toàn bộ lịch sử vào database, chỉ gửi reference ID):",
+        "trap": "Bẫy gián tiếp hóa thông tin (Indirection / raw dump trap)",
+        "explanation": "Người nhận phải mở và đọc toàn bộ lịch sử thô để tự rút ra vấn đề. Một bản tóm tắt có cấu trúc có giá trị hành động cao hơn nhiều so với một con trỏ đến dữ liệu thô."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic – Customer support agent guidance (handoff & escalation):",
+    "points": [
+      "Khi escalation, truyền một bản tóm tắt có cấu trúc gồm thông tin khách hàng, chi tiết liên quan và vấn đề đã xác định.",
+      "Agent không thực hiện hành động vượt quá thẩm quyền được cấp; các trường hợp cần phê duyệt phải được chuyển cho con người."
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_024",
+  "domain": "Information Extraction & Pipeline Validation (Trích xuất thông tin & Validation-Retry Loop)",
+  "topic": "Câu P1.24: Limits of Retry-with-Error-Feedback for Missing Source Information",
+  "question": "Your extraction system implements automatic retries when validation fails. On each retry, the specific validation error is appended to the prompt. This retry-with-error-feedback approach resolves most failures within 2-3 attempts\nFor which failure pattern would additional retries be LEAST effective?",
+  "options": {
+    "A": "The model extracts \"et al.\" for co-authors when the full list exists only in an external document not in the input",
+    "B": "The model extracts citation counts as locale-formatted strings (\"1,234\") when the schema requires integers",
+    "C": "The model extracts dates as ISO 8601 datetime strings (\"2023-03-15T00:00:00Z\") when the schema requires only the date portion (YYYY-MM-DD)",
+    "D": "The model extracts keywords as a nested object organized by category when the schema requires a flat array of strings"
+  },
+  "correct_answer": "A. The model extracts \"et al.\" for co-authors when the full list exists only in an external document not in the input",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Bản chất của vòng lặp validation-retry kèm error feedback:",
+    "points": [
+      "Retry-with-error-feedback hiệu quả khi lỗi là lỗi định dạng hoặc cấu trúc mà mô hình có thể tự sửa khi được chỉ ra: thông tin cần thiết đã nằm trong input, mô hình chỉ cần biểu diễn lại cho đúng schema.",
+      "Trường hợp A khác hoàn toàn về bản chất: danh sách đồng tác giả đầy đủ chỉ tồn tại trong một tài liệu bên ngoài không có trong input. Mô hình chỉ thấy \"et al.\" — thông tin không tồn tại trong context.",
+      "Dù retry bao nhiêu lần, mô hình cũng không thể trích xuất thông tin không có trong input. Retry kèm error feedback ở đây hoặc vô ích, hoặc tệ hơn là ép mô hình bịa ra tên tác giả (hallucination) để vượt qua validation.",
+      "Cách xử lý đúng cho trường hợp này là thay đổi input (cung cấp tài liệu bên ngoài) hoặc cho phép trường thể hiện trạng thái thiếu thông tin, chứ không phải retry thêm."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Citation count dạng chuỗi \"1,234\" thay vì integer):",
+        "trap": "Bẫy nhầm lỗi định dạng là lỗi khó sửa (Fixable format error trap)",
+        "explanation": "Đây là lỗi định dạng điển hình: giá trị đúng đã có, chỉ cần chuyển \"1,234\" thành 1234. Khi được báo lỗi \"expected integer\", mô hình dễ dàng sửa ở lần retry kế tiếp — retry rất hiệu quả."
+      },
+      "C": {
+        "title": "C sai (Ngày dạng ISO 8601 datetime thay vì YYYY-MM-DD):",
+        "trap": "Bẫy nhầm lỗi định dạng là lỗi khó sửa (Fixable format error trap)",
+        "explanation": "Thông tin ngày đã được trích xuất đúng, chỉ thừa phần thời gian. Error feedback chỉ rõ định dạng yêu cầu giúp mô hình cắt bỏ phần \"T00:00:00Z\" ngay lần retry tiếp theo."
+      },
+      "D": {
+        "title": "D sai (Keywords dạng nested object thay vì flat array):",
+        "trap": "Bẫy nhầm lỗi cấu trúc là lỗi khó sửa (Fixable structural error trap)",
+        "explanation": "Mô hình đã tìm đúng các keyword, chỉ tổ chức sai cấu trúc. Khi validation báo \"expected array of strings\", mô hình có thể làm phẳng (flatten) object thành mảng — một lỗi mà retry-with-feedback giải quyết tốt."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Nguyên tắc thiết kế validation-retry loop trong pipeline trích xuất (Claude Docs – Tool use / Structured outputs; Reduce hallucinations).",
+    "points": [
+      "Retry kèm thông báo lỗi cụ thể hiệu quả với lỗi định dạng/cấu trúc khi thông tin đúng đã có trong input.",
+      "Retry không thể khắc phục việc thiếu thông tin trong nguồn; ép mô hình điền thông tin vắng mặt làm tăng nguy cơ hallucination. Cần cho phép null/trạng thái thiếu hoặc bổ sung nguồn dữ liệu."
+    ]
+  }
+}

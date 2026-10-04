@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_010",
+  "domain": "Tool Design & Safety Guardrails (Thiết kế Tool & Cơ chế an toàn)",
+  "topic": "Câu P2.10: Enforcing Preview-Then-Confirm with Split Tools and Single-Use Confirmation Token",
+  "question": "Your remove_team_member tool uses a dry_run: boolean parameter for previewing impacts before execution. Production monitoring shows the agent bypasses the preview step in 15% of calls by calling with dry_run=false directly. You need to ensure every removal is preceded by a preview that the user explicitly confirms.\nWhat is the most reliable approach?",
+  "options": {
+    "A": "Add server-side validation that permits dry_run=false only when a dry_run=true call with identical parameters occurred within the past 60 seconds.",
+    "B": "Replace with two tools: preview_remove_member returns impact details and a single-use confirmation token; execute_remove_member requires that token, binding execution to the specific previewed action.",
+    "C": "Annotate the tool as requiring confirmation and configure the orchestration layer to prompt the user for approval before forwarding any calls to annotated tools.",
+    "D": "Add detailed instructions and few-shot examples to the tool description requiring the agent to always call with dry_run=true first and wait for user confirmation before calling with dry_run=false."
+  },
+  "correct_answer": "B. Replace with two tools: preview_remove_member returns impact details and a single-use confirmation token; execute_remove_member requires that token, binding execution to the specific previewed action.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Yêu cầu: mọi thao tác xóa thành viên phải được preview và người dùng xác nhận rõ ràng — trong khi agent đang bỏ qua preview ở 15% lời gọi:",
+    "points": [
+      "Nguyên nhân gốc là thiết kế tool: một tool duy nhất với cờ `dry_run` cho phép agent tự chọn bỏ qua preview. Khi ràng buộc chỉ tồn tại dưới dạng quy ước, model xác suất sẽ có lúc vi phạm.",
+      "Tách thành hai tool: `preview_remove_member` trả về impact details và một confirmation token dùng một lần; `execute_remove_member` bắt buộc token đó. Việc thực thi trở nên bất khả thi về mặt cấu trúc nếu chưa có preview — một ràng buộc tất định (structural guarantee) thay vì hướng dẫn.",
+      "Token gắn với đúng hành động đã preview (binding): không thể dùng token của preview A để thực thi hành động B, và không thể tái sử dụng (single-use).",
+      "Kết hợp với luồng hiển thị impact cho user và chỉ chuyển token sang bước execute sau khi user xác nhận, hệ thống đáp ứng đầy đủ yêu cầu “preview mà user explicitly confirms”."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Server chỉ cho dry_run=false nếu có dry_run=true trong 60 giây):",
+        "trap": "Bẫy ràng buộc theo thời gian mong manh (Time-window heuristic trap)",
+        "explanation": "Cửa sổ 60 giây là heuristic: agent có thể gọi dry_run=true rồi gọi ngay dry_run=false mà không chờ user xác nhận. Việc so khớp “identical parameters” theo thời gian cũng dễ lỗi (race, nhiều phiên song song) và không gắn với sự xác nhận của user."
+      },
+      "C": {
+        "title": "C sai (Annotate tool cần xác nhận, orchestration hỏi user):",
+        "trap": "Bẫy xác nhận mà không preview (Approval without preview trap)",
+        "explanation": "Orchestration layer hỏi user trước khi chuyển lời gọi, nhưng không đảm bảo một preview đã diễn ra — user có thể được yêu cầu phê duyệt dry_run=false mà chưa thấy impact. Ràng buộc “preview trước rồi mới xác nhận” vẫn không được thực thi ở cấp cấu trúc."
+      },
+      "D": {
+        "title": "D sai (Thêm hướng dẫn và few-shot vào tool description):",
+        "trap": "Bẫy dựa vào prompt cho ràng buộc an toàn (Prompt-only guardrail trap)",
+        "explanation": "Hướng dẫn chi tiết có thể giảm tỷ lệ vi phạm nhưng không thể đảm bảo 100%. Với thao tác phá hủy dữ liệu, “most reliable” đòi hỏi cơ chế tất định; tool description chỉ là gợi ý xác suất."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – “Writing effective tools for agents” & Anthropic Documentation – Tool use (tool design best practices):",
+    "points": [
+      "Thiết kế tool sao cho khó dùng sai (poka-yoke): thay đổi interface/tham số để loại bỏ khả năng gọi sai thay vì chỉ dặn trong mô tả.",
+      "Với các hành động có rủi ro cao, nên có bước xác nhận của con người (human-in-the-loop) được thực thi bởi hệ thống, không chỉ bởi chỉ dẫn cho model."
+    ]
+  }
+}

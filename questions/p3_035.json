@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_035",
+  "domain": "Tool Design & Tool Definitions (Thiết kế Tool & Định nghĩa tham số)",
+  "topic": "Câu P3.35: Clear Parameter Descriptions for update_user_profile",
+  "question": "Your update_user_profile tool accepts a user_id (required) and an optional fields_to_update object. In testing, Claude frequently omits user_id or passes incorrectly structured data.\nWhat is most critical for helping Claude understand what parameter values to provide?",
+  "options": {
+    "A": "Clear parameter descriptions explaining expected format, such as \"user_id : UUID of the user to update (required)\"",
+    "B": "Verbose parameter names encoding format hints, such as user_id_string_uuid_format",
+    "C": "Strict JSON Schema type constraints marking user_id as required and defining fields_to_update as an object type",
+    "D": "Detailed error responses explaining why invalid parameter values were rejected"
+  },
+  "correct_answer": "A. Clear parameter descriptions explaining expected format, such as \"user_id : UUID of the user to update (required)\"",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Claude quyết định giá trị tham số dựa trên những gì tool definition truyền đạt:",
+    "points": [
+      "Anthropic nhấn mạnh rằng description chi tiết (của tool và từng tham số) là yếu tố quan trọng nhất đối với hiệu năng tool use: giải thích tham số nghĩa là gì, định dạng mong đợi, khi nào bắt buộc, và ảnh hưởng thế nào đến hành vi tool.",
+      "Mô tả như 'user_id: UUID of the user to update (required)' cho mô hình biết cả ý nghĩa, định dạng (UUID) lẫn tính bắt buộc; tương tự, mô tả cấu trúc fields_to_update (các khóa hợp lệ, kiểu giá trị) giải quyết lỗi truyền dữ liệu sai cấu trúc.",
+      "Các biện pháp khác (schema, thông báo lỗi) bổ trợ, nhưng thông tin ngữ nghĩa giúp mô hình 'hiểu' cần cung cấp gì nằm ở description."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Tên tham số dài mã hóa định dạng):",
+        "trap": "Bẫy nhồi thông tin vào tên (Name-encoding anti-pattern trap)",
+        "explanation": "Tên như user_id_string_uuid_format khó đọc, dễ gõ sai, và vẫn không truyền đạt đủ ngữ nghĩa (thuộc người dùng nào, khi nào dùng, cấu trúc object ra sao). Tên nên rõ ràng và ngắn gọn; chi tiết thuộc về description."
+      },
+      "C": {
+        "title": "C sai (Chỉ dựa vào JSON Schema type constraints):",
+        "trap": "Bẫy schema thay thế cho ngữ nghĩa (Schema-only definition trap)",
+        "explanation": "Đánh dấu required và type: object là cần thiết, nhưng chỉ cho biết hình dạng, không cho biết giá trị đúng là gì (UUID ở đâu ra, fields_to_update chứa khóa nào). Theo đề bài, schema đã có user_id required mà mô hình vẫn bỏ sót - cần ngữ nghĩa trong description."
+      },
+      "D": {
+        "title": "D sai (Thông báo lỗi chi tiết):",
+        "trap": "Bẫy sửa sai sau khi gọi (Reactive error correction trap)",
+        "explanation": "Thông báo lỗi hữu ích giúp mô hình tự sửa ở lần thử sau, nhưng đó là cơ chế phục hồi, tốn thêm lượt gọi. Câu hỏi hỏi về điều quan trọng nhất để mô hình hiểu cần cung cấp gì ngay từ đầu."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool use: Best practices for tool definitions & 'Writing effective tools for agents':",
+    "points": [
+      "Cung cấp description cực kỳ chi tiết là yếu tố quan trọng nhất cho hiệu năng tool: tool làm gì, khi nào dùng, mỗi tham số nghĩa là gì và ảnh hưởng ra sao.",
+      "Tham số nên được đặt tên rõ ràng, không mơ hồ (ví dụ user_id thay vì user); các ràng buộc định dạng nên được nêu trong description."
+    ]
+  }
+}

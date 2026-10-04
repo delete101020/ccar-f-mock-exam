@@ -1,0 +1,57 @@
+{
+  "id": "ccar_f_p1_001",
+  "domain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Phân rã tác vụ - Task Decomposition)",
+  "topic": "Câu P1.1: Task Decomposition cho Intermittent 500 Error Investigation",
+  "question": "A developer asks the agent to investigate why a specific API endpoint intermittently returns 500 responses. The codebase has 200+ files and the developer doesn't know which components are involved. The agent must trace the error through routing, middleware, business logic, and database layers.\nWhat task decomposition approach would be most effective?",
+  "options": {
+    "A": "Run parallel worker agents on the file system of four layers, then combine their findings to reconstruct the complete error path.",
+    "B": "Have the agent dynamically generate investigation subtasks based on what it discovers at each step, adapting its exploration plan as new information about the error path emerges.",
+    "C": "Have the agent first create a comprehensive plan mapping all code paths through documented components before beginning any exploration or code reading.",
+    "D": "Define a fixed sequence of investigation steps upfront—grep for error handlers, then examine middleware, then check database queries, then examine middleware-woven code."
+  },
+  "correct_answer": "B. Have the agent dynamically generate investigation subtasks based on what it discovers at each step, adapting its exploration plan as new information about the error path emerges.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Bài toán đưa ra các dữ kiện quan trọng:",
+    "key_facts": [
+      "Lỗi xảy ra chập chờn (intermittently) tại một API endpoint cụ thể.",
+      "Codebase lớn (> 200 files) và chưa rõ các component liên quan.",
+      "Cần trace một luồng cụ thể: routing → middleware → business logic → database."
+    ],
+    "explanation": "Đây là bài toán dò vết phụ thuộc (dependency tracing / hypothesis testing), trong đó thông tin ở bước sau phụ thuộc hoàn toàn vào kết quả tìm được ở bước trước (ví dụ: chỉ khi đọc file router mới biết nó gọi middleware nào; chỉ khi kiểm tra controller mới biết gọi service/DB query nào).",
+    "architecture_verdict": "Vì vậy, mô hình tiếp cận tối ưu nhất cho agent là Dynamic / Adaptive Task Decomposition (ReAct / Autonomous Agent Loop):",
+    "points": [
+      "Agent bắt đầu từ điểm vào (endpoint URL/route definition).",
+      "Khám phá đến đâu, phân tích output đến đó và sinh tiếp các subtask tiếp theo dựa trên manh mối thu được.",
+      "Tránh đọc thừa các file không liên quan trong 200+ files, tiết kiệm context window và giảm thiểu hallucination."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Parallel worker agents theo 4 layers):",
+        "trap": "Bẫy kiến trúc",
+        "explanation": "Parallelization (Chạy song song) chỉ hiệu quả khi các tác vụ độc lập (independent) và không phụ thuộc dữ liệu vào nhau (ví dụ: chạy lint song song nhiều module, hoặc dịch 10 tài liệu khác nhau). Ở đây, worker ở layer database không thể biết cần tìm query/bảng nào nếu worker ở layer routing và business logic chưa xác định được luồng đi của endpoint đó. Chạy song song khi chưa biết context sẽ khiến các agent quét mò vô ích trên 200+ files."
+      },
+      "C": {
+        "title": "C sai (Lập plan toàn diện trước khi đọc code):",
+        "trap": "Bẫy lập kế hoạch cứng nhắc (Upfront planning without exploration)",
+        "explanation": "Đề bài nêu rõ “developer doesn't know which components are involved”. Agent không thể vẽ một \"comprehensive plan\" chính xác khi chưa hề đọc code hay lần theo call stack. Cố lập plan trước trong tình huống này sẽ dẫn đến kế hoạch suy đoán, sai lệch thực tế."
+      },
+      "D": {
+        "title": "D sai (Chuỗi cố định định sẵn - Fixed sequence):",
+        "trap": "Bẫy quy trình tĩnh (Rigid pipeline)",
+        "explanation": "Một quy trình tuần tự cố định (ví dụ: luôn grep error handler → middleware → database) không phản ánh đúng luồng lỗi chập chờn. Nếu lỗi bắt nguồn từ validation payload hoặc race condition ở tầng logic, việc ép buộc chạy một chuỗi cố định sẽ lãng phí token và dễ bị kẹt (dead end) khi giả định ban đầu sai."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Research: Bài viết chuyên khảo \"Building Effective Agents\" (anthropic.com/research/building-effective-agents).",
+    "points": [
+      "Anthropic phân biệt rõ giữa Workflows (chuỗi cố định xác định trước như Prompt Chaining, Routing, Parallelization) và Agents (mô hình linh hoạt: Autonomous / Dynamic Orchestrator nơi LLM tự định hướng các bước dựa trên feedback của môi trường/tool execution).",
+      "Nguyên tắc của Anthropic: Đối với các bài toán mở, phụ thuộc vào quá trình điều tra mã nguồn (như cách Claude Code hoạt động), agent phải sử dụng vòng lặp quan sát – hành động (Sense-Plan-Act / ReAct Loop) thay vì cố định hóa các bước ngay từ đầu."
+    ]
+  }
+}

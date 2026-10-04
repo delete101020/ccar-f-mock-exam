@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_060",
+  "domain": "Claude Code Configuration & Memory (Cấu hình Claude Code & Hệ thống bộ nhớ CLAUDE.md)",
+  "topic": "Câu P2.60: Diagnosing Inconsistent CLAUDE.md Adherence with /memory",
+  "question": "You've documented API error handling conventions in a CLAUDE.md file at your project root, specifying that endpoint handlers should use a custom ApiError class. After several sessions, you notice Claude Code sometimes follows these conventions and sometimes uses generic try/catch blocks with string messages. The inconsistency appears random across different coding sessions.\nWhat's the most efficient first diagnostic step?",
+  "options": {
+    "A": "Add more detailed code examples to your CLAUDE.md showing the exact ApiError usage pattern for different endpoint types.",
+    "B": "Run /memory to check which memory files are loaded and verify your CLAUDE.md is included.",
+    "C": "Search for conflicting instructions in ~/.claude/CLAUDE.md or ~/.claude/rules/ that might override your project conventions.",
+    "D": "Create path-specific rules in claude/rules/handlers.md with YAML frontmatter scoping the error handling instructions to your API handler files."
+  },
+  "correct_answer": "B. Run /memory to check which memory files are loaded and verify your CLAUDE.md is included.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Bài toán yêu cầu bước chẩn đoán đầu tiên hiệu quả nhất:",
+    "points": [
+      "Triệu chứng: Claude lúc tuân thủ, lúc không tuân thủ quy ước ApiError, có vẻ ngẫu nhiên giữa các session. Trước khi thay đổi nội dung hướng dẫn, cần xác nhận điều kiện tiên quyết: CLAUDE.md có thực sự được nạp vào session hay không (ví dụ khi khởi chạy Claude Code từ thư mục khác, file nằm sai vị trí, hoặc sai tên file).",
+      "Lệnh /memory hiển thị các memory file đang được nạp trong session hiện tại (user, project, local, rules...). Đây là bước kiểm tra nhanh, rẻ, cho câu trả lời chắc chắn và loại trừ nguyên nhân gốc phổ biến nhất.",
+      "Nếu file đã được nạp, khi đó mới chuyển sang các bước tiếp theo như kiểm tra chỉ dẫn mâu thuẫn hoặc bổ sung ví dụ/rules theo đường dẫn."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Thêm ví dụ code chi tiết vào CLAUDE.md):",
+        "trap": "Bẫy sửa trước khi chẩn đoán (Fix-before-diagnose trap)",
+        "explanation": "Nếu CLAUDE.md không được nạp trong một số session, thêm nội dung vào đó hoàn toàn vô ích. Đây là giải pháp, không phải bước chẩn đoán."
+      },
+      "C": {
+        "title": "C sai (Tìm chỉ dẫn mâu thuẫn trong ~/.claude/CLAUDE.md hoặc ~/.claude/rules/):",
+        "trap": "Bẫy chẩn đoán thủ công kém hiệu quả (Manual hunting trap)",
+        "explanation": "Mâu thuẫn là một khả năng, nhưng tìm kiếm thủ công từng file kém hiệu quả hơn /memory — vốn cho thấy toàn bộ các file đang được nạp (bao gồm cả file cấp user) trong một lệnh. Hơn nữa user-level config thường cố định giữa các session, nên khó giải thích tính ngẫu nhiên."
+      },
+      "D": {
+        "title": "D sai (Tạo path-specific rules trong .claude/rules/handlers.md):",
+        "trap": "Bẫy tái cấu trúc khi chưa biết nguyên nhân (Premature restructuring trap)",
+        "explanation": "Path-scoped rules có thể là cải tiến hữu ích về sau, nhưng đó là thay đổi cấu hình, không phải bước chẩn đoán. Nếu vấn đề là file không được nạp, việc tái tổ chức chưa chắc đã giải quyết được."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Memory management (CLAUDE.md):",
+    "points": [
+      "Claude Code nạp memory theo phân cấp: enterprise/managed policy, user (~/.claude/CLAUDE.md), project (./CLAUDE.md, .claude/CLAUDE.md), cùng các rules trong .claude/rules/.",
+      "Lệnh /memory cho phép xem và chỉnh sửa các memory file đang được nạp trong session, là công cụ trực tiếp để xác minh hướng dẫn nào đang có hiệu lực."
+    ]
+  }
+}

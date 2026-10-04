@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_037",
+  "domain": "Context Management & Conversation State (Quản lý ngữ cảnh & Trạng thái hội thoại)",
+  "topic": "Câu P3.37: Structured Preference State Object Included in Each Request",
+  "question": "Users frequently refine their search criteria mid-conversation. You notice a pattern: when users say things like \"Actually, let's raise the budget to $650K\" or \"I'd prefer a condo now instead of a house,\" the assistant sometimes continues referencing the original preferences in later responses—even though the updates are clearly present in the conversation history. Context usage is only at 35% capacity.\nWhich solution most reliably ensures the model uses the current preferences?",
+  "options": {
+    "A": "Maintain a structured state object with current preferences, update it on changes, and include it in each request.",
+    "B": "Implement conversation pruning to remove turns containing outdated preferences, ensuring only current ones remain in context.",
+    "C": "Include few-shot examples showing the assistant correctly acknowledging and applying preference changes in responses.",
+    "D": "Add system prompt instructions emphasizing that the model should always prioritize the most recently stated preferences over earlier ones."
+  },
+  "correct_answer": "A. Maintain a structured state object with current preferences, update it on changes, and include it in each request.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Dữ kiện quan trọng: context chỉ dùng 35%, và thông tin cập nhật vẫn nằm trong lịch sử:",
+    "points": [
+      "Vấn đề không phải do thiếu dung lượng mà do thông tin mâu thuẫn rải rác trong lịch sử (budget cũ và mới, house và condo). Mô hình phải tự suy ra giá trị nào mới nhất, và đôi khi bám vào giá trị cũ.",
+      "Duy trì một state object có cấu trúc (ví dụ budget: 650000, property_type: condo) do ứng dụng cập nhật khi người dùng thay đổi, rồi đưa vào mỗi request như 'nguồn sự thật' (single source of truth), loại bỏ sự mơ hồ một cách tất định.",
+      "Lịch sử hội thoại vẫn được giữ nguyên cho mạch lạc, chỉ thêm một khối trạng thái hiện hành rõ ràng - giải pháp nhỏ gọn và đáng tin cậy nhất."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Cắt bỏ các lượt chứa preference cũ):",
+        "trap": "Bẫy sửa lịch sử phá hủy ngữ cảnh (Destructive pruning trap)",
+        "explanation": "Lượt chứa preference cũ thường cũng chứa thông tin khác cần giữ; xóa chúng phá vỡ mạch hội thoại. Việc xác định lượt nào 'lỗi thời' cũng phức tạp và dễ sai, trong khi context còn dư nhiều."
+      },
+      "C": {
+        "title": "C sai (Few-shot ví dụ áp dụng thay đổi preference):",
+        "trap": "Bẫy giải pháp xác suất cho bài toán trạng thái (Probabilistic fix for state problem trap)",
+        "explanation": "Few-shot có thể cải thiện phần nào nhưng vẫn để mô hình phải tự suy ra trạng thái hiện tại từ lịch sử; không 'most reliably' bằng việc cung cấp trạng thái tường minh."
+      },
+      "D": {
+        "title": "D sai (Chỉ dẫn ưu tiên preference gần nhất):",
+        "trap": "Bẫy chỉ dẫn chung chung (Generic instruction trap)",
+        "explanation": "Mô hình vốn đã được kỳ vọng làm điều này và vẫn thất bại; thêm câu nhấn mạnh không loại bỏ được nhu cầu tự đối chiếu nhiều giá trị mâu thuẫn trong lịch sử."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic – Effective context engineering for AI agents (structured note-taking / state) & Prompt engineering guidance:",
+    "points": [
+      "Lưu trạng thái quan trọng dưới dạng có cấu trúc bên ngoài lịch sử hội thoại và đưa lại vào context giúp agent duy trì thông tin chính xác qua nhiều lượt.",
+      "Thông tin rõ ràng, tường minh trong prompt đáng tin cậy hơn việc trông chờ mô hình tự suy luận từ dữ liệu mâu thuẫn."
+    ]
+  }
+}

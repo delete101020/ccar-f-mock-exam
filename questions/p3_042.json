@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_042",
+  "domain": "Model Context Protocol (MCP) & Claude Code Configuration (Giao thức ngữ cảnh mô hình & Cấu hình phạm vi MCP)",
+  "topic": "Câu P3.42: Applying Project vs Personal MCP Server Scopes",
+  "question": "Your team is configuring MCP servers in Claude Code. You want to add a shared venue lookup server that all team members should have access to, and you personally want to add an experimental music playlist server that only you are testing.\nWhich configuration approach correctly applies MCP server scopes?",
+  "options": {
+    "A": "Add venue server to .mcp.json and playlist server to ~/.claude.json",
+    "B": "Add both servers to the project-level .mcp.json file",
+    "C": "Add venue server to ~/.claude.json and playlist server to .mcp.json",
+    "D": "Add both servers to your local ~/.claude.json"
+  },
+  "correct_answer": "A. Add venue server to .mcp.json and playlist server to ~/.claude.json",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Claude Code hỗ trợ các phạm vi (scopes) cấu hình MCP server với vị trí lưu khác nhau:",
+    "points": [
+      "Project scope: lưu trong file .mcp.json ở root dự án, được commit vào version control nên mọi thành viên trong team đều có server này - phù hợp với venue lookup server dùng chung.",
+      "Local/User scope: lưu trong ~/.claude.json của từng người dùng, không được chia sẻ qua repo - phù hợp với playlist server thử nghiệm chỉ mình bạn dùng (local scope gắn với dự án hiện tại, user scope dùng cho mọi dự án; cả hai đều riêng tư).",
+      "Phân phạm vi đúng giúp team nhận đúng cấu hình chung, đồng thời không làm lộ hay áp đặt server thử nghiệm cá nhân lên người khác."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Cả hai vào .mcp.json):",
+        "trap": "Bẫy rò rỉ cấu hình cá nhân (Leaking personal config trap)",
+        "explanation": "Playlist server thử nghiệm sẽ được commit và áp dụng cho cả team, trái với yêu cầu chỉ mình bạn dùng."
+      },
+      "C": {
+        "title": "C sai (Venue vào ~/.claude.json, playlist vào .mcp.json):",
+        "trap": "Bẫy đảo ngược phạm vi (Inverted scopes trap)",
+        "explanation": "Đảo ngược hoàn toàn: server chung chỉ có trên máy bạn, còn server thử nghiệm cá nhân lại được chia sẻ cho cả team."
+      },
+      "D": {
+        "title": "D sai (Cả hai vào ~/.claude.json):",
+        "trap": "Bẫy không chia sẻ cấu hình team (Unshared team config trap)",
+        "explanation": "Venue server sẽ không có trên máy đồng đội; mỗi người phải tự cấu hình thủ công, dễ lệch phiên bản."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Connect Claude Code to tools via MCP (MCP installation scopes):",
+    "points": [
+      "Local scope (mặc định) và user scope được lưu trong ~/.claude.json, riêng tư với từng người dùng.",
+      "Project scope được lưu trong .mcp.json ở root dự án, được thiết kế để commit vào version control và chia sẻ với team (Claude Code hỏi xác nhận trước khi dùng server từ .mcp.json)."
+    ]
+  }
+}

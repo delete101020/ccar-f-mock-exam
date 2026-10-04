@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_034",
+  "domain": "Context Management & Subagent State Recovery (Quản lý Context & Phục hồi trạng thái Subagent)",
+  "topic": "Câu P1.34: Structured Reports for Crash Recovery in Multi-Agent Pipelines",
+  "question": "Your multi-agent research pipeline crashed after processing 12 of 28 documents. The web search agent had identified relevant sources, the document analysis agent had partially completed extraction, and the synthesizer had begun pattern identification.\nYou need to resume processing without repeating work or losing fidelity of prior findings.\nWhat state management approach best balances information fidelity with context efficiency when restoring agent state?",
+  "options": {
+    "A": "Persist the coordinator's conversation log containing all task delegations and responses, providing this to agents when resuming.",
+    "B": "Have each agent maintain its own persistent state file and reload it independently at the start of each session.",
+    "C": "Index all agent outputs in a shared vector store. When resuming, each agent queries the store using semantic search to retrieve relevant prior findings.",
+    "D": "Have each agent persist a structured report to a known location. On resume, the coordinator loads the reports and injects relevant state into agent prompts."
+  },
+  "correct_answer": "D. Have each agent persist a structured report to a known location. On resume, the coordinator loads the reports and injects relevant state into agent prompts.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Yêu cầu kép: không lặp lại công việc, không mất fidelity, nhưng vẫn hiệu quả về context.",
+    "points": [
+      "Mỗi agent persist một structured report (ví dụ: danh sách nguồn đã tìm, các tài liệu đã trích xuất xong, các pattern đã xác định) vào một vị trí đã biết. Structured report giữ nguyên các phát hiện quan trọng với độ chính xác cao nhưng ngắn gọn hơn nhiều so với toàn bộ log hội thoại.",
+      "Khi resume, coordinator — vốn là thành phần điều phối trung tâm — load các report và chỉ inject phần state liên quan vào prompt của từng agent. Mỗi agent nhận đúng context nó cần, không bị nhồi thông tin thừa.",
+      "Cách này cân bằng tốt nhất giữa fidelity (dữ liệu có cấu trúc, đầy đủ, xác định được 12/28 tài liệu đã xử lý) và context efficiency (không đưa toàn bộ lịch sử vào context window).",
+      "Nó cũng giữ nguyên mô hình điều phối hub-and-spoke: coordinator kiểm soát luồng thông tin và biết chính xác việc nào cần làm tiếp."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Persist toàn bộ conversation log của coordinator):",
+        "trap": "Bẫy phình context (Context bloat trap)",
+        "explanation": "Log hội thoại đầy đủ chứa rất nhiều thông tin trung gian, lặp lại và không còn liên quan. Đưa nó vào khi resume tiêu tốn nhiều token, dễ gây suy giảm chất lượng (context degradation / lost-in-the-middle), và các phát hiện quan trọng bị chôn vùi trong khối văn bản lớn."
+      },
+      "B": {
+        "title": "B sai (Mỗi agent tự quản lý và tự reload state file):",
+        "trap": "Bẫy phân tán trạng thái thiếu điều phối (Decentralized state trap)",
+        "explanation": "Mỗi agent reload độc lập khiến coordinator mất tầm nhìn tổng thể về tiến độ của pipeline. Các agent có thể không nhất quán với nhau (ví dụ synthesizer không biết document analysis đã xử lý đến đâu), dẫn đến lặp việc hoặc thiếu sót."
+      },
+      "C": {
+        "title": "C sai (Vector store + semantic search khi resume):",
+        "trap": "Bẫy truy xuất xác suất cho dữ liệu cần chính xác (Lossy retrieval trap)",
+        "explanation": "Semantic search mang tính xác suất: có thể bỏ sót phát hiện quan trọng hoặc trả về đoạn không liên quan. Việc khôi phục trạng thái cần tính xác định (deterministic) — biết chính xác tài liệu nào đã xử lý — mà vector search không đảm bảo. Đây là over-engineering làm giảm fidelity."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – \"How we built our multi-agent research system\" & \"Effective context engineering for AI agents\".",
+    "points": [
+      "Agent nên lưu kế hoạch và kết quả vào bộ nhớ ngoài (external memory) để có thể tiếp tục khi context bị cắt hoặc hệ thống gặp lỗi, thay vì bắt đầu lại từ đầu.",
+      "Context là tài nguyên hữu hạn: nên cung cấp tập token nhỏ nhất có tín hiệu cao (structured summaries) thay vì toàn bộ lịch sử."
+    ]
+  }
+}

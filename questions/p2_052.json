@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_052",
+  "domain": "Tool Design & Error Handling (Thiết kế Tool & Xử lý lỗi)",
+  "topic": "Câu P2.52: Returning Structured IDs and Metadata for Multi-Step Workflows",
+  "question": "Your documents (query) tool returns results as \"Found 3 documents: Q2 Budget Proposal, Q2 Budget Forecast, Annual Review\". You want the agent to document (4, multi) and doc (24, multi).\nWhat return format would best enable these multi-step workflows?",
+  "options": {
+    "A": "URLs that users can click to open the document in their browser.",
+    "B": "Structured data containing document IDs and metadata for each result.",
+    "C": "A JSON array of document titles extracted from the search results.",
+    "D": "More detailed human-readable descriptions including the size and authors."
+  },
+  "correct_answer": "B. Structured data containing document IDs and metadata for each result.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Bản chất thiết kế output của tool cho chuỗi thao tác nhiều bước:",
+    "points": [
+      "Output hiện tại chỉ là chuỗi văn bản tự nhiên chứa tiêu đề (\"Q2 Budget Proposal\", \"Q2 Budget Forecast\"...). Để thực hiện các bước tiếp theo (đọc, so sánh, cập nhật tài liệu), agent cần một định danh ổn định, không mơ hồ để truyền vào tool kế tiếp.",
+      "Trả về structured data gồm document ID và metadata (title, ngày cập nhật, loại...) cho phép agent chọn đúng tài liệu dựa trên metadata, rồi chuyển ID chính xác sang các lệnh gọi tiếp theo như get_document(id).",
+      "Tiêu đề có thể trùng hoặc gần giống nhau (hai tài liệu \"Q2 Budget...\"), nên ID là cần thiết để tránh nhầm lẫn khi chuỗi thao tác kéo dài."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Trả về URL để người dùng click mở trên trình duyệt):",
+        "trap": "Bẫy thiết kế cho người thay vì cho agent (Human-oriented output trap)",
+        "explanation": "URL hữu ích cho người dùng cuối, nhưng không phải tham số mà các tool tiếp theo của agent sử dụng, và không cung cấp metadata giúp agent lựa chọn."
+      },
+      "C": {
+        "title": "C sai (Mảng JSON chỉ chứa tiêu đề):",
+        "trap": "Bẫy cấu trúc nửa vời (Structure without identifiers trap)",
+        "explanation": "Định dạng JSON dễ parse hơn, nhưng tiêu đề không phải định danh duy nhất và không đủ để gọi các tool tiếp theo một cách chắc chắn. Vẫn thiếu metadata để phân biệt các tài liệu tương tự."
+      },
+      "D": {
+        "title": "D sai (Mô tả dễ đọc chi tiết hơn với kích thước và tác giả):",
+        "trap": "Bẫy thêm văn bản tự do (More prose trap)",
+        "explanation": "Thêm thông tin dưới dạng văn bản tự nhiên làm tăng token nhưng vẫn không cung cấp định danh có cấu trúc cho các bước tiếp theo, buộc agent phải trích xuất lại từ văn bản dễ sai."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – \"Writing effective tools for agents\" & Tool Use documentation:",
+    "points": [
+      "Tool nên trả về thông tin có ý nghĩa và có thể sử dụng trực tiếp cho các hành động tiếp theo; các định danh cần thiết cho downstream tool calls nên được bao gồm trong kết quả.",
+      "Kết quả tool có cấu trúc giúp agent xâu chuỗi các lệnh gọi (chaining) chính xác mà không phải đoán."
+    ]
+  }
+}

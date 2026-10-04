@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_032",
+  "domain": "Model Context Protocol (MCP) & Tool Discovery (Giao thức ngữ cảnh mô hình & Khám phá Tool)",
+  "topic": "Câu P3.32: Tools from Multiple MCP Servers Are Available Simultaneously",
+  "question": "You've configured your Claude agent with three MCP servers: one for git operations, one for Jira ticket management, and one for documentation search.\nWhen a user asks the agent to \"create a branch for JIRA- 123 and add documentation links to the ticket,\" how does the agent access tools across these servers?",
+  "options": {
+    "A": "The agent queries each server sequentially to determine which handles each tool, routing calls based on tool name prefixes.",
+    "B": "Tools from all configured MCP servers are discovered at connection time and available simultaneously to the agent.",
+    "C": "You must specify which MCP server to use for each turn, and the agent can only access one server's tools at a time.",
+    "D": "The agent automatically selects the most relevant server based on the request and loads only that server's tools."
+  },
+  "correct_answer": "B. Tools from all configured MCP servers are discovered at connection time and available simultaneously to the agent.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Cơ chế kết nối nhiều MCP server trong một agent (MCP client):",
+    "points": [
+      "Khi khởi tạo, client kết nối tới từng server được cấu hình và gọi tools/list để khám phá công cụ. Toàn bộ tool từ git, Jira và documentation server được gộp vào cùng một danh sách tool cung cấp cho mô hình.",
+      "Vì vậy, trong cùng một tác vụ, agent có thể gọi tool tạo branch của git server, tool tìm kiếm của docs server, rồi tool cập nhật ticket của Jira server - mô hình chọn tool dựa vào tên và description như với mọi tool khác.",
+      "Host/client (ví dụ Claude Code dùng tên dạng mcp__<server>__<tool>) tự định tuyến mỗi lời gọi tới đúng server sở hữu tool; mô hình không cần biết hay chọn server."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Truy vấn từng server tuần tự để xác định tool):",
+        "trap": "Bẫy hiểu sai thời điểm khám phá (Runtime discovery misconception trap)",
+        "explanation": "Việc khám phá tool diễn ra khi kết nối, không phải truy vấn tuần tự từng server mỗi lần gọi. Định tuyến theo tool do client đảm nhiệm, không phải agent phải dò hỏi."
+      },
+      "C": {
+        "title": "C sai (Phải chỉ định một server mỗi lượt):",
+        "trap": "Bẫy giới hạn không tồn tại (Single-server-per-turn fallacy)",
+        "explanation": "MCP không có giới hạn chỉ dùng một server mỗi lượt. Yêu cầu này cần tool của cả ba server trong cùng một tác vụ, và agent làm được điều đó."
+      },
+      "D": {
+        "title": "D sai (Tự chọn server phù hợp nhất và chỉ nạp tool của nó):",
+        "trap": "Bẫy nhầm với cơ chế lọc tool động (Dynamic server selection trap)",
+        "explanation": "Mặc định không có bước chọn một server rồi chỉ nạp tool của server đó. Ngay cả khi dùng tool search/deferred loading cho số lượng tool lớn, nó tìm theo tool chứ không giới hạn agent vào một server."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Model Context Protocol Specification (tools/list, client-server architecture) & Claude Code MCP documentation:",
+    "points": [
+      "Một host có thể duy trì nhiều client kết nối tới nhiều server; tool từ các server được khám phá qua tools/list và cung cấp cho mô hình.",
+      "Trong Claude Code, tool MCP được đặt tên theo dạng mcp__<server>__<tool> và có thể dùng cùng lúc với các tool tích hợp."
+    ]
+  }
+}

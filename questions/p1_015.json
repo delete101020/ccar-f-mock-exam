@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_015",
+  "domain": "Model Context Protocol (MCP) & Tool Selection / Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "topic": "Câu P1.15: Optimizing MCP Tool Descriptions to Prevent Grep Fallback for Code Analysis",
+  "question": "After integrating a local MCP server providing code analysis tools (analyze_dependencies, find_dead_code, calculate_complexity), you notice the agent continues to use Grep to inspect dependencies even when users explicitly ask about \"code dependencies\". Tool definitions reveal: analyze_dependencies returns a dependency graph by analyzing imports.\nWhat's the most effective approach to improve the agent's selection of MCP tools?",
+  "options": {
+    "A": "Remove Grep from the available tools to eliminate functional overlap.",
+    "B": "Expand the MCP tool descriptions to state what each returns and when to prefer it over Grep for dependency questions.",
+    "C": "Split analyze_dependencies into granular tools: list_imports, detect_transitive_deps, identify_circular_deps to avoid overlap with Grep.",
+    "D": "Add routing questions to the system prompt specifying that dependency-related questions should use MCP tools rather than Grep."
+  },
+  "correct_answer": "B. Expand the MCP tool descriptions to state what each returns and when to prefer it over Grep for dependency questions.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Cơ chế lựa chọn Tool của LLM và nguyên tắc phân định ranh giới công cụ (Tool Disambiguation):",
+    "points": [
+      "Xu hướng Fallback về công cụ quen thuộc: Grep là công cụ tìm kiếm văn bản cơ bản được huấn luyện rất sâu trong dữ liệu tiền huấn luyện của LLM. Khi mô tả của công cụ MCP mới không nêu bật được sự khác biệt vượt trội (structured graph, phân tích AST, phát hiện import cycles), mô hình sẽ coi MCP tool này chỉ là một dạng lọc text và fallback về Grep.",
+      "Làm giàu mô tả công cụ (Tool Description & Output Schema Enrichment): Bằng cách mô tả chi tiết khả năng xây dựng đồ thị phụ thuộc (dependency graph) cùng kết quả đầu ra cụ thể (đồ thị có cấu trúc, các phụ thuộc vòng), agent sẽ nhận thức rõ MCP tool cung cấp giá trị phân tích cú pháp cấu trúc mà Grep (chuỗi regex thô) hoàn toàn không làm được.",
+      "Giải pháp tự nhiên theo chuẩn Anthropic: Cải thiện prompt/description của tool luôn là phương án chi phí thấp nhất, không phá vỡ tính tự chủ của agent và giải quyết triệt để vấn đề hiểu sai công năng."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Xóa bỏ công cụ Grep):",
+        "trap": "Bẫy làm tê liệt năng lực cơ bản (Handcuffing basic capabilities trap)",
+        "explanation": "Grep là công cụ nền tảng thiết yếu để tìm kiếm từ khóa, error strings, hằng số hoặc cấu hình trong codebase. Xóa Grep chỉ để ép dùng MCP sẽ làm tê liệt khả năng khám phá mã nguồn tổng quát của agent."
+      },
+      "C": {
+        "title": "C sai (Chia nhỏ thành các sub-tools như list_imports, detect_transitive_deps...):",
+        "trap": "Bẫy phân mảnh công cụ (Tool proliferation / Fragmentation trap)",
+        "explanation": "Chia nhỏ công cụ một cách không cần thiết làm tăng số lượng tools trong schema, làm phình to context window và tăng nguy cơ mô hình bối rối (confusion) trong việc chọn tool. Ngoài ra, việc chia nhỏ không giải quyết được gốc rễ nếu phần mô tả vẫn thiếu tính phân biệt với Grep."
+      },
+      "D": {
+        "title": "D sai (Thêm các câu hỏi định tuyến cứng vào system prompt):",
+        "trap": "Bẫy nhồi nhét quy tắc vào System Prompt (Brittle prompt over-engineering trap)",
+        "explanation": "Ép quy tắc định tuyến thủ công vào system prompt làm phình to prompt hệ thống, khó bảo trì khi thêm các công cụ mới và làm giảm tính tự chủ thích ứng của agent. Anthropic khuyến nghị đưa ngữ cảnh sử dụng vào chính phần mô tả công cụ (tool definitions)."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool Use Best Practices & MCP Guidelines:",
+    "points": [
+      "Nguyên tắc phân định công cụ (Distinguishing overlapping tools): Khi có sự chồng lấn chức năng giữa một công cụ chung (Grep) và một công cụ chuyên biệt (MCP AST parser), mô tả của công cụ chuyên biệt phải làm nổi bật định dạng dữ liệu đầu ra có cấu trúc và trường hợp sử dụng ưu tiên.",
+      "Tối ưu hóa Tool Schema: Mô tả rõ ràng về cả inputs lẫn outputs giúp mô hình đánh giá được sự vượt trội của công cụ chuyên dụng so với việc xử lý văn bản thô."
+    ]
+  }
+}

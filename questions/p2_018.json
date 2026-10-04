@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_018",
+  "domain": "Conversation State Management & Messages API (Quản lý trạng thái hội thoại & Messages API)",
+  "topic": "Câu P2.18: Persona Guidelines Lost After Early Turns Because the System Prompt Is Sent Only Once",
+  "question": "Your home renovation planning assistant uses a system prompt defining an expert contractor persona with specific guidelines: always ask about budget, suggest alternatives at multiple price points, and confirm timeline requirements. During testing, responses follow these guidelines for turns 1-4, but by turn 7, the assistant gives generic advice without asking about budget or timeline. The conversation totals only 2,500 tokens.\nWhat is the most likely cause?",
+  "options": {
+    "A": "System prompts only establish initial behavior and don't persist across all turns.",
+    "B": "The system prompt is only sent with the first API request.",
+    "C": "The assistant's accumulated responses are diluting the system prompt's influence.",
+    "D": "The model's attention on system prompt instructions naturally weakens as turns accumulate."
+  },
+  "correct_answer": "B. The system prompt is only sent with the first API request.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Các dữ kiện chẩn đoán:",
+    "points": [
+      "Turn 1–4 tuân thủ guideline, đến turn 7 thì trả lời chung chung, không hỏi budget/timeline — hành vi giống hệt một Claude không có system prompt.",
+      "Toàn bộ hội thoại chỉ 2.500 tokens — quá ngắn để có hiện tượng dilution hay suy giảm attention. Điều này loại trừ các giải thích liên quan đến độ dài.",
+      "Messages API là stateless: tham số `system` phải được gửi kèm trong mọi request. Nếu ứng dụng chỉ đính kèm system prompt ở request đầu (hoặc vài request đầu) rồi chỉ gửi `messages` ở các lượt sau, Claude ở các lượt đó hoàn toàn không thấy persona và guideline.",
+      "Đây là lỗi tích hợp phía ứng dụng; khắc phục bằng cách luôn gửi cùng tham số `system` trong mỗi lượt gọi (có thể kết hợp prompt caching để giảm chi phí)."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (System prompt chỉ thiết lập hành vi ban đầu, không duy trì):",
+        "trap": "Bẫy hiểu sai bản chất system prompt (System prompt misconception)",
+        "explanation": "System prompt không “hết hiệu lực” theo số turn: mỗi khi được gửi trong request, nó áp dụng cho toàn bộ response đó. Vấn đề không nằm ở bản chất system prompt mà ở việc nó có được gửi hay không."
+      },
+      "C": {
+        "title": "C sai (Các response tích lũy làm loãng ảnh hưởng của system prompt):",
+        "trap": "Bẫy dilution với hội thoại ngắn (Dilution red herring)",
+        "explanation": "Với chỉ 2.500 tokens, không có đủ nội dung để “làm loãng” system prompt. Hiện tượng drift do hội thoại dài chỉ đáng cân nhắc ở quy mô lớn hơn nhiều, và hiếm khi gây mất hoàn toàn guideline ở turn 7."
+      },
+      "D": {
+        "title": "D sai (Attention vào system prompt yếu dần theo số turn):",
+        "trap": "Bẫy suy giảm attention tự nhiên (Attention decay red herring)",
+        "explanation": "Không có cơ chế suy giảm attention theo số turn nào khiến model bỏ hoàn toàn guideline sau 6–7 lượt với 2.500 tokens. Phương án này mô tả triệu chứng chứ không chỉ ra nguyên nhân có thể kiểm chứng và sửa được."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Messages API (`system` parameter) & System prompts (Giving Claude a role):",
+    "points": [
+      "System prompt được truyền qua tham số `system` của mỗi request Messages API; API không lưu trạng thái giữa các request.",
+      "Role prompting qua system prompt là cách hiệu quả để định hình persona, nhưng chỉ có tác dụng với request có chứa nó."
+    ]
+  }
+}

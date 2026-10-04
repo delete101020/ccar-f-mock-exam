@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_041",
+  "domain": "Prompt Engineering & Conversational Design (Kỹ thuật Prompt & Thiết kế hội thoại)",
+  "topic": "Câu P2.41: Handling Ambiguous Requests via Stated Assumptions",
+  "question": "Your conversational assistant frequently generates multiple clarifying questions when users make ambiguous requests. When a user asks \"Can you help me with the report?\", the assistant responds: \"I'd be happy to help! Could you tell me: 1) Which report? 2) What kind of help—drafting, reviewing, or formatting? 3) What's your deadline?\" User analytics show a 40% conversation abandonment rate after these multi-question responses.\nWhat's the most effective way to reduce friction while appropriately handling ambiguity?",
+  "options": {
+    "A": "Limit the assistant to one clarifying question per turn, using conversation history to accumulate answers over multiple exchanges rather than requesting everything upfront.",
+    "B": "Modify the system prompt to instruct the assistant to make reasonable assumptions from available context, state those assumptions explicitly, and offer to adjust if the interpretation is wrong.",
+    "C": "Add a preprocessing step using a smaller model to classify request ambiguity on a 1-5 scale, routing high-ambiguity requests to a clarification dialog and low-ambiguity requests directly to the assistant.",
+    "D": "Create a lookup table of common request patterns with predefined default interpretations, having the assistant respond with those defaults without stating the assumptions made."
+  },
+  "correct_answer": "B. Modify the system prompt to instruct the assistant to make reasonable assumptions from available context, state those assumptions explicitly, and offer to adjust if the interpretation is wrong.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Bài toán đưa ra các dữ kiện quan trọng:",
+    "points": [
+      "Triệu chứng: assistant dồn 3 câu hỏi làm rõ (clarifying questions) vào một lượt trả lời, khiến 40% người dùng bỏ cuộc hội thoại (abandonment). Nguyên nhân gốc rễ là assistant đẩy toàn bộ gánh nặng làm rõ sang người dùng trước khi mang lại bất kỳ giá trị nào.",
+      "Hướng dẫn trong system prompt yêu cầu assistant suy luận giả định hợp lý từ context sẵn có (lịch sử hội thoại, tài liệu đang mở, report gần nhất...), nói rõ giả định đó (state assumptions explicitly) và đề nghị điều chỉnh nếu hiểu sai. Người dùng nhận được giá trị ngay ở lượt đầu, trong khi sự mơ hồ vẫn được xử lý minh bạch.",
+      "Việc nêu rõ giả định giữ được tính kiểm soát của người dùng: nếu giả định sai, họ chỉ cần sửa một điểm thay vì trả lời cả một bảng câu hỏi. Đây là cách giải quyết tương xứng (proportionate), chỉ cần thay đổi hành vi qua prompt, không cần thêm hạ tầng."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Giới hạn một câu hỏi mỗi lượt, tích lũy dần qua nhiều lượt):",
+        "trap": "Bẫy giảm triệu chứng nhưng giữ nguyên gốc rễ (Symptom-only fix trap)",
+        "explanation": "Hỏi từng câu một chỉ dàn trải ma sát ra nhiều lượt: người dùng vẫn phải trả lời 3 câu hỏi trước khi nhận được bất kỳ giúp đỡ nào, thậm chí tốn nhiều round-trip hơn. Assistant vẫn không tận dụng context để tự suy luận, nên tỷ lệ bỏ cuộc khó giảm đáng kể."
+      },
+      "C": {
+        "title": "C sai (Thêm model nhỏ phân loại độ mơ hồ 1-5 rồi route):",
+        "trap": "Bẫy over-engineering (Unnecessary infrastructure trap)",
+        "explanation": "Thêm một bước tiền xử lý với model riêng làm tăng độ trễ, chi phí và điểm lỗi, trong khi các yêu cầu bị đánh giá \"mơ hồ cao\" vẫn bị đẩy vào đúng clarification dialog đang gây ra 40% bỏ cuộc. Thang điểm 1-5 cũng là một ngưỡng chủ quan, khó hiệu chỉnh."
+      },
+      "D": {
+        "title": "D sai (Bảng tra cứu diễn giải mặc định, không nói rõ giả định):",
+        "trap": "Bẫy giả định ngầm (Silent assumption trap)",
+        "explanation": "Bảng tra cứu cứng nhắc không bao phủ được sự đa dạng của yêu cầu thực tế. Nguy hiểm hơn, việc áp dụng mặc định mà không nói rõ giả định khiến người dùng không biết assistant đã hiểu sai, dẫn đến kết quả sai một cách âm thầm và mất niềm tin."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Prompt Engineering Guidance & Claude system prompt design:",
+    "points": [
+      "Anthropic khuyến nghị viết system prompt rõ ràng, mô tả hành vi mong muốn cụ thể (be clear and direct), bao gồm cách xử lý tình huống mơ hồ.",
+      "Mẫu hành vi được khuyến khích: khi yêu cầu chưa rõ, đưa ra diễn giải hợp lý nhất từ context, nêu rõ giả định và mời người dùng điều chỉnh, thay vì hỏi dồn nhiều câu hoặc âm thầm đoán."
+    ]
+  }
+}

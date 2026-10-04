@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_041",
+  "domain": "Prompt Engineering & System Prompt Design (Kỹ thuật Prompt & Thiết kế System Prompt)",
+  "topic": "Câu P3.41: Defining Persistent Behavioral Guidelines in the System Prompt",
+  "question": "Your music discovery assistant should consistently maintain an enthusiastic tone, explain its reasoning for each recommendation, and ask clarifying questions to better understand user preferences. You want this behavior to persist reliably across all user interactions.\nWhere should you define these behavioral guidelines?",
+  "options": {
+    "A": "In the first assistant message, instructing Claude to follow these guidelines going forward",
+    "B": "Prepended to each user message before sending to the API",
+    "C": "In the system prompt",
+    "D": "In environmental variables that your application passes to the API client"
+  },
+  "correct_answer": "C. In the system prompt",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Vai trò của system prompt trong Messages API:",
+    "points": [
+      "System prompt (tham số system) là nơi định nghĩa vai trò, giọng điệu và hành vi xuyên suốt cho Claude. Nó được gửi trong mọi request, áp dụng cho toàn bộ hội thoại và có trọng số chỉ dẫn cao hơn nội dung người dùng.",
+      "Các hành vi như giữ giọng nhiệt tình, giải thích lý do cho mỗi gợi ý, hỏi câu làm rõ là hướng dẫn hành vi bền vững - đúng loại nội dung thuộc về system prompt.",
+      "Vì Messages API là stateless, ứng dụng gửi lại system prompt ở mỗi lần gọi, đảm bảo hành vi nhất quán bất kể hội thoại dài bao nhiêu; system prompt ổn định còn có thể được cache."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Đặt trong assistant message đầu tiên):",
+        "trap": "Bẫy dùng sai vai trò tin nhắn (Role misuse trap)",
+        "explanation": "Tin nhắn assistant là lời của mô hình, không phải chỉ dẫn từ nhà phát triển. Đặt hướng dẫn ở đây có thẩm quyền yếu, dễ bị 'trôi' khi hội thoại dài và là cách dùng không chuẩn."
+      },
+      "B": {
+        "title": "B sai (Chèn vào trước mỗi user message):",
+        "trap": "Bẫy lặp chỉ dẫn trong lượt người dùng (Per-message injection trap)",
+        "explanation": "Lặp lại hướng dẫn ở mọi user message làm phình context, lẫn lộn chỉ dẫn hệ thống với nội dung người dùng, và giảm hiệu quả cache. System prompt là cơ chế được thiết kế đúng cho việc này."
+      },
+      "D": {
+        "title": "D sai (Biến môi trường trong API client):",
+        "trap": "Bẫy nhầm cấu hình ứng dụng với ngữ cảnh mô hình (Config vs prompt trap)",
+        "explanation": "Biến môi trường chỉ tồn tại ở phía ứng dụng/SDK (ví dụ API key); mô hình không bao giờ nhìn thấy chúng trừ khi được đưa vào prompt."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Giving Claude a role with a system prompt & Messages API:",
+    "points": [
+      "Dùng tham số system để thiết lập vai trò và hành vi của Claude; nội dung theo tác vụ cụ thể đặt trong user turn.",
+      "System prompt giúp tăng tính nhất quán về giọng điệu và hành vi trong suốt hội thoại."
+    ]
+  }
+}

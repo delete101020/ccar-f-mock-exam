@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_039",
+  "domain": "Messages API Fundamentals & Conversation State (Nền tảng Messages API & Trạng thái hội thoại)",
+  "topic": "Câu P2.39: Stateless Messages API Requires Resending Conversation History",
+  "question": "During initial testing, you notice that Claude doesn't seem to remember vocabulary words from earlier in the conversation. When a student asks \"Can you quiz me on those words?\", responds as if no words have been discussed.\nWhat is the most likely explanation?",
+  "options": {
+    "A": "Your system prompt needs explicit instructions telling Claude to remember information from earlier turns.",
+    "B": "You're not including prior messages in each API request—the stateless API doesn't retain conversation history.",
+    "C": "You need to enable conversation persistence by passing a session ID parameter with each API call.",
+    "D": "The model's context window has filled up, causing earlier conversation content to be dropped."
+  },
+  "correct_answer": "B. You're not including prior messages in each API request—the stateless API doesn't retain conversation history.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Cơ chế hội thoại nhiều lượt của Messages API:",
+    "points": [
+      "Messages API là stateless: server không lưu bất kỳ trạng thái hội thoại nào giữa các request. Mỗi request là độc lập; Claude chỉ \"biết\" những gì có trong mảng `messages` (và `system`) của chính request đó.",
+      "Để có hội thoại nhiều lượt, ứng dụng phải tự lưu lịch sử và gửi lại toàn bộ các lượt `user`/`assistant` trước đó trong mỗi request mới. Nếu chỉ gửi tin nhắn mới nhất (\"Can you quiz me on those words?\"), Claude không hề thấy danh sách từ vựng đã thảo luận.",
+      "Dấu hiệu \"during initial testing\" và việc Claude trả lời như chưa từng có từ nào được thảo luận là triệu chứng điển hình của lỗi tích hợp này, không phải giới hạn của model."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Thêm chỉ dẫn \"hãy nhớ\" vào system prompt):",
+        "trap": "Bẫy dùng prompt để sửa lỗi kiến trúc (Prompting around a data problem trap)",
+        "explanation": "Không chỉ dẫn nào có thể khiến Claude nhớ thông tin không được gửi tới nó. Nếu lịch sử có trong request, Claude vốn đã dùng nó mà không cần nhắc."
+      },
+      "C": {
+        "title": "C sai (Truyền session ID để bật persistence):",
+        "trap": "Bẫy tham số không tồn tại (Nonexistent API feature trap)",
+        "explanation": "Messages API không có tham số session ID để server tự lưu hội thoại. Việc quản lý trạng thái hoàn toàn thuộc trách nhiệm của ứng dụng phía client."
+      },
+      "D": {
+        "title": "D sai (Context window đã đầy và nội dung cũ bị bỏ):",
+        "trap": "Bẫy chẩn đoán sai quy mô (Context overflow misdiagnosis trap)",
+        "explanation": "Đây là giai đoạn thử nghiệm ban đầu với vài lượt về từ vựng — còn rất xa giới hạn context window hàng trăm nghìn token. Hơn nữa, khi vượt giới hạn, API trả về lỗi thay vì âm thầm cắt bỏ nội dung cũ."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Messages API (Working with the Messages API / multi-turn conversations):",
+    "points": [
+      "Messages API là stateless; bạn luôn gửi toàn bộ lịch sử hội thoại trong mỗi request thông qua mảng `messages` với các lượt `user` và `assistant` xen kẽ.",
+      "Các lượt trước đó không cần thực sự do Claude sinh ra — ứng dụng có toàn quyền xây dựng lịch sử được gửi lên."
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_024",
+  "domain": "Claude Code Configuration & Project Memory (Cấu hình Claude Code & Bộ nhớ dự án CLAUDE.md)",
+  "topic": "Câu P3.24: Reducing Low-Value Generated Tests via Testing Standards in CLAUDE.md",
+  "question": "Your test generation produces unit tests for new code, but reviews show 55% are low-value: trivial assertions that only verify functions don't throw exceptions, tests duplicating existing coverage, or tests ignoring your team's fixture conventions.\nHow do you reduce the rate of low-value tests being generated in the first place?",
+  "options": {
+    "A": "Add post-generation coverage analysis that automatically filters out any generated test that doesn't increase line coverage beyond what existing tests provide.",
+    "B": "Restrict test generation to directories where historical quality metrics show higher acceptance rates, disabling it for areas where generated tests consistently require heavy editing.",
+    "C": "Document testing standards in CLAUDE.md including valuable test criteria, available fixtures with intended use cases, and examples distinguishing meaningful behavioral tests from trivial assertions.",
+    "D": "Implement a two-phase generation where a second Claude call scores each test against quality criteria, filtering out low-scoring tests before presenting results to developers."
+  },
+  "correct_answer": "C. Document testing standards in CLAUDE.md including valuable test criteria, available fixtures with intended use cases, and examples distinguishing meaningful behavioral tests from trivial assertions.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Câu hỏi nhấn mạnh 'reduce the rate ... in the first place' - tức là giải pháp ở đầu vào (prevention), không phải lọc ở đầu ra:",
+    "points": [
+      "Nguyên nhân gốc: Claude không biết tiêu chuẩn kiểm thử của team - tiêu chí thế nào là test có giá trị, fixture nào đang có và dùng khi nào. Thiếu ngữ cảnh này, mô hình sinh ra test 'an toàn' kiểu chỉ kiểm tra không throw, trùng lặp coverage, hoặc tự dựng setup thay vì dùng fixture.",
+      "CLAUDE.md là bộ nhớ dự án (project memory) được Claude Code tự động nạp vào mỗi phiên. Ghi tiêu chuẩn test, danh sách fixture kèm mục đích sử dụng, và ví dụ phân biệt behavioral test có ý nghĩa với trivial assertion sẽ định hướng trực tiếp quá trình sinh test.",
+      "Ví dụ cụ thể (good vs bad examples) là một trong những cách hiệu quả nhất để chỉ cho Claude chuẩn chất lượng mong muốn; tệp được commit nên cả team và mọi lần chạy đều dùng chung một chuẩn."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Lọc theo coverage sau khi sinh):",
+        "trap": "Bẫy xử lý triệu chứng ở đầu ra (Post-hoc filtering trap)",
+        "explanation": "Lọc sau khi sinh không giảm tỷ lệ test kém được sinh ra; vẫn tốn chi phí sinh 55% test vô giá trị. Hơn nữa, tăng line coverage không đồng nghĩa với có giá trị: trivial assertion vẫn có thể tăng coverage, còn test bỏ qua fixture convention thì coverage không phát hiện được."
+      },
+      "B": {
+        "title": "B sai (Giới hạn theo thư mục có tỷ lệ chấp nhận cao):",
+        "trap": "Bẫy thu hẹp phạm vi thay vì sửa gốc (Scope retreat trap)",
+        "explanation": "Tắt tính năng ở những vùng khó chỉ né vấn đề và làm mất giá trị ở chính những nơi cần test nhất. Nguyên nhân - thiếu tiêu chuẩn và ngữ cảnh fixture - vẫn còn nguyên."
+      },
+      "D": {
+        "title": "D sai (Gọi Claude lần hai để chấm điểm và lọc):",
+        "trap": "Bẫy thêm tầng kiểm duyệt tốn kém (Generate-then-filter overhead trap)",
+        "explanation": "Thêm một lượt gọi tăng chi phí và độ trễ, và vẫn là lọc sau khi sinh chứ không ngăn sinh test kém. Nếu tiêu chí chất lượng đã được viết ra, đặt chúng vào ngữ cảnh lúc sinh (CLAUDE.md) hiệu quả hơn."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Manage Claude's memory (CLAUDE.md) & Best practices:",
+    "points": [
+      "CLAUDE.md ở cấp dự án được tự động nạp vào context, dùng để ghi quy ước code, lệnh test, và tiêu chuẩn của team; commit vào version control để chia sẻ.",
+      "Prompting best practices: cung cấp ví dụ cụ thể và tiêu chí rõ ràng giúp Claude tạo ra kết quả đúng chuẩn ngay từ đầu."
+    ]
+  }
+}

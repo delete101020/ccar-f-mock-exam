@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_031",
+  "domain": "Tool Design & Multi-Agent Systems (Thiết kế Tool & Hệ thống đa Agent)",
+  "topic": "Câu P1.31: Splitting a Generic Tool into Purpose-Specific Tools with Defined Contracts",
+  "question": "The document analysis agent has a single analyze_document tool that takes a document and a free-text instruction parameter. During evaluation, requests like \"extract the key financial metrics\" often return narrative summaries, while \"summarize the methodology\" sometimes returns raw data tables. The synthesis agent reports that 35% of analysis results require re-requests with clarified instructions.\nWhat's the most effective way to improve reliability?",
+  "options": {
+    "A": "Keep the single tool but add an analysis_type enum parameter requiring explicit selection between extraction, summarization, and verification modes.",
+    "B": "Have the coordinator pre-classify each analysis request before passing instructions to the document analysis agent.",
+    "C": "Enhance the tool description with detailed examples showing how different instruction phrasings should map to different output formats.",
+    "D": "Split the generic tool into purpose-specific tools– extract_data_points, summarize_content, verify_claim_against_source –each with defined input/output contracts."
+  },
+  "correct_answer": "D. Split the generic tool into purpose-specific tools– extract_data_points, summarize_content, verify_claim_against_source –each with defined input/output contracts.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Nguyên nhân gốc của 35% re-requests:",
+    "points": [
+      "Tool analyze_document quá chung chung (generic): tham số instruction dạng free-text khiến mục đích và định dạng đầu ra hoàn toàn phụ thuộc vào cách diễn giải chuỗi văn bản. \"Extract the key financial metrics\" có thể bị hiểu là tóm tắt; \"summarize the methodology\" có thể bị hiểu là trích dữ liệu.",
+      "Tách thành các tool chuyên biệt — extract_data_points, summarize_content, verify_claim_against_source — làm cho ý định (intent) được mã hóa trực tiếp vào việc chọn tool. Mỗi tool có input/output contract riêng (ví dụ extract_data_points luôn trả về mảng data points có cấu trúc).",
+      "Output contract rõ ràng giúp synthesis agent nhận được đúng loại kết quả nó cần, loại bỏ sự mơ hồ về định dạng và giảm mạnh việc phải request lại.",
+      "Anthropic khuyến nghị thiết kế tool có mục đích rõ ràng, tên và mô tả phân biệt, giống như thiết kế một giao diện tốt cho developer (agent-computer interface)."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Giữ tool chung, thêm tham số analysis_type enum):",
+        "trap": "Bẫy cải tiến nửa vời (Partial fix trap)",
+        "explanation": "Enum giúp chọn mode rõ ràng hơn, nhưng tool vẫn chỉ có một output contract chung chung — mỗi mode cần các tham số và định dạng đầu ra khác nhau (verify_claim cần claim và source; extract cần danh sách trường) mà một schema duy nhất khó biểu diễn tốt. Đây là bước cải thiện một phần, không triệt để bằng tách tool."
+      },
+      "B": {
+        "title": "B sai (Coordinator phân loại trước request):",
+        "trap": "Bẫy thêm bước trung gian không sửa giao diện (Extra hop trap)",
+        "explanation": "Coordinator phân loại xong vẫn phải truyền instruction free-text qua cùng một tool mơ hồ — giao diện tool không thay đổi nên vấn đề diễn giải vẫn còn. Thêm một bước LLM cũng tăng chi phí và độ trễ."
+      },
+      "C": {
+        "title": "C sai (Bổ sung ví dụ chi tiết trong tool description):",
+        "trap": "Bẫy dựa vào prompt cho vấn đề cấu trúc (Prompt-only fix for structural problem trap)",
+        "explanation": "Ví dụ trong mô tả tool có thể giúp phần nào, nhưng việc ánh xạ từ vô số cách diễn đạt free-text sang định dạng đầu ra vẫn mang tính xác suất. Vấn đề cốt lõi là giao diện tool thiếu ràng buộc cấu trúc, nên giải pháp cấu trúc (tách tool) đáng tin cậy hơn."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – \"Building Effective Agents\" (Appendix: Prompt engineering your tools) & \"Writing effective tools for agents\"; Claude API Docs – Tool use: tool definitions.",
+    "points": [
+      "Tool nên có mục đích rõ ràng, tên và mô tả phân biệt rõ để mô hình chọn đúng; tránh các tool đa năng mơ hồ.",
+      "Đầu tư vào agent-computer interface (ACI): định nghĩa tham số và định dạng đầu ra rõ ràng giúp giảm lỗi sử dụng tool."
+    ]
+  }
+}

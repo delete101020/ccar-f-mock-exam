@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_045",
+  "domain": "Multi-Agent Orchestration & Source Provenance (Điều phối đa Agent & Bảo toàn nguồn trích dẫn)",
+  "topic": "Câu P1.45: Separating Content Summaries from Source Metadata in Agent Outputs",
+  "question": "The synthesis agent receives summarized findings from the web search and document analysis agents, then passes a consolidated summary to the report generator. During testing, you discover the generated reports make factual claims without proper citations–the report generator cannot attribute statements to their original sources because that metadata was lost during the summarization steps.\nWhat's the most effective approach to ensure proper source attribution in the final reports?",
+  "options": {
+    "A": "Instruct the synthesis agent to embed source references inline within its summary text using a consistent citation format.",
+    "B": "Skip summarization and pass full raw outputs from web search and document analysis directly to the report generator.",
+    "C": "Have each agent output structured data separating content summaries from source metadata (URLs, document names, page numbers).",
+    "D": "Have the report generator query the web search agent to re-locate sources for claims in the final report."
+  },
+  "correct_answer": "C. Have each agent output structured data separating content summaries from source metadata (URLs, document names, page numbers).",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Nguyên nhân gốc rễ: metadata nguồn bị \"hòa tan\" khi các bước summarization viết lại thành văn xuôi:",
+    "points": [
+      "Mỗi lần tóm tắt bằng văn bản tự do, model có xu hướng lược bỏ URL, tên tài liệu, số trang vì chúng không phải \"nội dung chính\". Sau hai tầng tóm tắt, report generator không còn dữ liệu để trích dẫn.",
+      "Thiết kế output có cấu trúc cho mỗi agent – tách riêng trường content summary và trường source metadata (URL, document name, page number) liên kết với từng finding – khiến metadata trở thành một phần bắt buộc của schema, không thể bị tóm tắt mất.",
+      "Giải pháp vừa giữ lợi ích của summarization (giảm token) vừa bảo toàn provenance xuyên suốt pipeline đến bước sinh báo cáo."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Yêu cầu nhúng citation inline trong văn bản tóm tắt):",
+        "trap": "Bẫy phụ thuộc chỉ dẫn prompt (Prompt-only formatting trap)",
+        "explanation": "Citation nhúng trong văn xuôi vẫn có thể bị các bước tóm tắt sau lược bỏ hoặc viết lại sai; đây là ràng buộc mềm, không đảm bảo bằng cấu trúc dữ liệu."
+      },
+      "B": {
+        "title": "B sai (Bỏ summarization, truyền toàn bộ raw output):",
+        "trap": "Bẫy nhồi context (Context bloat trap)",
+        "explanation": "Truyền dữ liệu thô làm phình context, tăng chi phí và độ trễ, giảm chất lượng tập trung của report generator; đồng thời bỏ mất giá trị của bước synthesis."
+      },
+      "D": {
+        "title": "D sai (Report generator hỏi lại web search agent để tìm lại nguồn):",
+        "trap": "Bẫy tái tìm kiếm tốn kém (Redundant re-retrieval trap)",
+        "explanation": "Tìm lại nguồn cho từng claim sau khi đã mất metadata là lặp lại công việc, tốn thêm vòng gọi và không đảm bảo tìm đúng nguồn ban đầu."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude API Docs – Structured outputs / Tool use JSON schema & Anthropic Engineering – Multi-agent research system:",
+    "points": [
+      "Dùng schema có cấu trúc để truyền dữ liệu giữa các bước, tách nội dung và metadata thành các trường riêng.",
+      "Bảo toàn provenance (nguồn, vị trí) suốt pipeline để bước cuối có thể trích dẫn chính xác."
+    ]
+  }
+}

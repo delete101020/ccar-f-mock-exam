@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_038",
+  "domain": "Tool Interface Design & Schema Constraints (Thiết kế giao diện Tool & Ràng buộc Schema)",
+  "topic": "Câu P2.38: Splitting log_workout into Category-Specific Tools to Prevent Invalid Combinations",
+  "question": "Your agent has a log_workout tool that accepts exercise_type (string), value (number), and measurement (string). Production monitoring shows the agent frequently passes mismatched combinations-using measurement: \"reps\" for cardio exercises like running, or measurement: \"miles\" for strength exercises like bench press. Your exercises naturally divide into two categories: cardio (measured in time or distance) and strength (measured in reps and sets). 23% of tool calls have invalid combinations.\nWhat approach would most effectively reduce these errors?",
+  "options": {
+    "A": "Implement server-side validation returning descriptive errors for invalid combinations, allowing the agent to retry with corrections.",
+    "B": "Add enum constraints on measurement limiting values to \"minutes\", \"miles\", \"reps\", or \"sets\" to prevent arbitrary measurement strings.",
+    "C": "Add explicit examples to the tool description showing valid combinations (e.g., \"For running: use minutes or miles. For push-ups: use reps\") with constraints for each exercise category.",
+    "D": "Split into log_cardio_workout (with duration_minutes or distance_miles parameters) and log_strength_workout (with reps and sets parameters)."
+  },
+  "correct_answer": "D. Split into log_cardio_workout (with duration_minutes or distance_miles parameters) and log_strength_workout (with reps and sets parameters).",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Nguyên nhân gốc rễ nằm ở thiết kế interface của tool:",
+    "points": [
+      "Schema hiện tại cho phép biểu diễn trạng thái không hợp lệ: `exercise_type`, `value`, `measurement` là ba trường độc lập, nên tổ hợp \"running + reps\" hoàn toàn hợp lệ về mặt schema. Tỷ lệ lỗi 23% là hệ quả trực tiếp của việc interface không mã hóa ràng buộc nghiệp vụ.",
+      "Tách theo ranh giới tự nhiên của domain: bài toán đã nói rõ bài tập chia thành hai nhóm với đơn vị đo khác nhau. `log_cardio_workout(duration_minutes, distance_miles)` và `log_strength_workout(reps, sets)` khiến tổ hợp sai trở nên không thể biểu diễn (make invalid states unrepresentable).",
+      "Tên tham số tự mô tả đơn vị (`duration_minutes`, `distance_miles`) loại bỏ trường `measurement` dạng string tự do — model chỉ cần chọn đúng tool theo loại bài tập, một quyết định dễ hơn nhiều.",
+      "Đây là giải pháp phòng ngừa mang tính cấu trúc (structural/deterministic), không phụ thuộc xác suất model đọc và làm theo mô tả."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Validation phía server trả lỗi mô tả để agent retry):",
+        "trap": "Bẫy phát hiện sau thay vì phòng ngừa (Detect-and-retry instead of prevent trap)",
+        "explanation": "Validation là lớp phòng vệ tốt, nhưng 23% tool call vẫn sai ở lần đầu, mỗi lần tốn thêm một vòng retry (token + latency). Nó xử lý triệu chứng, không sửa interface gây ra lỗi."
+      },
+      "B": {
+        "title": "B sai (Enum cho measurement: minutes/miles/reps/sets):",
+        "trap": "Bẫy ràng buộc từng trường độc lập (Independent field constraint trap)",
+        "explanation": "Enum chặn được chuỗi tùy ý, nhưng lỗi trong đề bài là tổ hợp sai giữa các giá trị đều hợp lệ (\"reps\" và \"miles\" đều nằm trong enum). Ràng buộc chéo giữa exercise_type và measurement vẫn không được biểu diễn."
+      },
+      "C": {
+        "title": "C sai (Thêm ví dụ tổ hợp hợp lệ vào tool description):",
+        "trap": "Bẫy hướng dẫn mềm (Soft guidance trap)",
+        "explanation": "Mô tả rõ ràng giúp giảm lỗi, nhưng vẫn là hướng dẫn mang tính xác suất — schema vẫn chấp nhận tổ hợp sai, và với các bài tập không có trong ví dụ, model vẫn có thể nhầm. Khi có ranh giới domain rõ ràng, mã hóa nó vào cấu trúc tool hiệu quả hơn."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering \"Writing effective tools for agents\" & Tool use documentation (Defining tools):",
+    "points": [
+      "Thiết kế tool nên phản ánh cách chia nhỏ tác vụ tự nhiên; tham số nên được đặt tên rõ ràng, không mơ hồ để giảm lỗi khi model gọi tool.",
+      "Anthropic khuyến nghị \"poka-yoke\" cho tool: thay đổi tham số/interface sao cho model khó mắc lỗi hơn, thay vì chỉ dựa vào mô tả."
+    ]
+  }
+}

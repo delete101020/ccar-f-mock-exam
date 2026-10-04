@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_049",
+  "domain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Phân rã tác vụ - Task Decomposition)",
+  "topic": "Câu P2.49: Prioritized, Adaptive Decomposition for Legacy Test Coverage",
+  "question": "An engineer asks your agent to add comprehensive tests to a legacy codebase with 200 files and minimal existing test coverage. The engineer hasn't specified which modules to prioritize.\nHow should the agent decompose this open-ended task?",
+  "options": {
+    "A": "Systematically read all 200 files to create a complete function inventory before writing any tests, ensuring the testing plan accounts for every function before beginning.",
+    "B": "Create a fixed testing schedule upfront based on directory structure, allocating equal effort to each top-level directory regardless of code complexity or business importance.",
+    "C": "Start writing tests for the first module alphabetically, using test failures and imports to discover related files organically.",
+    "D": "Use Glob and Grep to map codebase structure, identify heavily-coupled modules, create a prioritized plan for high-impact areas, and revise as dependencies are discovered."
+  },
+  "correct_answer": "D. Use Glob and Grep to map codebase structure, identify heavily-coupled modules, create a prioritized plan for high-impact areas, and revise as dependencies are discovered.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Bài toán đưa ra các dữ kiện quan trọng:",
+    "points": [
+      "Tác vụ mở (open-ended): 200 file legacy, gần như không có test, không có chỉ định module ưu tiên. Agent cần tự xác định nơi đầu tư công sức mang lại giá trị cao nhất.",
+      "Dùng Glob và Grep để lập bản đồ cấu trúc codebase một cách rẻ (không đọc toàn bộ file), nhận diện các module bị phụ thuộc nhiều (heavily-coupled) — nơi lỗi gây ảnh hưởng rộng nhất — rồi lập kế hoạch ưu tiên cho các vùng high-impact.",
+      "Kế hoạch được điều chỉnh khi phát hiện dependency mới (adaptive decomposition), kết hợp ưu điểm của lập kế hoạch có định hướng và khả năng thích ứng của agent loop."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Đọc toàn bộ 200 file để lập inventory trước khi viết test):",
+        "trap": "Bẫy duyệt toàn bộ upfront (Exhaustive upfront reading trap)",
+        "explanation": "Đọc toàn bộ 200 file sẽ làm cạn context window và tốn rất nhiều token trước khi tạo ra bất kỳ giá trị nào. Inventory cũng không tự cho biết module nào quan trọng nhất."
+      },
+      "B": {
+        "title": "B sai (Lịch cố định chia đều theo thư mục):",
+        "trap": "Bẫy phân bổ cứng nhắc (Rigid equal allocation trap)",
+        "explanation": "Chia đều công sức bất kể độ phức tạp hay tầm quan trọng nghiệp vụ dẫn đến lãng phí vào code ít rủi ro và thiếu đầu tư cho code cốt lõi. Kế hoạch cố định cũng không thích ứng khi phát hiện dependency."
+      },
+      "C": {
+        "title": "C sai (Bắt đầu từ module đầu tiên theo alphabet, khám phá tự nhiên):",
+        "trap": "Bẫy thiếu định hướng ưu tiên (Arbitrary starting point trap)",
+        "explanation": "Thứ tự alphabet không liên quan gì đến tác động hay rủi ro. Khám phá \"organic\" không có kế hoạch ưu tiên có thể khiến agent sa đà vào các module ít quan trọng."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Research: \"Building Effective Agents\" & Claude Code best practices:",
+    "points": [
+      "Với tác vụ mở, agent nên khám phá môi trường bằng công cụ (Glob/Grep) để thu thập ngữ cảnh, lập kế hoạch, rồi điều chỉnh dựa trên phản hồi thực tế trong vòng lặp.",
+      "Claude Code khuyến nghị giai đoạn explore → plan trước khi triển khai, đồng thời tiết kiệm context bằng tìm kiếm có mục tiêu thay vì đọc toàn bộ codebase."
+    ]
+  }
+}

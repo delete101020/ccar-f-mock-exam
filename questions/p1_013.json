@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_013",
+  "domain": "Context Management & Code Exploration (Quản lý ngữ cảnh & Chiến lược khám phá mã nguồn lớn)",
+  "topic": "Câu P1.13: Exploring Large Caching Layer via Interface-First Pattern",
+  "question": "An engineer asks the agent to understand how the caching layer works before adding a new cache invalidation trigger. The engineer is unfamiliar with the layer and wants to understand its overall design, not just locate existing invalidation calls. After initial Grep searches, the agent has identified that caching logic spans 15 files including decorators, middleware, and service classes (~8,000 lines total).\nWhat's the most effective next step for building understanding while managing context constraints?",
+  "options": {
+    "A": "Use Glob to find files matching common caching patterns (cache.py, caching/), prioritize the largest files by reading them first, then check smaller files for gaps.",
+    "B": "Use Grep to search for \"invalidate\" and \"expire\" patterns across all files, then Read only those specific line ranges with minimal surrounding context.",
+    "C": "Analyze imports and class hierarchies to identify the base cache class, Read that file to understand the interface, then trace specific invalidation implementations.",
+    "D": "Use the Read tool to sequentially load all 15 files, building complete understanding across the full caching implementation."
+  },
+  "correct_answer": "C. Analyze imports and class hierarchies to identify the base cache class, Read that file to understand the interface, then trace specific invalidation implementations.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Bản chất chiến lược khám phá Top-Down / Interface-First trên codebase lớn:",
+    "points": [
+      "Quản lý giới hạn ngữ cảnh (Context Constraints): Hệ thống caching trải dài trên 15 files với khoảng 8.000 dòng code. Nếu đọc dàn trải hoặc đọc toàn bộ, context window sẽ bị bão hòa ngay lập tức.",
+      "Chiến lược Interface-First / Base Class: Trong kiến trúc phần mềm, class trừu tượng cơ sở (base cache class/interface) quy định hợp đồng chung (contract), các phương thức cốt lõi (get, set, invalidate) và vòng đời của cache. Đọc file này trước giúp mô hình nắm được bức tranh tổng thể và kiến trúc hệ thống chỉ với một lượng token tối thiểu.",
+      "Lần vết có mục tiêu (Targeted Tracing): Sau khi đã nắm vững interface, agent mới lần theo các triển khai cụ thể của invalidation trigger mà kỹ sư yêu cầu, vừa tiết kiệm token vừa đảm bảo tính chính xác cao nhất."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Ưu tiên đọc file to nhất trước):",
+        "trap": "Bẫy kích thước file (File size prioritization trap)",
+        "explanation": "File có dung lượng lớn nhất thường chứa nhiều code triển khai chi tiết, boilerplate hoặc logic rẽ nhánh phức tạp thay vì định nghĩa kiến trúc lõi. Đọc file to trước vừa tốn token vừa làm agent bị lạc vào chi tiết vụn vặt."
+      },
+      "B": {
+        "title": "B sai (Chỉ Grep và đọc vài dòng quanh invalidate/expire):",
+        "trap": "Bẫy góc nhìn hẹp (Tunnel vision trap)",
+        "explanation": "Chỉ đọc vài dòng rời rạc không thể giúp agent hiểu được kiến trúc tổng thể ('understand how the caching layer works') như đề bài yêu cầu. Thiếu hiểu biết về interface chung sẽ khiến trigger mới dễ bị lỗi kiến trúc."
+      },
+      "D": {
+        "title": "D sai (Đọc tuần tự toàn bộ cả 15 files):",
+        "trap": "Bẫy ngập lụt ngữ cảnh (Context flooding trap)",
+        "explanation": "Đọc toàn bộ 8.000 dòng code sẽ làm bão hòa context window ngay lập tức, đẩy chi phí token lên cao và gây suy giảm chất lượng suy luận nghiêm trọng (attention dilution)."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Nguyên tắc chung (nên đối chiếu thêm tài liệu chính thức của Anthropic):",
+    "points": [
+      "Với subsystem lớn, nắm interface/base class trước rồi mới lần theo các triển khai cụ thể.",
+      "Tránh nạp cả module lớn vào context khi chưa xác định phạm vi cần tác động."
+    ]
+  }
+}

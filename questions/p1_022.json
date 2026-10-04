@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_022",
+  "domain": "Information Extraction & Hallucination Reduction (Trích xuất thông tin & Giảm thiểu Hallucination)",
+  "topic": "Câu P1.22: Reducing Fabricated Values with Explicit Null Instructions",
+  "question": "Your system extracts event metadata (date, location, organizer, attendee_count) from news articles using a JSON schema with all nullable fields. During evaluation, you observe the model frequently generates plausible but incorrect values for fields not mentioned in the article–for example, outputting \"500\" for attendee_count when the source contains no attendance information.\nWhat's the most effective way to reduce these false extractions?",
+  "options": {
+    "A": "Add a post-processing step using a second LLM call to verify each extracted value exists in the source document.",
+    "B": "Upgrade to a more capable model tier with improved instruction-following to reduce hallucination tendencies.",
+    "C": "Make all schema fields required (non-nullable) with strict validation rules to ensure the model only outputs verifiable data.",
+    "D": "Add prompt instructions to return null for any field where information is not directly stated in the source."
+  },
+  "correct_answer": "D. Add prompt instructions to return null for any field where information is not directly stated in the source.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Dữ kiện then chốt của bài toán:",
+    "points": [
+      "Schema đã cho phép tất cả các trường nullable, tức là về mặt cấu trúc mô hình đã có \"lối thoát\" hợp lệ để trả về null. Tuy vậy, mô hình vẫn điền giá trị nghe hợp lý nhưng sai (ví dụ \"500\" cho attendee_count) khi bài báo không hề nhắc đến số người tham dự.",
+      "Nguyên nhân gốc: mô hình có xu hướng \"hữu ích\" bằng cách điền đầy đủ mọi trường, vì nó không được chỉ dẫn rõ ràng rằng null là câu trả lời mong muốn khi thông tin không được nêu trực tiếp. Schema nullable chỉ cho phép null, nhưng không nói khi nào phải dùng null.",
+      "Thêm chỉ dẫn rõ ràng trong prompt (\"trả về null cho bất kỳ trường nào không được nêu trực tiếp trong nguồn\") kết hợp với schema nullable sẵn có là cách trực tiếp, rẻ và hiệu quả nhất: nó cho mô hình tiêu chí rõ ràng (explicit criteria) và quyền được nói \"không biết\".",
+      "Anthropic khuyến nghị việc cho phép Claude thừa nhận không có thông tin (\"allow Claude to say I don't know\") như một kỹ thuật cốt lõi để giảm hallucination."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Thêm một LLM call thứ hai để kiểm chứng từng giá trị):",
+        "trap": "Bẫy thêm tầng xử lý tốn kém trước khi sửa nguyên nhân gốc (Over-engineering verification trap)",
+        "explanation": "Bước kiểm chứng bằng LLM thứ hai làm tăng gấp đôi chi phí và độ trễ, và bản thân nó cũng có thể sai. Nó chỉ xử lý hậu quả thay vì nguyên nhân: mô hình extraction chưa được chỉ dẫn khi nào cần trả về null. Nên sửa prompt trước khi thêm hạ tầng."
+      },
+      "B": {
+        "title": "B sai (Nâng cấp model tier):",
+        "trap": "Bẫy nâng cấp mô hình (Model upgrade trap)",
+        "explanation": "Một model mạnh hơn vẫn có xu hướng điền đầy đủ các trường nếu không có chỉ dẫn rõ ràng. Vấn đề là thiếu tiêu chí trong prompt, không phải thiếu năng lực. Nâng cấp tốn kém hơn mà không đảm bảo giải quyết."
+      },
+      "C": {
+        "title": "C sai (Biến tất cả các trường thành required, non-nullable):",
+        "trap": "Bẫy ép buộc schema làm trầm trọng hallucination (Forced non-null fabrication trap)",
+        "explanation": "Đây là hướng ngược lại hoàn toàn. Nếu attendee_count là bắt buộc và không được null, mô hình buộc phải bịa ra một con số khi bài báo không có thông tin, làm tăng chứ không giảm false extractions. Validation rules không thể kiểm chứng giá trị có tồn tại trong nguồn hay không."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Docs – Reduce hallucinations & Structured outputs / Tool use (JSON schema).",
+    "points": [
+      "Anthropic khuyến nghị cho phép Claude thừa nhận sự không chắc chắn hoặc thiếu thông tin để giảm hallucination.",
+      "Trong thiết kế schema trích xuất, các trường có thể vắng mặt trong nguồn nên được khai báo nullable/optional, kết hợp chỉ dẫn rõ ràng trả về null khi thông tin không được nêu trực tiếp."
+    ]
+  }
+}

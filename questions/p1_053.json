@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_053",
+  "domain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "topic": "Câu P1.53: Structured MCP Error Responses with retryable Flag",
+  "question": "Production logs reveal inconsistent error responses when lookup_order fails. The agent sometimes retries (wasting 3-4 turns) before concluding on the error. Your MCP tool currently returns only a plain text error message to Claude.\nWhat's the most effective improvement?",
+  "options": {
+    "A": "Implement retry logic with exponential backoff in your MCP server for all errors, returning only successful results to the agent.",
+    "B": "Create an analyze_error MCP tool the agent calls to determine the error type before deciding how to handle it.",
+    "C": "Return structured error responses with retryable: false for business errors and a customer-friendly explanation for Claude to use.",
+    "D": "Add few-shot examples to the system prompt showing how to distinguish retryable from non-retryable errors by parsing error message text."
+  },
+  "correct_answer": "C. Return structured error responses with retryable: false for business errors and a customer-friendly explanation for Claude to use.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Nguyên nhân gốc rễ: tool chỉ trả về plain text error, nên Claude phải đoán lỗi có retry được hay không:",
+    "points": [
+      "Với thông báo lỗi dạng text tự do, model không có tín hiệu tất định để phân biệt lỗi tạm thời (transient) và lỗi nghiệp vụ vĩnh viễn – dẫn đến hành vi không nhất quán và lãng phí 3-4 lượt retry.",
+      "Structured error response (ví dụ: error_type, `retryable: false`, kèm customer-friendly explanation) đưa ngữ nghĩa của lỗi vào chính tool result. Claude đọc được ngay rằng không nên thử lại và có sẵn lời giải thích phù hợp để nói với khách.",
+      "Đây là sửa ở nguồn (tool design), áp dụng cho mọi lần gọi, tất định hơn so với prompt hay thêm tool phụ."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Retry với exponential backoff cho mọi lỗi trong MCP server):",
+        "trap": "Bẫy retry mù quáng (Blind retry trap)",
+        "explanation": "Retry lỗi nghiệp vụ (ví dụ \"Order not found\") không bao giờ thành công, chỉ chuyển sự lãng phí từ agent sang server và tăng độ trễ; việc che giấu mọi lỗi khiến agent không thể giải thích cho khách."
+      },
+      "B": {
+        "title": "B sai (Thêm tool analyze_error để phân loại lỗi):",
+        "trap": "Bẫy thêm vòng gọi không cần thiết (Extra tool round-trip trap)",
+        "explanation": "Thêm một lượt tool call cho mỗi lỗi làm tăng độ trễ và chi phí, trong khi thông tin phân loại có thể trả về trực tiếp trong error response ban đầu."
+      },
+      "D": {
+        "title": "D sai (Few-shot examples dạy parse text lỗi):",
+        "trap": "Bẫy phụ thuộc parsing văn bản (Brittle text parsing trap)",
+        "explanation": "Dạy model đoán từ chuỗi text vẫn là xác suất và dễ sai khi thông báo lỗi thay đổi; cấu trúc dữ liệu tường minh đáng tin cậy hơn nhiều."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "MCP Specification – Tools (Error handling, isError) & Anthropic Engineering – Writing effective tools for agents:",
+    "points": [
+      "Tool nên trả về thông báo lỗi hữu ích, có thể hành động (actionable), giúp agent biết bước tiếp theo.",
+      "Lỗi thực thi tool được trả trong kết quả (isError) kèm nội dung có cấu trúc để model xử lý chính xác."
+    ]
+  }
+}

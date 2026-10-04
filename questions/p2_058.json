@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_058",
+  "domain": "Tool Design & Error Handling (Thiết kế Tool & Xử lý lỗi)",
+  "topic": "Câu P2.58: Replacing Ambiguous Parameters with game_id plus a Lookup Tool",
+  "question": "Your agent includes an update_game_score tool that accepts game_date (string), home_team (string), and away_team (string) parameters. Production logs reveal recurring issues: the agent uses team nicknames instead of official names, applies inconsistent date formats, and selects the wrong game when teams have rematches in the same season.\nWhat tool interface change would effectively prevent these errors?",
+  "options": {
+    "A": "Add a season parameter to disambiguate rematches, and add a confirm_before_update flag that returns the resolved game details for the agent to verify before the score is committed.",
+    "B": "Add detailed examples to the tool description showing the required date format and complete list of official team names.",
+    "C": "Add enum constraints listing valid team names for both team parameters, and add a regex pattern enforcing ISO 8601 format for the date parameter.",
+    "D": "Replace the three parameters with a single game_id parameter and a separate search_games lookup tool that returns matching game IDs."
+  },
+  "correct_answer": "D. Replace the three parameters with a single game_id parameter and a separate search_games lookup tool that returns matching game IDs.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Bài toán có ba nhóm lỗi cần ngăn chặn:",
+    "points": [
+      "Ba lỗi: dùng biệt danh đội thay vì tên chính thức, định dạng ngày không nhất quán, và chọn sai trận khi hai đội tái đấu trong mùa. Gốc rễ chung là interface yêu cầu agent tự xác định trận đấu bằng các trường văn bản tự do dễ mơ hồ.",
+      "Thay ba tham số bằng một game_id duy nhất, kết hợp tool search_games trả về các ID khớp (kèm ngày, đội, metadata), biến việc xác định trận đấu thành tra cứu có cấu trúc: agent tìm trận, xem kết quả, rồi cập nhật bằng định danh không mơ hồ.",
+      "Search tool có thể tự chuẩn hóa biệt danh và định dạng ngày ở đầu vào tìm kiếm, nên cả ba lớp lỗi đều bị loại bỏ ở mức thiết kế interface — đúng tinh thần \"poka-yoke\" (thiết kế chống lỗi) cho tool."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Thêm tham số season và cờ confirm_before_update):",
+        "trap": "Bẫy vá từng phần (Partial patching trap)",
+        "explanation": "Tham số season không phân biệt được hai trận tái đấu trong cùng một mùa — chính là kịch bản trong đề. Cờ xác nhận thêm một vòng gọi nhưng không ngăn được lỗi biệt danh và định dạng ngày."
+      },
+      "B": {
+        "title": "B sai (Thêm ví dụ và danh sách tên đội vào tool description):",
+        "trap": "Bẫy dựa vào hướng dẫn (Documentation-only fix trap)",
+        "explanation": "Ví dụ trong description chỉ cải thiện xác suất, không cưỡng chế. Quan trọng hơn, nó không giải quyết được việc chọn sai trận tái đấu, vì cùng ngày-đội vẫn không đủ để phân biệt ý định của agent."
+      },
+      "C": {
+        "title": "C sai (Enum tên đội và regex ISO 8601 cho ngày):",
+        "trap": "Bẫy cưỡng chế định dạng nhưng không giải quyết định danh (Format-only validation trap)",
+        "explanation": "Enum và regex sửa được lỗi biệt danh và định dạng ngày, nhưng không giải quyết lỗi chọn sai trận tái đấu — agent vẫn có thể truyền đúng định dạng nhưng sai ngày. Định danh trận đấu vẫn là tổ hợp nhiều trường dễ sai."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – \"Writing effective tools for agents\" & \"Building Effective Agents\" (Appendix: Prompt engineering your tools):",
+    "points": [
+      "Anthropic khuyến nghị thiết kế tool chống lỗi (poka-yoke): thay đổi tham số để agent khó mắc lỗi hơn, ví dụ dùng định danh rõ ràng thay vì giá trị dễ mơ hồ.",
+      "Tách tool tìm kiếm trả về định danh không mơ hồ để dùng cho các tool hành động tiếp theo là mẫu thiết kế được khuyến khích."
+    ]
+  }
+}

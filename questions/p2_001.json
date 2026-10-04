@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_001",
+  "domain": "Information Extraction & Pipeline Validation (Trích xuất thông tin & Kiểm thực pipeline)",
+  "topic": "Câu P2.1: Invoice Total Mismatch via calculated_total vs stated_total Consistency Check",
+  "question": "Your extraction pipeline processes invoices and extracts line items, subtotals, tax amounts, and grand totals. During evaluation, you discover that in 18% of extractions, the sum of extracted line item amounts doesn't match the extracted grand total—sometimes due to OCR errors in the source document, sometimes due to extraction mistakes by the model. Downstream accounting systems reject records with mismatched totals.\nWhat's the most effective approach to improve extraction reliability?",
+  "options": {
+    "A": "Add few-shot examples demonstrating invoices where extracted line items sum correctly to the stated total, encouraging the model to produce mathematically consistent extractions.",
+    "B": "Implement post-processing that automatically adjusts line item amounts proportionally when their sum doesn't match the stated total.",
+    "C": "Add a \"calculated_total\" field where the model sums extracted line items alongside a \"stated_total\" field. Flag records for human review when values differ.",
+    "D": "Extract line items and totals independently, then use a separate validation model to reconcile discrepancies by determining which extracted values are most likely correct."
+  },
+  "correct_answer": "C. Add a \"calculated_total\" field where the model sums extracted line items alongside a \"stated_total\" field. Flag records for human review when values differ.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Bài toán có hai nguồn lỗi khác nhau (OCR sai trong tài liệu gốc và lỗi trích xuất của model), và hệ thống kế toán phía sau từ chối mọi bản ghi lệch tổng:",
+    "points": [
+      "Tách bạch “giá trị in trên hóa đơn” và “giá trị tính lại”: Trường `stated_total` ghi nhận đúng con số in trên tài liệu (verbatim), còn `calculated_total` là tổng các line items đã trích xuất. Hai trường song song này biến một mâu thuẫn ẩn thành một tín hiệu tường minh, có thể so sánh tự động.",
+      "Không che giấu nguyên nhân gốc: Vì 18% lỗi đến từ cả OCR lẫn lỗi model, không có cách tự động nào biết chắc giá trị nào đúng. Giữ nguyên cả hai giá trị và gắn cờ khi lệch giúp người duyệt (human-in-the-loop) nhìn thấy chính xác chỗ sai thay vì nhận một con số đã bị “làm đẹp”.",
+      "Định tuyến có chọn lọc: Các bản ghi khớp đi thẳng vào hệ thống kế toán; chỉ những bản ghi lệch mới chuyển sang review. Đây là cơ chế self-consistency check mà Anthropic khuyến nghị cho pipeline trích xuất: trích xuất thêm các trường kiểm chứng để phát hiện sai lệch thay vì tin tuyệt đối vào một lần trích xuất.",
+      "Lưu ý triển khai: Phép so sánh `calculated_total` với `stated_total` nên được thực hiện (hoặc kiểm tra lại) bằng code tất định ở bước post-processing, không dựa vào khả năng cộng nhẩm của model."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Thêm few-shot examples với hóa đơn cộng đúng tổng):",
+        "trap": "Bẫy ép model tạo ra số liệu “nhất quán giả” (Forced consistency trap)",
+        "explanation": "Few-shot không sửa được lỗi OCR trong tài liệu gốc. Tệ hơn, khuyến khích model “cho ra kết quả khớp toán học” có thể khiến model bịa hoặc chỉnh số để tổng khớp, che giấu lỗi thật thay vì phát hiện chúng. Đây vẫn là biện pháp xác suất, không phải cơ chế kiểm chứng."
+      },
+      "B": {
+        "title": "B sai (Tự động điều chỉnh line items theo tỷ lệ cho khớp tổng):",
+        "trap": "Bẫy sửa dữ liệu tài chính tùy tiện (Data falsification / Audit violation trap)",
+        "explanation": "Phân bổ chênh lệch theo tỷ lệ vào từng dòng hàng tạo ra các con số không hề tồn tại trên hóa đơn. Nếu lỗi nằm ở một dòng duy nhất (OCR đọc 8 thành 3) hoặc ở chính grand total, việc điều chỉnh làm sai lệch toàn bộ các dòng khác và phá vỡ khả năng kiểm toán (auditability)."
+      },
+      "D": {
+        "title": "D sai (Dùng model thứ hai để phán xử giá trị nào đúng):",
+        "trap": "Bẫy dùng LLM phán xử xác suất (LLM-as-arbiter trap)",
+        "explanation": "Model validation thứ hai cũng chỉ suy đoán “giá trị nào có khả năng đúng hơn”, nhân đôi chi phí và độ trễ mà không có nguồn sự thật mới. Khi tài liệu gốc bị OCR sai, không model nào có thể khẳng định chắc chắn; đầu ra “đã hòa giải” lại che mất tín hiệu cần người xem xét."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Prompt engineering for extraction & Structured outputs / Tool use (nguyên tắc chung, nên đối chiếu thêm tài liệu chính thức):",
+    "points": [
+      "Thiết kế schema có trường kiểm chứng (ví dụ: tổng in trên tài liệu và tổng tính lại) để phát hiện mâu thuẫn một cách tường minh.",
+      "Kiểm tra số học bằng code tất định và định tuyến các bản ghi không nhất quán sang human review, giữ nguyên dữ liệu gốc đã trích xuất."
+    ]
+  }
+}

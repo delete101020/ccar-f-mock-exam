@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_054",
+  "domain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Vòng lặp Agentic Loop)",
+  "topic": "Câu P1.54: How the Agentic Loop Decides the Next Tool Call",
+  "question": "When the agent calls lookup_order and receives order details showing the item was purchased 45 days ago, how does the agentic loop determine whether to call process_refund or escalate_to_human next?",
+  "options": {
+    "A": "The order details are added to the conversation and the model reasons about which action to take.",
+    "B": "The agent follows a pre-configured decision tree mapping order attributes to specific tool calls.",
+    "C": "The orchestration layer automatically routes to the next tool based on the order's status field.",
+    "D": "The agent executes the remaining steps in a tool sequence planned at the start of the request."
+  },
+  "correct_answer": "A. The order details are added to the conversation and the model reasons about which action to take.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Cơ chế cốt lõi của agentic loop với Claude tool use:",
+    "points": [
+      "Khi Claude trả về `stop_reason: \"tool_use\"`, ứng dụng thực thi lookup_order và gửi kết quả lại dưới dạng `tool_result` trong messages.",
+      "Kết quả (đơn hàng mua 45 ngày trước) trở thành một phần của conversation. Ở lượt tiếp theo, chính model suy luận trên toàn bộ context – chính sách đổi trả, chi tiết đơn, yêu cầu khách – để quyết định gọi process_refund, escalate_to_human, hay trả lời khách.",
+      "Đây là điểm khác biệt giữa agent và workflow: model tự định hướng các bước dựa trên phản hồi từ môi trường (tool results), vòng lặp tiếp tục cho đến khi model không còn yêu cầu tool nữa."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Decision tree cấu hình sẵn):",
+        "trap": "Bẫy nhầm agent với workflow (Agent vs workflow confusion trap)",
+        "explanation": "Decision tree là logic code cứng ngoài model; trong agentic loop, việc chọn tool tiếp theo do model quyết định dựa trên context."
+      },
+      "C": {
+        "title": "C sai (Orchestration layer tự định tuyến theo trường status):",
+        "trap": "Bẫy định tuyến tất định ngoài model (External routing trap)",
+        "explanation": "Tầng orchestration chỉ thực thi tool và chuyển kết quả về model; nó không tự quyết định tool tiếp theo dựa trên một trường dữ liệu."
+      },
+      "D": {
+        "title": "D sai (Thực thi chuỗi tool đã lên kế hoạch từ đầu):",
+        "trap": "Bẫy kế hoạch tĩnh (Static upfront plan trap)",
+        "explanation": "Agent không cố định chuỗi tool ngay từ đầu; mỗi tool result mới (như 45 ngày – có thể vượt hạn đổi trả) có thể làm thay đổi bước tiếp theo."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude API Docs – Tool use (agentic loop, stop_reason: tool_use) & \"Building Effective Agents\":",
+    "points": [
+      "Vòng lặp tool use: Claude yêu cầu tool → ứng dụng thực thi → trả `tool_result` → Claude quyết định bước tiếp theo.",
+      "Agents là hệ thống nơi LLM tự định hướng quy trình và cách dùng tool dựa trên phản hồi từ môi trường."
+    ]
+  }
+}

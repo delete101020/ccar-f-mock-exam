@@ -1,0 +1,57 @@
+{
+  "id": "ccar_f_p2_030",
+  "domain": "Claude Code Configuration & CLAUDE.md Hierarchy (Cấu hình Claude Code & Phân cấp CLAUDE.md)",
+  "topic": "Câu P2.30: Selective @Imports of Shared Standards per Package CLAUDE.md",
+  "question": "Your monorepo contains shared coding standards in /docs/standards/security-rules.md (for services handling user data), testing-patterns.md (for all packages), and api-conventions.md (for API-facing services). Your 15 packages are organized by feature domain (/packages/auth/, /packages/billing/, /packages/notifications/, etc.) without naming conventions indicating which handle user data or expose APIs. Package maintainers are expected to configure their own local development settings, as they understand their package's domain requirements. Currently, all package CLAUDE.md files duplicate all three standards, applying irrelevant guidance.\nWhat's the most effective approach?",
+  "options": {
+    "A": "Create claude/rules/ files for each standard with YAML frontmatter paths listing every package directory where that standard should apply.",
+    "B": "Create a shared-standards.nd that uses @imports to combine all three standards, then have each package's CLAUDE.md import that combined file.",
+    "C": "Put all standards in the root CLAUDE.md with override instructions like \"ignore security-rules.md when working in packages that don't handle user data.\"",
+    "D": "Use @imports in each package's CLAUDE.md to reference only the specific standard files relevant to that package, based on the maintainer's domain knowledge."
+  },
+  "correct_answer": "D. Use @imports in each package's CLAUDE.md to reference only the specific standard files relevant to that package, based on the maintainer's domain knowledge.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Ba vấn đề cần giải quyết cùng lúc:",
+    "key_facts": [
+      "Trùng lặp: 15 file CLAUDE.md đều copy nguyên 3 bộ standard.",
+      "Áp dụng sai: package không xử lý user data vẫn nhận security-rules, package không có API vẫn nhận api-conventions.",
+      "Không có quy ước đặt tên để suy ra package nào cần standard nào — chỉ maintainer mới biết, và maintainer được kỳ vọng tự cấu hình package của mình."
+    ],
+    "explanation": "CLAUDE.md hỗ trợ cú pháp `@path/to/file` để import file khác. Mỗi package CLAUDE.md chỉ cần import đúng những standard liên quan, ví dụ `/packages/auth/CLAUDE.md` import `@/docs/standards/security-rules.md`, `@/docs/standards/api-conventions.md` và `@/docs/standards/testing-patterns.md`, còn `/packages/notifications/` có thể chỉ import testing-patterns.",
+    "points": [
+      "Single source of truth: nội dung standard chỉ nằm ở /docs/standards/, sửa một chỗ áp dụng mọi nơi — hết trùng lặp.",
+      "Chỉ nạp guidance liên quan: mỗi package chọn đúng tập con standard, loại bỏ hướng dẫn không phù hợp và tiết kiệm context.",
+      "Đúng mô hình sở hữu: quyết định nằm ở CLAUDE.md của từng package, do chính maintainer — người hiểu domain — quản lý, thay vì một danh sách tập trung."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Rules file với frontmatter paths liệt kê từng package):",
+        "trap": "Bẫy dùng path-scoping khi không có pattern đường dẫn (Path-glob without naming convention trap)",
+        "explanation": "Path-scoped rules mạnh nhất khi có glob pattern tự nhiên (ví dụ `**/*.test.ts`). Ở đây không có quy ước đặt tên, nên phải liệt kê thủ công từng thư mục trong một file tập trung — mỗi package mới hoặc thay đổi domain đều phải sửa danh sách đó, đi ngược mô hình maintainer tự cấu hình package của mình."
+      },
+      "B": {
+        "title": "B sai (Gộp cả 3 standard vào một file rồi mọi package import):",
+        "trap": "Bẫy giải quyết trùng lặp nhưng giữ nguyên áp dụng sai (Dedup-only trap)",
+        "explanation": "Cách này xóa được việc copy-paste nhưng mọi package vẫn nhận cả 3 standard, nên vấn đề \"applying irrelevant guidance\" vẫn y nguyên."
+      },
+      "C": {
+        "title": "C sai (Gom vào root CLAUDE.md kèm chỉ dẫn \"ignore\"):",
+        "trap": "Bẫy chỉ dẫn loại trừ mơ hồ (Negative override instruction trap)",
+        "explanation": "Toàn bộ standard vẫn được nạp vào context mọi lúc, và Claude phải tự đoán package nào xử lý user data — trong khi chính đề bài nói không có dấu hiệu nào để suy ra. Chỉ dẫn \"hãy bỏ qua\" là xác suất, không tất định."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Memory management (CLAUDE.md imports & hierarchy):",
+    "points": [
+      "CLAUDE.md có thể import file bổ sung bằng cú pháp `@path/to/import` (đường dẫn tương đối hoặc tuyệt đối), giúp chia sẻ nội dung mà không cần sao chép.",
+      "CLAUDE.md ở thư mục con được nạp khi Claude làm việc với file trong thư mục đó, phù hợp để mỗi package có chỉ dẫn riêng.",
+      "`.claude/rules/` với frontmatter `paths` phù hợp cho các quy tắc gắn với pattern đường dẫn/loại file rõ ràng."
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_020",
+  "domain": "Prompt Engineering & Long-Conversation Consistency (Kỹ thuật Prompt & Duy trì hành vi trong hội thoại dài)",
+  "topic": "Câu P2.20: Maintaining Guideline Adherence in Long Conversations via Reinforcement Reminders",
+  "question": "During QA testing, you notice that Claude follows your system prompt guidelines consistently in the first 10- 15 turns, but by turn 25-30, responses begin deviating—using informal tone when formality was specified, occasionally skipping required formatting, or providing information types the guidelines restrict. Conversation length is well within context limits (typically 30,000 tokens out of 200,000 available).\nWhat's the most effective approach to maintain consistent behavior throughout extended conversations?",
+  "options": {
+    "A": "Insert user-role messages that reinforce critical guidelines at natural conversation breakpoints, especially before complex requests.",
+    "B": "Implement post-response validation that regenerates each response until it conforms to the specified guidelines.",
+    "C": "Automatically start a new conversation after 20 turns, passing a summary of the prior context to maintain continuity.",
+    "D": "Move behavioral guidelines from the system prompt into the first user message."
+  },
+  "correct_answer": "A. Insert user-role messages that reinforce critical guidelines at natural conversation breakpoints, especially before complex requests.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Các dữ kiện then chốt:",
+    "points": [
+      "Hội thoại tuân thủ tốt ở 10–15 turn đầu, bắt đầu lệch (giọng điệu informal, bỏ định dạng, cung cấp thông tin bị hạn chế) từ turn 25–30.",
+      "Tổng chỉ ~30.000/200.000 tokens → không phải vấn đề giới hạn context; đây là hiện tượng drift: khi khoảng cách giữa system prompt và lượt hiện tại tăng lên cùng với nhiều mẫu hội thoại tích lũy, ảnh hưởng tương đối của guideline giảm.",
+      "Chèn các message nhắc lại guideline quan trọng (reminder) tại các điểm chuyển tự nhiên, đặc biệt trước các request phức tạp, đưa chỉ dẫn trở lại gần vị trí sinh response — kỹ thuật nhẹ, chủ động, không làm gián đoạn trải nghiệm người dùng.",
+      "Đây là cách tiếp cận phòng ngừa (prevent drift) thay vì phát hiện sau, chi phí thấp và giữ nguyên toàn bộ ngữ cảnh hội thoại."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Validate rồi regenerate đến khi tuân thủ):",
+        "trap": "Bẫy sửa triệu chứng bằng regenerate (Regenerate-until-pass trap)",
+        "explanation": "Không ngăn được drift, chỉ phát hiện sau khi xảy ra; vòng regenerate không giới hạn làm tăng độ trễ và chi phí không dự đoán được. Việc validate các tiêu chí như “tone formal” bằng code cũng khó và thường cần thêm một LLM khác."
+      },
+      "C": {
+        "title": "C sai (Tự động mở hội thoại mới sau 20 turn kèm summary):",
+        "trap": "Bẫy reset phá vỡ trải nghiệm (Disruptive reset trap)",
+        "explanation": "Reset mất chi tiết hội thoại do tóm tắt có tổn thất, gây gián đoạn với người dùng, trong khi context còn dư rất nhiều (30K/200K). Đây là biện pháp nặng tay cho một vấn đề có thể xử lý bằng reminder."
+      },
+      "D": {
+        "title": "D sai (Chuyển guideline từ system prompt sang first user message):",
+        "trap": "Bẫy đặt chỉ dẫn sai vị trí (Wrong placement trap)",
+        "explanation": "Message đầu tiên vẫn nằm ở đầu hội thoại — cùng khoảng cách với lượt hiện tại như system prompt, nên không giải quyết drift. Hơn nữa system prompt là nơi được thiết kế cho role và guideline hành vi; bỏ nó đi còn làm giảm hiệu lực."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Prompt engineering (System prompts, Long conversations) (nguyên tắc chung, nên đối chiếu thêm tài liệu chính thức):",
+    "points": [
+      "System prompt là nơi định nghĩa role và guideline hành vi; với hội thoại dài, nhắc lại các chỉ dẫn quan trọng gần lượt hiện tại giúp duy trì sự tuân thủ.",
+      "Ưu tiên các biện pháp phòng ngừa nhẹ, chi phí thấp trước khi dùng cơ chế reset hội thoại hay regenerate."
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_039",
+  "domain": "Claude Code CLI & CI/CD Automation (Claude Code CLI & Tự động hóa CI/CD)",
+  "topic": "Câu P3.39: Using --append-system-prompt to Preserve Built-in Tool Guidance",
+  "question": "You are setting up a non-interactive automated code review pipeline using Claude Code. You want Claude to analyze a pulled Git diff (git diff) against the main branch and apply a custom set of code review instructions. However, you notice that when you run the pipeline, Claude only looks at the raw diff text itself and completely stops using its file-reading or code navigation tools. As a result, it fails to inspect the broader codebase repository context, which is critical because the diff modifies a core function called by many other external modules.\nWhich change to the CLI invocation will cause Claude to read related files in the repository while still successfully applying your custom review instructions?",
+  "options": {
+    "A": "Replace --system-prompt with --append-system-prompt so your review instructions are added to Claude Code's default prompt instead of overwriting the built-in guidance for using file-reading and code navigation tools.",
+    "B": "Keep --system-prompt and add --allowedTools \"Read, Glob, Grep\" so that the non-interactive mode permits file system tools that it otherwise disables.",
+    "C": "Stop piping the diff via stdin and instead embed the diff contents inside the prompt string, so Claude Code treats the invocation as an agentic session rather than a stream-processing one.",
+    "D": "Remove --system-prompt entirely and place the review instructions in a CLAUDE.md file at the repo root, since --system-prompt is incompatible with tool use under -p."
+  },
+  "correct_answer": "A. Replace --system-prompt with --append-system-prompt so your review instructions are added to Claude Code's default prompt instead of overwriting the built-in guidance for using file-reading and code navigation tools.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Triệu chứng: sau khi thêm hướng dẫn review, Claude ngừng dùng tool đọc file và chỉ nhìn vào diff:",
+    "points": [
+      "--system-prompt thay thế toàn bộ system prompt mặc định của Claude Code. Prompt mặc định chứa hướng dẫn về cách làm việc như một coding agent: khi nào và cách dùng Read, Grep, Glob để khám phá codebase. Khi bị ghi đè, Claude chỉ còn lại hướng dẫn review và xử lý diff như một văn bản thuần.",
+      "--append-system-prompt nối thêm hướng dẫn của bạn vào cuối prompt mặc định, giữ nguyên hành vi agentic tích hợp sẵn trong khi vẫn áp dụng quy tắc review tùy chỉnh.",
+      "Đây là thay đổi tối thiểu, sửa đúng nguyên nhân gốc; Anthropic khuyến nghị append cho hầu hết trường hợp, chỉ dùng thay thế khi cần kiểm soát hoàn toàn."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Giữ --system-prompt và thêm --allowedTools):",
+        "trap": "Bẫy nhầm quyền với hướng dẫn hành vi (Permissions vs guidance trap)",
+        "explanation": "Chế độ -p không tắt các tool đọc file; Read, Glob, Grep là tool chỉ đọc và vốn đã sẵn có. Vấn đề là Claude không được hướng dẫn dùng chúng, chứ không phải bị cấm."
+      },
+      "C": {
+        "title": "C sai (Nhúng diff vào prompt thay vì pipe qua stdin):",
+        "trap": "Bẫy phân biệt giả 'stream vs agentic' (Fictitious mode distinction trap)",
+        "explanation": "Claude Code không có chế độ 'stream-processing' riêng làm tắt tool khi đọc stdin. Đổi cách truyền diff không khôi phục được prompt mặc định đã bị ghi đè."
+      },
+      "D": {
+        "title": "D sai (--system-prompt không tương thích với tool use dưới -p):",
+        "trap": "Bẫy khẳng định sai về CLI (False incompatibility claim trap)",
+        "explanation": "--system-prompt hoàn toàn hoạt động với -p và tool use; tiền đề của phương án là sai. CLAUDE.md có thể là một chỗ để đặt hướng dẫn, nhưng lý do đưa ra không đúng và append-system-prompt mới là cách trực tiếp cho pipeline."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – CLI reference (system prompt flags) & Headless mode:",
+    "points": [
+      "--system-prompt: thay thế toàn bộ system prompt mặc định; --append-system-prompt: thêm nội dung vào sau prompt mặc định.",
+      "Với hầu hết trường hợp, append được khuyến nghị vì giữ lại các khả năng tích hợp sẵn của Claude Code."
+    ]
+  }
+}

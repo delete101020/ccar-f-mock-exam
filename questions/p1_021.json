@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_021",
+  "domain": "Information Extraction & Prompt Engineering (Trích xuất thông tin & Kỹ thuật Prompt - Few-shot Examples)",
+  "topic": "Câu P1.21: Improving Field Consistency with Few-shot Examples",
+  "question": "Your extraction system parses e-commerce product descriptions to extract specifications like dimensions, weight, and materials into JSON. Despite having a well-defined schema, the model inconsistently extracts the \"materials\" field–sometimes returning \"cotton blend\", other times \"Cotton/Polyester mix\", and occasionally omitting the field when material information is clearly present in the source.\nWhat's the most effective way to improve extraction consistency?",
+  "options": {
+    "A": "Add few-shot examples showing 2-3 complete input-output pairs with standardized material description formats",
+    "B": "Set temperature to 0 to eliminate randomness and ensure deterministic outputs",
+    "C": "Make the \"materials\" field required instead of optional in the schema to force the model to always extract a value",
+    "D": "Switch to a more capable model tier since inconsistent extraction indicates insufficient model capability"
+  },
+  "correct_answer": "A. Add few-shot examples showing 2-3 complete input-output pairs with standardized material description formats",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Phân tích triệu chứng của trường \"materials\":",
+    "points": [
+      "Schema đã được định nghĩa tốt, nghĩa là cấu trúc JSON không phải vấn đề. Vấn đề nằm ở cách mô hình diễn giải và định dạng giá trị: cùng một chất liệu nhưng lúc là \"cotton blend\", lúc là \"Cotton/Polyester mix\", và đôi khi bỏ sót trường dù nguồn có thông tin.",
+      "Đây là sự mơ hồ về định dạng đầu ra (output format ambiguity): schema chỉ nói kiểu dữ liệu là string, không nói chuỗi đó nên trông như thế nào, viết hoa ra sao, gộp/tách thành phần thế nào, hay thông tin chất liệu có thể ẩn ở đâu trong mô tả sản phẩm.",
+      "Few-shot examples (2-3 cặp input-output hoàn chỉnh) là kỹ thuật được Anthropic khuyến nghị mạnh nhất để truyền đạt định dạng mong muốn: mô hình nhìn thấy cụ thể cách chuẩn hóa chuỗi chất liệu và cách nhận diện thông tin chất liệu trong nhiều kiểu mô tả khác nhau, từ đó giải quyết cả hai triệu chứng (format không đồng nhất và bỏ sót trường).",
+      "Đây là giải pháp nhắm đúng nguyên nhân gốc (thiếu chỉ dẫn về định dạng chuẩn), chi phí thấp và không đòi hỏi thay đổi hạ tầng hay model."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Đặt temperature = 0):",
+        "trap": "Bẫy nhầm lẫn giữa tính ngẫu nhiên và sự mơ hồ của chỉ dẫn (Determinism vs ambiguity trap)",
+        "explanation": "Temperature 0 chỉ giảm tính ngẫu nhiên trong việc lấy mẫu token, không dạy cho mô hình định dạng chuẩn nào là đúng. Với các mô tả sản phẩm khác nhau, mô hình vẫn có thể diễn đạt chất liệu theo nhiều cách khác nhau vì nó không biết quy ước mong muốn. Ngoài ra temperature 0 cũng không đảm bảo hoàn toàn deterministic và không giải quyết việc bỏ sót trường."
+      },
+      "C": {
+        "title": "C sai (Chuyển trường materials thành required):",
+        "trap": "Bẫy ép buộc schema dẫn đến bịa dữ liệu (Forced field fabrication trap)",
+        "explanation": "Bắt buộc trường materials chỉ giải quyết triệu chứng bỏ sót, nhưng lại tạo rủi ro mô hình bịa (hallucinate) giá trị cho những sản phẩm thực sự không có thông tin chất liệu. Quan trọng hơn, nó hoàn toàn không xử lý vấn đề định dạng không nhất quán (\"cotton blend\" vs \"Cotton/Polyester mix\")."
+      },
+      "D": {
+        "title": "D sai (Nâng cấp lên model tier mạnh hơn):",
+        "trap": "Bẫy nâng cấp mô hình thay vì sửa prompt (Model upgrade trap)",
+        "explanation": "Sự không nhất quán ở đây không xuất phát từ năng lực của mô hình mà từ việc thiếu chỉ dẫn về định dạng chuẩn. Một model mạnh hơn vẫn sẽ chọn các cách diễn đạt khác nhau nếu không được cho biết quy ước. Nâng cấp model làm tăng chi phí mà không xử lý nguyên nhân gốc."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Docs – Prompt engineering: Use examples (multishot prompting).",
+    "points": [
+      "Anthropic khuyến nghị dùng 3-5 ví dụ đa dạng, liên quan và được đặt trong thẻ <example> để cải thiện độ chính xác và tính nhất quán của định dạng đầu ra.",
+      "Ví dụ cụ thể hiệu quả hơn mô tả trừu tượng khi cần truyền đạt định dạng, cách chuẩn hóa và cách xử lý các trường hợp đa dạng trong dữ liệu nguồn."
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_039",
+  "domain": "Agentic Architectures & Multi-Agent Orchestration (Kiến trúc Agent & Điều phối đa Agent - Coordinator/Subagent)",
+  "topic": "Câu P1.39: Missing Research Findings in Synthesis Subagent (Explicit Context Passing)",
+  "question": "After the web search agent and document analysis agent complete their tasks, the coordinator invokes the synthesis agent. However, the synthesis agent responds that it cannot complete the task because no research findings were provided. What is the most likely cause of this issue?",
+  "options": {
+    "A": "The synthesis agent needs tools that can fetch results directly from the other agents' conversation histories.",
+    "B": "The synthesis agent's context window is not large enough to hold the combined outputs from both previous agents.",
+    "C": "The coordinator did not include the outputs from the previous agents in the synthesis agent's prompt.",
+    "D": "The subagents need to share a single API connection to enable automatic context sharing between invocations."
+  },
+  "correct_answer": "C. The coordinator did not include the outputs from the previous agents in the synthesis agent's prompt.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Cơ chế cô lập ngữ cảnh (context isolation) giữa coordinator và subagent:",
+    "points": [
+      "Mỗi subagent được khởi tạo với một context window riêng, sạch (fresh context). Subagent KHÔNG tự động kế thừa lịch sử hội thoại của coordinator hay của các subagent khác – nó chỉ \"nhìn thấy\" đúng những gì được đưa vào prompt/task description lúc được invoke.",
+      "Web search agent và document analysis agent đã hoàn thành, kết quả của chúng được trả về cho coordinator (dưới dạng tool result của lệnh gọi subagent). Nếu coordinator không chủ động chép (pass) các findings này vào prompt khi gọi synthesis agent, synthesis agent sẽ nhận một task trống rỗng – đúng với triệu chứng \"no research findings were provided\".",
+      "Cách khắc phục là coordinator phải truyền tường minh (explicit context passing) toàn bộ hoặc bản cấu trúc của findings vào prompt của synthesis agent. Đây là lỗi điều phối ở tầng coordinator chứ không phải giới hạn hạ tầng."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Cấp tool để synthesis agent tự đọc lịch sử hội thoại của agent khác):",
+        "trap": "Bẫy chia sẻ trạng thái ngầm (Implicit shared state trap)",
+        "explanation": "Kiến trúc coordinator–subagent theo mô hình hub-and-spoke: mọi luồng thông tin đi qua coordinator. Thêm tool để subagent đi \"móc\" lịch sử của agent khác vừa phá vỡ sự cô lập, vừa tăng độ phức tạp, trong khi nguyên nhân gốc rễ chỉ là coordinator quên truyền dữ liệu."
+      },
+      "B": {
+        "title": "B sai (Context window của synthesis agent không đủ lớn):",
+        "trap": "Bẫy chẩn đoán sai triệu chứng (Misdiagnosis trap)",
+        "explanation": "Nếu context bị tràn, API sẽ trả lỗi vượt giới hạn (context length/prompt too long) hoặc chất lượng suy giảm – chứ agent không trả lời rằng \"không có findings nào được cung cấp\". Triệu chứng cho thấy dữ liệu chưa hề được đưa vào, không phải quá nhiều."
+      },
+      "D": {
+        "title": "D sai (Dùng chung một API connection để tự động chia sẻ context):",
+        "trap": "Bẫy hiểu sai bản chất stateless của API (Stateless API misconception trap)",
+        "explanation": "Messages API là stateless: mỗi request độc lập, context chỉ bao gồm những gì nằm trong mảng messages/system của request đó. Không có cơ chế \"API connection\" nào tự chia sẻ context giữa các lần invoke."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Agent SDK – Subagents & Anthropic Engineering: \"How we built our multi-agent research system\":",
+    "points": [
+      "Subagent chạy trong context window riêng biệt; thông tin chỉ đến được subagent thông qua prompt/task mà orchestrator truyền vào.",
+      "Messages API là stateless – mọi ngữ cảnh cần thiết phải được gửi lại tường minh trong từng request.",
+      "Coordinator chịu trách nhiệm truyền đầy đủ kết quả của các bước trước cho bước sau (explicit handoff)."
+    ]
+  }
+}

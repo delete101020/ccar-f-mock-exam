@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_002",
+  "domain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ)",
+  "topic": "Câu P3.2: Preserving Critical Facts While Compacting a Long Conversation",
+  "question": "After a 40-minute session helping plan a dinner party, the conversation has grown to 78,000 tokens. The history includes: (1) the user mentioning a guest has a severe shellfish allergy, (2) measurements for scaling recipes to 8 servings, (3) the user's clarification that \"room temperature butter\" means 68°F in their kitchen, and (4) general back-and-forth about meal timing and presentation. You need to implement context management before the window limit is reached.\nWhat approach best balances information preservation with token reduction?",
+  "options": {
+    "A": "Summarize the entire conversation history into a concise summary capturing main topics discussed, then append new messages going forward.",
+    "B": "Implement a sliding window retaining only the most recent 20,000 tokens relying on users to re-state important information when relevant.",
+    "C": "Store the full conversation externally and use semantic search to retrieve relevant portions for each turn, loading only matching segments into context.",
+    "D": "Extract critical structured data (allergies, serving counts, user-defined terms) into a compact reference section, summarize general discussion, and retain recent exchanges verbatim."
+  },
+  "correct_answer": "D. Extract critical structured data (allergies, serving counts, user-defined terms) into a compact reference section, summarize general discussion, and retain recent exchanges verbatim.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Phân loại thông tin trong lịch sử hội thoại 78.000 tokens:",
+    "points": [
+      "Thông tin có độ quan trọng cao, cần chính xác tuyệt đối: dị ứng hải sản nghiêm trọng (an toàn sức khỏe), số khẩu phần (8 servings) và định nghĩa do người dùng đặt ra ('room temperature butter' = 68°F). Đây là dữ liệu mà summarization thông thường rất dễ làm mờ hoặc làm mất.",
+      "Thông tin có giá trị thấp, có thể nén: các trao đổi qua lại chung chung về meal timing và presentation.",
+      "Chiến lược phân tầng (tiered context management): (1) trích xuất các facts quan trọng vào một 'reference section' có cấu trúc, ổn định, luôn nằm trong context; (2) tóm tắt phần thảo luận chung; (3) giữ nguyên văn (verbatim) các lượt trao đổi gần nhất để duy trì mạch hội thoại. Cách này vừa giảm token mạnh vừa đảm bảo không mất thông tin quan trọng."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Tóm tắt toàn bộ hội thoại thành summary các chủ đề chính):",
+        "trap": "Bẫy mất chi tiết khi tóm tắt (Lossy summarization trap)",
+        "explanation": "Summary 'capturing main topics' có xu hướng giữ chủ đề nhưng đánh rơi các chi tiết cụ thể như con số (8 servings), định nghĩa riêng (68°F) hoặc ràng buộc an toàn (shellfish allergy). Mất thông tin dị ứng có thể gây hậu quả nghiêm trọng."
+      },
+      "B": {
+        "title": "B sai (Sliding window chỉ giữ 20.000 tokens gần nhất):",
+        "trap": "Bẫy cắt cụt ngữ cảnh (Context truncation trap)",
+        "explanation": "Các facts quan trọng thường được nêu ở đầu phiên và sẽ bị đẩy ra khỏi cửa sổ. Dựa vào việc người dùng tự nhắc lại là chuyển gánh nặng sang người dùng và rất dễ dẫn đến gợi ý món chứa hải sản cho khách bị dị ứng."
+      },
+      "C": {
+        "title": "C sai (Lưu toàn bộ ra ngoài và dùng semantic search mỗi lượt):",
+        "trap": "Bẫy over-engineering truy xuất (Retrieval dependence trap)",
+        "explanation": "Semantic search chỉ nạp các đoạn 'khớp' với lượt hiện tại; ràng buộc dị ứng có thể không được truy xuất khi người dùng hỏi về một công thức mới không nhắc tới hải sản. Các ràng buộc luôn-áp-dụng (always-on constraints) phải luôn có trong context, không nên phụ thuộc vào độ tương đồng ngữ nghĩa. Ngoài ra đây là giải pháp phức tạp không tương xứng với một phiên hội thoại."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Context Engineering & Long Context Management:",
+    "points": [
+      "Anthropic Engineering ('Effective context engineering for AI agents'): compaction cần ưu tiên giữ lại các quyết định, ràng buộc và chi tiết quan trọng, loại bỏ nội dung dư thừa; ghi chú có cấu trúc (structured note-taking) giúp duy trì thông tin then chốt qua nhiều lượt.",
+      "Nguyên tắc: các facts mang tính giao dịch/ràng buộc (số liệu, định nghĩa, yêu cầu an toàn) nên được tách ra thành một khối có cấu trúc thay vì để lẫn trong summary dạng văn xuôi, đồng thời giữ nguyên văn các lượt gần nhất."
+    ]
+  }
+}

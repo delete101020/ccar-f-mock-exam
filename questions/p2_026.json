@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_026",
+  "domain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
+  "topic": "Câu P2.26: Preserving Precise Numerical Facts with a Structured Fact Store",
+  "question": "Your research assistant helps users analyze academic papers over extended conversations. User testing reveals a recurring issue: after conversations exceed 60K tokens, users ask follow-up questions requiring precise numerical details from papers discussed earlier—sample sizes, exact p-values, specific inclusion criteria. Your current approach summarizes paper discussions after 8 turns to stay within context limits. Users report that responses to these precision-dependent questions are often hedged or inaccurate.\nWhat's the most effective architectural change?",
+  "options": {
+    "A": "Implement retrieval that re-injects relevant paper sections when the user's question suggests they need specific numerical details.",
+    "B": "Maintain a structured database of key facts extracted from each paper (sample sizes, statistics, methods) and retrieve relevant entries into context when precision-dependent questions are detected.",
+    "C": "Keep source text from methodology and results sections in context permanently, while summarizing only the conversational discussion and interpretation portions.",
+    "D": "Use a separate Claude call with explicit instructions to generate higher-fidelity summaries that preserve all numerical details and statistical values."
+  },
+  "correct_answer": "B. Maintain a structured database of key facts extracted from each paper (sample sizes, statistics, methods) and retrieve relevant entries into context when precision-dependent questions are detected.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Nguyên nhân gốc rễ và mẫu thiết kế bộ nhớ phù hợp:",
+    "points": [
+      "Root cause: Progressive summarization là nén có mất mát (lossy). Các chi tiết chính xác như sample size, p-value, inclusion criteria là thứ đầu tiên bị làm tròn hoặc lược bỏ khi tóm tắt, nên khi user hỏi lại, Claude chỉ còn bản tóm tắt mơ hồ và phải trả lời rào đón (hedged) hoặc đoán sai.",
+      "Tách biệt fact và narrative: Mẫu thiết kế được khuyến nghị là trích xuất các dữ kiện quan trọng thành một kho có cấu trúc (structured fact store — tương tự một \"case facts\" block) nằm NGOÀI luồng tóm tắt. Phần thảo luận có thể tiếp tục được tóm tắt, còn các con số được lưu nguyên vẹn, có gắn paper/nguồn.",
+      "Truy xuất có mục tiêu: Khi phát hiện câu hỏi cần độ chính xác, chỉ các entry liên quan (ví dụ: `{paper: \"Smith 2023\", n: 412, primary_p: 0.003}`) được đưa vào context — gọn nhẹ, chính xác, không làm phình context như việc giữ nguyên văn bản gốc.",
+      "Có thể mở rộng: số lượng paper tăng không làm context tăng tuyến tính, vì fact store nằm ở bộ nhớ ngoài (external memory)."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Retrieval re-inject các đoạn văn bản của paper):",
+        "trap": "Bẫy RAG thô trên văn bản dài (Raw chunk retrieval trap)",
+        "explanation": "Đưa lại nguyên đoạn văn bản tốn nhiều token hơn và phụ thuộc vào chất lượng tìm kiếm ngữ nghĩa — một câu hỏi như \"cỡ mẫu của nghiên cứu thứ hai là bao nhiêu?\" khó khớp với đúng chunk. Các con số lại rải rác ở nhiều đoạn (methods, results, tables), nên kết quả kém tin cậy hơn so với một kho fact đã được chuẩn hóa sẵn."
+      },
+      "C": {
+        "title": "C sai (Giữ vĩnh viễn methodology và results trong context):",
+        "trap": "Bẫy phình context không giới hạn (Unbounded context growth trap)",
+        "explanation": "Mỗi paper thêm hàng nghìn token methodology/results giữ vĩnh viễn; với nhiều paper trong hội thoại >60K tokens, context sẽ chạm giới hạn — chính vấn đề mà việc summarize đang cố tránh. Văn bản dài còn gây hiện tượng chi tiết bị lẫn giữa nhiều nguồn (lost in the middle)."
+      },
+      "D": {
+        "title": "D sai (Gọi Claude riêng để tóm tắt với độ trung thực cao hơn):",
+        "trap": "Bẫy tóm tắt tốt hơn vẫn là tóm tắt (Better-summary fallacy trap)",
+        "explanation": "Mọi bản tóm tắt vẫn là nén có mất mát; yêu cầu \"giữ lại tất cả con số\" mâu thuẫn với mục tiêu rút gọn, và qua nhiều vòng tóm tắt lồng nhau, các chi tiết vẫn tiếp tục bị bào mòn. Nó chỉ làm chậm triệu chứng, không thay đổi kiến trúc."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – Effective context engineering for AI agents & Long-context guidance:",
+    "points": [
+      "Context là tài nguyên hữu hạn; các kỹ thuật như compaction (tóm tắt) cần đi kèm structured note-taking / external memory để giữ lại thông tin quan trọng không được phép mất.",
+      "Thông tin dạng dữ kiện giao dịch/định lượng (số liệu, ngày tháng, mã định danh) nên được lưu ở dạng có cấu trúc, tách khỏi lịch sử được tóm tắt, và đưa lại vào context khi cần."
+    ]
+  }
+}

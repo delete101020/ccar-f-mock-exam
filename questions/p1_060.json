@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_060",
+  "domain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
+  "topic": "Câu P1.60: Handling Returning Customers with a Fresh Session plus Injected Structured Summary",
+  "question": "A customer returns 4 hours after their initial session about the same billing dispute. The previous 32-turn session contains context: lookup_status_result messages containing \"Status: Pending Refund\" and significant tokens from prior lookup results. The agent needs to be prepared to answer the customer fully.\nWhat approach most reliably handles returning customers?",
+  "options": {
+    "A": "Resume with state and configure the agent to automatically re-call all previous tool_results messages to ensure data freshness.",
+    "B": "Create a new session with a structured summary of the previous interaction (issue type, resolution steps, current status), then make fresh tool calls as needed.",
+    "C": "Start a new session, inject a structured summary of the previous interaction (issue type, resolution steps, current status), then make fresh tool calls as needed.",
+    "D": "Resume with the full conversation and add a system prompt instruction that instructs the agent to prioritize resolving the pending refund."
+  },
+  "correct_answer": "C. Start a new session, inject a structured summary of the previous interaction (issue type, resolution steps, current status), then make fresh tool calls as needed.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Vấn đề khi resume một phiên 32 lượt sau 4 giờ:",
+    "points": [
+      "Các tool result cũ (ví dụ \"Status: Pending Refund\") đã có thể lỗi thời – trạng thái hoàn tiền có thể đã thay đổi trong 4 giờ. Resume nguyên phiên khiến model có xu hướng tin vào dữ liệu cũ (stale data) và trả lời sai.",
+      "Phiên cũ còn chứa rất nhiều token từ các lookup trước, gây tốn chi phí và làm loãng context.",
+      "Cách đáng tin cậy nhất: bắt đầu phiên mới, inject một structured summary (issue type, resolution steps, current status) để giữ liên tục ngữ cảnh, rồi gọi tool mới khi cần để lấy dữ liệu hiện tại. Model biết khách là ai và vấn đề gì, nhưng dựa vào dữ liệu tươi để trả lời."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Resume và tự động gọi lại mọi tool result trước đó):",
+        "trap": "Bẫy làm mới toàn bộ lãng phí (Blanket re-fetch trap)",
+        "explanation": "Gọi lại tất cả tool call cũ tốn chi phí và độ trễ cho cả những dữ liệu không cần, trong khi context vẫn mang theo toàn bộ tool result cũ gây nhiễu và mâu thuẫn với dữ liệu mới."
+      },
+      "B": {
+        "title": "B sai (Create a new session with a structured summary... – gần như trùng với C):",
+        "trap": "Bẫy phương án gần trùng (Near-duplicate option trap)",
+        "explanation": "Về mặt kỹ thuật B mô tả cùng hướng tiếp cận với C. Tuy nhiên C diễn đạt chính xác mẫu thiết kế được khuyến nghị – khởi tạo phiên mới và inject (tiêm) bản tóm tắt có cấu trúc vào context – nên C là đáp án chuẩn. Khi hai phương án gần trùng nhau, hãy chọn phương án dùng đúng thuật ngữ của mẫu thiết kế (\"start a new session\" + \"inject\")."
+      },
+      "D": {
+        "title": "D sai (Resume toàn bộ hội thoại và thêm chỉ dẫn ưu tiên refund):",
+        "trap": "Bẫy tin dữ liệu cũ (Stale context trap)",
+        "explanation": "Phiên cũ vẫn chứa \"Status: Pending Refund\" có thể đã lỗi thời; chỉ dẫn ưu tiên refund không khiến model kiểm tra lại dữ liệu mới, và context vẫn nặng nề."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Agent SDK / Claude Code – Sessions (resume vs fresh session) & Context engineering guidance:",
+    "points": [
+      "Khi context cũ chứa tool result có thể đã lỗi thời, bắt đầu phiên mới với bản tóm tắt có cấu trúc thường đáng tin cậy hơn resume.",
+      "Luôn lấy dữ liệu mới bằng tool call cho các trạng thái có thể thay đổi theo thời gian."
+    ]
+  }
+}

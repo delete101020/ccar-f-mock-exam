@@ -1,0 +1,56 @@
+{
+  "id": "ccar_f_p2_029",
+  "domain": "Claude Code Context Provisioning (Cung cấp ngữ cảnh trong Claude Code & @file references)",
+  "topic": "Câu P2.29: Using @References to Supply Concrete Pattern Examples for a One-Off Task",
+  "question": "You're implementing a new payment processing module that must follow your project's established patterns for database transactions, error handling, and audit logging. You've identified three existing modules that exemplify these patterns: db_utils.py, error_handlers.py, and audit_logger.py. This is a one-off integration task—these patterns are well-documented in your team wiki and don't need additional project-level documentation.\nWhat's the most effective approach?",
+  "options": {
+    "A": "Describe the patterns from the three modules in natural language in your prompt, explaining the transaction handling approach, error format, and logging conventions Claude should follow.",
+    "B": "Use @references to include the three modules directly in your prompt, giving Claude concrete code examples of the patterns to follow.",
+    "C": "Ask Claude to explore your codebase to find and understand the transaction, error handling, and logging patterns before generating the new module.",
+    "D": "Add documentation of each pattern to your CLAUDE.md file, establishing them as project conventions that Claude will apply automatically."
+  },
+  "correct_answer": "B. Use @references to include the three modules directly in your prompt, giving Claude concrete code examples of the patterns to follow.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Các dữ kiện quyết định lựa chọn:",
+    "key_facts": [
+      "Đã xác định chính xác 3 file mẫu: db_utils.py, error_handlers.py, audit_logger.py.",
+      "Đây là tác vụ một lần (one-off) — không cần quy ước lâu dài cấp dự án.",
+      "Mục tiêu: code mới phải theo đúng pattern hiện có."
+    ],
+    "explanation": "Cú pháp `@path/to/file` trong prompt của Claude Code đưa nội dung file trực tiếp vào context của lượt hiện tại. Đây là cách nhanh, chính xác và có phạm vi đúng bằng tác vụ để cung cấp ví dụ code thật.",
+    "points": [
+      "Code thật là ví dụ cụ thể nhất (concrete examples): Claude thấy chính xác cách mở/commit/rollback transaction, cấu trúc error object, format log — không mất mát như khi mô tả bằng lời.",
+      "Không lãng phí công khám phá: bạn đã biết file nào là mẫu, nên không cần Claude tìm kiếm lại.",
+      "Phạm vi phù hợp: thông tin chỉ nằm trong phiên làm việc này, không làm phình CLAUDE.md vốn được nạp vào mọi phiên."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Mô tả pattern bằng ngôn ngữ tự nhiên):",
+        "trap": "Bẫy diễn giải mất mát (Lossy paraphrase trap)",
+        "explanation": "Mô tả bằng lời tốn công và dễ bỏ sót chi tiết (tên hàm helper, thứ tự tham số, format log chính xác). Khi đã có sẵn code mẫu, đưa thẳng code luôn chính xác hơn bản diễn giải."
+      },
+      "C": {
+        "title": "C sai (Để Claude tự khám phá codebase tìm pattern):",
+        "trap": "Bẫy khám phá thừa (Redundant exploration trap)",
+        "explanation": "Khám phá phù hợp khi chưa biết thông tin nằm ở đâu. Ở đây bạn đã xác định đúng 3 file; để Claude tự tìm tốn thêm token/thời gian và có rủi ro Claude chọn nhầm một module cũ không theo chuẩn làm hình mẫu."
+      },
+      "D": {
+        "title": "D sai (Thêm tài liệu pattern vào CLAUDE.md):",
+        "trap": "Bẫy sai phạm vi bộ nhớ (Wrong memory scope trap)",
+        "explanation": "Đề bài nói rõ đây là tác vụ một lần và pattern \"don't need additional project-level documentation\". CLAUDE.md được nạp vào mọi phiên, nên thêm nội dung không cần thiết làm tốn context lâu dài và trùng lặp với team wiki."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Common workflows (Reference files with @) & Memory management:",
+    "points": [
+      "Dùng `@` để tham chiếu file hoặc thư mục ngay trong prompt, giúp đưa nội dung vào context mà không cần chờ Claude đọc file.",
+      "CLAUDE.md dành cho các chỉ dẫn và quy ước bền vững, được nạp tự động mỗi phiên; nội dung chỉ phục vụ một tác vụ nên đưa trực tiếp vào prompt."
+    ]
+  }
+}

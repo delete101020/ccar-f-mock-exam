@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_015",
+  "domain": "Prompt Management & Conversation Consistency (Quản lý phiên bản System Prompt & Tính nhất quán hội thoại)",
+  "topic": "Câu P3.15: Versioning System Prompts per Conversation to Preserve Long-Running Session Consistency",
+  "question": "After deploying an updated system prompt that improves response quality, users with multi-session conversations spanning several weeks report that the assistant now contradicts its earlier statements and has a noticeably different communication style. New users don't experience these issues.\nWhat's the best approach to resolve this?",
+  "options": {
+    "A": "Regenerate summaries of existing conversations using the new prompt and replace the stored histories to align past context with current behavior.",
+    "B": "Add a transition message when sessions resume explaining that the assistant has been updated and behavior may differ.",
+    "C": "Version system prompts and associate each conversation with the prompt version under which it started, applying updates only to new conversations.",
+    "D": "Add instructions to the new system prompt directing the assistant to maintain consistency with any prior statements in the conversation history."
+  },
+  "correct_answer": "C. Version system prompts and associate each conversation with the prompt version under which it started, applying updates only to new conversations.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Phân tích triệu chứng:",
+    "points": [
+      "Chỉ người dùng có hội thoại nhiều phiên kéo dài nhiều tuần bị ảnh hưởng; người dùng mới không gặp vấn đề. Điều đó cho thấy nguyên nhân là sự lệch pha giữa lịch sử hội thoại (được tạo dưới system prompt cũ) và system prompt mới đang được áp dụng.",
+      "Version system prompt và gắn mỗi conversation với version mà nó bắt đầu là giải pháp cấu trúc, tất định: các hội thoại đang diễn ra tiếp tục dưới cùng prompt nên giữ nguyên phong cách và không mâu thuẫn với phát ngôn trước; các hội thoại mới nhận prompt cải tiến.",
+      "Đây là thực hành chuẩn khi vận hành LLM ở production: coi prompt như code — có version, có thể rollout dần, đánh giá và rollback, tránh thay đổi hành vi giữa chừng một trải nghiệm đang diễn ra."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Tạo lại summary và thay thế lịch sử đã lưu):",
+        "trap": "Bẫy viết lại lịch sử (History rewriting trap)",
+        "explanation": "Thay thế lịch sử bằng summary sinh lại sẽ làm mất chi tiết và có thể làm thay đổi những gì người dùng nhớ đã được nói, tạo ra mâu thuẫn mới. Đây là thao tác tốn kém, rủi ro và phá hủy dữ liệu gốc."
+      },
+      "B": {
+        "title": "B sai (Thêm thông báo chuyển tiếp rằng assistant đã được cập nhật):",
+        "trap": "Bẫy thừa nhận thay vì khắc phục (Disclosure without fix trap)",
+        "explanation": "Thông báo chỉ giải thích triệu chứng, không giải quyết việc assistant mâu thuẫn với phát ngôn trước và đổi phong cách. Trải nghiệm vẫn bị gián đoạn."
+      },
+      "D": {
+        "title": "D sai (Thêm chỉ dẫn duy trì nhất quán với lịch sử vào prompt mới):",
+        "trap": "Bẫy chỉ dẫn mâu thuẫn mang tính xác suất (Conflicting instructions trap)",
+        "explanation": "Prompt mới vẫn định hướng phong cách khác; yêu cầu 'nhất quán với lịch sử' tạo xung đột giữa hai bộ chỉ dẫn và chỉ có tác dụng xác suất. Nó cũng có thể làm giảm cải tiến chất lượng cho chính các hội thoại đó."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Prompt Engineering & Building with Claude (production best practices):",
+    "points": [
+      "System prompt định hình vai trò, phong cách và hành vi của Claude trong toàn bộ hội thoại; thay đổi system prompt giữa chừng sẽ làm thay đổi hành vi so với lịch sử đã có.",
+      "Thực hành vận hành: quản lý prompt có version, đánh giá bằng test suite trước khi rollout, và áp dụng thay đổi theo cách kiểm soát được (ví dụ chỉ cho hội thoại mới)."
+    ]
+  }
+}

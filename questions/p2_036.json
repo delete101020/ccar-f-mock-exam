@@ -1,0 +1,56 @@
+{
+  "id": "ccar_f_p2_036",
+  "domain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Review code dạng agentic)",
+  "topic": "Câu P2.36: Turn-Limited Agentic Code Review for Cross-File Bugs",
+  "question": "Your pipeline reviews every PR using a single API call with a static prompt containing the diff and full text of each changed file — unchanged files are not included. Reviews are posted asynchronously and don't block PR creation. Developers report that reviews consistently miss bugs involving cross-file interactions — for example, a PR renames a function's parameters but the review doesn't flag callers in unchanged files that still use the old argument order. Evaluation shows cross-file bugs account for 35% of production incidents from reviewed PRs.\nWhat is the most effective change to your review design?",
+  "options": {
+    "A": "Redesign the review as a turn-limited agentic task where the model can read files and search the codebase via tools, following references to verify cross-file findings.",
+    "B": "Add chain-of-thought instructions asking the model to list all external references in the diff, then reason step-by-step about how each change might affect callers in other files.",
+    "C": "Run parallel review passes per changed file with direct dependents included in each pass, then aggregate and deduplicate findings using a final summarization call.",
+    "D": "Use static analysis to build a dependency graph of changed code, then expand the prompt to include all files within two dependency hops of any changed file."
+  },
+  "correct_answer": "A. Redesign the review as a turn-limited agentic task where the model can read files and search the codebase via tools, following references to verify cross-file findings.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Các dữ kiện then chốt:",
+    "key_facts": [
+      "Root cause: prompt tĩnh chỉ chứa diff và file thay đổi — caller nằm ở file không thay đổi hoàn toàn vắng mặt trong context. Model không thể flag thứ nó không nhìn thấy.",
+      "Review chạy bất đồng bộ, không chặn PR → có thể chấp nhận latency và vài lượt tool call.",
+      "Lỗi cross-file chiếm 35% incident → giá trị cải thiện rất lớn."
+    ],
+    "explanation": "Không thể biết trước file nào cần xem — điều đó phụ thuộc vào nội dung từng PR (đổi tên tham số → cần tìm mọi caller; đổi kiểu trả về → cần tìm mọi nơi dùng giá trị). Đây đúng là tình huống Anthropic mô tả cho agent: số bước không đoán trước được, model cần tự quyết định dựa trên phản hồi từ môi trường.",
+    "points": [
+      "Với tools như `read_file` và `search_codebase` (grep), model có thể tìm mọi call site của hàm bị đổi tham số và kiểm chứng trực tiếp từng caller.",
+      "Turn limit (ví dụ tối đa N lượt) giới hạn chi phí và thời gian, tránh agent khám phá vô hạn.",
+      "Chỉ đọc đúng những file liên quan, thay vì nhồi trước một lượng lớn context có thể không cần thiết."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Chain-of-thought liệt kê tham chiếu và suy luận về caller):",
+        "trap": "Bẫy suy luận trên dữ liệu không có (Reasoning without data trap)",
+        "explanation": "CoT giúp model suy nghĩ kỹ hơn về những gì có trong context, nhưng caller ở file không thay đổi vẫn không có trong prompt. Model chỉ có thể suy đoán \"có thể có caller bị ảnh hưởng\" mà không xác định được cụ thể caller nào sai — dễ sinh cảnh báo chung chung hoặc hallucination."
+      },
+      "C": {
+        "title": "C sai (Review song song từng file kèm direct dependents, rồi tổng hợp):",
+        "trap": "Bẫy phân mảnh context (Fragmented parallel review trap)",
+        "explanation": "Phân tách theo file làm mất các tương tác giữa nhiều file thay đổi trong cùng PR, cần thêm bước xác định dependents và một lượt tổng hợp — phức tạp hơn nhiều. Ngoài ra, chỉ bao gồm direct dependents cố định trước vẫn không cho phép model đi theo tham chiếu khi cần."
+      },
+      "D": {
+        "title": "D sai (Dependency graph và nhồi mọi file trong 2 hop):",
+        "trap": "Bẫy nhồi context tĩnh (Static context stuffing trap)",
+        "explanation": "Với file dùng chung (utility, model), 2 hop có thể kéo theo hàng trăm file, gây tràn context, tăng chi phí và làm loãng sự chú ý của model. Ngưỡng 2 hop cũng tùy ý — có lúc thừa, có lúc thiếu (ví dụ dynamic dispatch, reflection mà static analysis không bắt được)."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Research \"Building Effective Agents\" & Effective context engineering for AI agents:",
+    "points": [
+      "Agent phù hợp cho các bài toán mở, khi không thể dự đoán trước số bước hoặc đường đi; nên đặt điều kiện dừng (ví dụ số lượt tối đa) để kiểm soát chi phí.",
+      "Chiến lược \"just-in-time\" context: cho agent công cụ để tự truy xuất thông tin khi cần (như Claude Code dùng grep/đọc file), thay vì nạp trước toàn bộ dữ liệu có thể liên quan."
+    ]
+  }
+}

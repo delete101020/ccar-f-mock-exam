@@ -1,0 +1,56 @@
+{
+  "id": "ccar_f_p2_027",
+  "domain": "Claude Code Exploration Strategies & Plan Mode (Chiến lược duyệt mã nguồn & Chế độ lập kế hoạch)",
+  "topic": "Câu P2.27: Using Plan Mode for a 45-File Breaking-Change Library Migration",
+  "question": "A security audit requires updating your authentication library from v2 to v3. The migration guide documents breaking changes: authenticate() now returns a Promise instead of accepting a callback, the User type has restructured fields, and three deprecated methods were removed. Grep shows the library is imported in 45 files across several modules.\nWhat's the most effective approach?",
+  "options": {
+    "A": "Paste the migration guide's breaking changes into your prompt and use direct execution to update all usages across the 45 files.",
+    "B": "Enter plan mode to explore library usage across modules, map affected code paths, then create a migration strategy before implementing.",
+    "C": "Update the dependency version, run the test suite, and use Claude Code to fix each failure as it appears.",
+    "D": "Create a custom slash command encapsulating the migration transformations, then execute it against each file without prior codebase exploration."
+  },
+  "correct_answer": "B. Enter plan mode to explore library usage across modules, map affected code paths, then create a migration strategy before implementing.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Bài toán có các dấu hiệu điển hình của một thay đổi cần lập kế hoạch:",
+    "key_facts": [
+      "Phạm vi lớn: 45 files trải trên nhiều module.",
+      "Nhiều loại breaking change khác nhau: callback → Promise (thay đổi luồng điều khiển, cần async/await lan truyền lên các caller), User type tái cấu trúc, 3 method bị xóa.",
+      "Yêu cầu từ security audit — sai sót trong code xác thực có hậu quả nghiêm trọng."
+    ],
+    "explanation": "Plan mode trong Claude Code cho phép Claude khám phá codebase ở chế độ chỉ đọc (read-only), không sửa file, rồi đề xuất kế hoạch để developer duyệt trước khi thực thi. Với thay đổi đa file, có kiến trúc phức tạp, đây là quy trình Anthropic khuyến nghị: Explore → Plan → Implement.",
+    "points": [
+      "Khám phá: xác định cách từng module dùng authenticate(), những chỗ truy cập field của User, chỗ gọi 3 method bị xóa — mỗi kiểu dùng cần cách chuyển đổi khác nhau.",
+      "Lập bản đồ code path: chuyển callback sang Promise thường kéo theo việc các hàm gọi phải trở thành async — ảnh hưởng vượt ra ngoài 45 file import trực tiếp.",
+      "Chiến lược: thứ tự migrate (shared utilities trước, consumers sau), điểm kiểm thử, và cách thay thế các method bị xóa — được duyệt trước khi sửa bất kỳ dòng code nào."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Dán migration guide và thực thi trực tiếp trên 45 file):",
+        "trap": "Bẫy thực thi khi chưa hiểu bối cảnh (Direct execution without exploration trap)",
+        "explanation": "Migration guide chỉ mô tả API thay đổi, không cho biết codebase của bạn dùng chúng như thế nào. Thực thi trực tiếp trên 45 file dễ dẫn tới chuyển đổi máy móc, bỏ sót các caller gián tiếp và tạo ra thay đổi không nhất quán giữa các module."
+      },
+      "C": {
+        "title": "C sai (Nâng version, chạy test, sửa từng lỗi khi xuất hiện):",
+        "trap": "Bẫy lệ thuộc vào test coverage (Test-driven whack-a-mole trap)",
+        "explanation": "Cách này chỉ phát hiện được những gì test bao phủ; các code path không có test (rất phổ biến ở luồng lỗi xác thực) sẽ lỗi ở production. Sửa phản ứng từng lỗi một còn tạo ra các bản vá cục bộ, thiếu chiến lược tổng thể cho thay đổi callback → Promise."
+      },
+      "D": {
+        "title": "D sai (Slash command đóng gói phép biến đổi, chạy trên từng file không khám phá trước):",
+        "trap": "Bẫy tự động hóa mù (Blind automation trap)",
+        "explanation": "Slash command phù hợp cho quy trình lặp lại đã được hiểu rõ. Ở đây chưa biết các kiểu sử dụng thực tế, nên đóng gói một phép biến đổi cố định là đoán trước; phần \"without prior codebase exploration\" chính là điểm loại phương án này."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Common workflows (Plan Mode) & Claude Code Best Practices:",
+    "points": [
+      "Plan Mode cho phép Claude phân tích codebase bằng các thao tác chỉ đọc và trình bày kế hoạch trước khi thay đổi; phù hợp cho các thay đổi đa bước, đa file hoặc khi cần khám phá codebase trước.",
+      "Best practice \"Explore, plan, code, commit\": yêu cầu Claude đọc và lập kế hoạch trước khi viết code giúp cải thiện đáng kể kết quả với các vấn đề đòi hỏi suy nghĩ sâu."
+    ]
+  }
+}

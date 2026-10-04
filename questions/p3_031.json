@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_031",
+  "domain": "Code Review & Self-Evaluation Bias (Review mã nguồn & Thiên kiến tự đánh giá)",
+  "topic": "Câu P3.31: Same-Session Self-Review Misses Bugs Caught by Independent CI Review",
+  "question": "A developer uses Claude Code to refactor a function during their development session. Before committing, they ask the same Claude session to review the code for issues. Later, a separate automated CI review catches several bugs that the same-session review missed.\nWhat best explains this discrepancy?",
+  "options": {
+    "A": "The CI environment has access to the full codebase context while the local session only sees the current file",
+    "B": "The CI review uses a more specific prompt tailored for catching bugs, while the developer's request was too general",
+    "C": "Claude retains context about its prior reasoning in the session, making it less likely to question its own decisions",
+    "D": "The extended session length caused the context window to fill with conversation history, leaving less room for thorough analysis"
+  },
+  "correct_answer": "C. Claude retains context about its prior reasoning in the session, making it less likely to question its own decisions",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Bản chất của việc tự review trong cùng một phiên:",
+    "points": [
+      "Trong cùng session, context chứa toàn bộ lập luận Claude đã dùng để viết refactor. Khi review, mô hình bị neo vào các giả định và quyết định đó (anchoring / confirmation bias) nên ít có khả năng đặt câu hỏi ngược lại chính mình.",
+      "CI review chạy trong một phiên/instance độc lập, không mang theo lịch sử lập luận, nên nhìn code với 'đôi mắt mới' và phát hiện được những lỗi mà phiên gốc bỏ qua.",
+      "Đây là lý do Anthropic khuyến nghị tách vai trò: một instance Claude viết code, một instance khác (context sạch) review - tương tự mẫu evaluator-optimizer."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (CI có toàn bộ codebase, phiên local chỉ thấy file hiện tại):",
+        "trap": "Bẫy hiểu sai khả năng của Claude Code (Tooling misconception trap)",
+        "explanation": "Claude Code trong phiên local có thể đọc, grep và điều hướng toàn bộ repository. Không có giới hạn 'chỉ thấy file hiện tại'."
+      },
+      "B": {
+        "title": "B sai (Prompt CI cụ thể hơn):",
+        "trap": "Bẫy giải thích bề mặt (Surface-level explanation trap)",
+        "explanation": "Prompt cụ thể có thể giúp, nhưng đề bài nhấn mạnh 'same-session' vs 'separate' review - khác biệt cốt lõi là ngữ cảnh lập luận được giữ lại. Ngay cả với prompt tốt, review trong cùng session vẫn chịu thiên kiến tự xác nhận."
+      },
+      "D": {
+        "title": "D sai (Context đầy do phiên dài):",
+        "trap": "Bẫy đổ lỗi cho context window (Context exhaustion red herring)",
+        "explanation": "Đề bài không cho thấy phiên dài hay context bị đầy; một lần refactor một hàm hiếm khi gây ra điều đó. Nguyên nhân hợp lý là thiên kiến từ lập luận trước, không phải thiếu dung lượng."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Best Practices (multi-Claude workflows) & Anthropic 'Building Effective Agents' (Evaluator-Optimizer):",
+    "points": [
+      "Claude Code best practices: dùng một Claude để viết code và một Claude khác (phiên riêng, context sạch) để review hoặc kiểm thử, cho kết quả tốt hơn so với để một instance làm cả hai.",
+      "Context riêng biệt giúp reviewer không bị ảnh hưởng bởi lập luận và giả định của bên tạo ra code."
+    ]
+  }
+}

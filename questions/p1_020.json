@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_020",
+  "domain": "Batch Processing & Context Window Optimization (Xử lý hàng loạt & Tối ưu hóa Context Window)",
+  "topic": "Câu P1.20: Handling context_length_exceeded Failures in Daily Batch Processing",
+  "question": "After your daily batch of 10,000 documents completes, 300 documents (3%) failed with \"context_length_exceeded\" errors. The results file identifies each failure by custom_id.\nWhat's the most cost-effective approach to process these failures?",
+  "options": {
+    "A": "Increase the max_tokens parameter for the 300 failed documents and resubmit them in a new batch",
+    "B": "Reprocess the entire batch with prompt caching enabled to reduce the cost of retrying requests with identical system prompts",
+    "C": "Resubmit only the 300 failed documents after chunking them into smaller pieces, then combine the partial extractions",
+    "D": "Resubmit the entire 10,000 document batch using a model tier with a larger context window"
+  },
+  "correct_answer": "C. Resubmit only the 300 failed documents after chunking them into smaller pieces, then combine the partial extractions",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Bản chất lỗi context_length_exceeded và tối ưu hóa chi phí trong kiến trúc Batch Processing:",
+    "points": [
+      "Nguyên nhân lỗi context_length_exceeded: Lỗi này xảy ra khi tổng số token đầu vào (input prompt + tài liệu) vượt quá giới hạn cửa sổ ngữ cảnh (context window) của mô hình. Điều này có nghĩa là tài liệu đơn lẻ quá dài để đưa vào trong một lần gọi API duy nhất.",
+      "Tận dụng định danh custom_id: Batch API của Anthropic cho phép gắn `custom_id` cho từng yêu cầu. Khi có kết quả batch, ta có thể định vị chính xác 300 tài liệu bị lỗi mà không cần chạm vào 9.700 tài liệu đã xử lý thành công.",
+      "Chiến lược chia nhỏ và tổng hợp (Chunking & Map-Reduce / Synthesis): Chỉ gửi lại 300 tài liệu lỗi sau khi cắt chúng thành các đoạn nhỏ (chunks) vừa vặn với context window, trích xuất từng phần rồi hợp nhất kết quả. Đây là phương án tiết kiệm chi phí tối đa vì chỉ tiêu tốn thêm token cho đúng 3% tài liệu bị hỏng."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Tăng tham số max_tokens cho 300 tài liệu lỗi):",
+        "trap": "Bẫy nhầm lẫn giữa Input Context và Output Limit (Input vs Output token trap)",
+        "explanation": "Tham số `max_tokens` quy định số lượng token tối đa mà mô hình ĐƯỢC PHÉP SINH RA (output tokens), hoàn toàn không làm tăng dung lượng context window cho dữ liệu đầu vào (input tokens). Lỗi 'context_length_exceeded' do input quá dài không thể giải quyết bằng cách tăng max_tokens, thậm chí tăng max_tokens còn có thể làm giảm không gian còn lại cho input trên một số kiến trúc."
+      },
+      "B": {
+        "title": "B sai (Chạy lại toàn bộ 10.000 tài liệu với Prompt Caching):",
+        "trap": "Bẫy lãng phí token quy mô lớn (Massive recomputation trap)",
+        "explanation": "Chạy lại 9.700 tài liệu đã thành công là cực kỳ lãng phí thời gian và tiền bạc, dù có dùng Prompt Caching. Hơn nữa, prompt caching không giải quyết được vấn đề vượt quá context window của 300 tài liệu bị quá tải token."
+      },
+      "D": {
+        "title": "D sai (Gửi lại toàn bộ 10.000 tài liệu sang tier model có context window lớn hơn):",
+        "trap": "Bẫy nâng cấp mô hình toàn cục không cần thiết (Global model upgrade trap)",
+        "explanation": "Chạy lại toàn bộ 10.000 tài liệu trên một model tier cao hơn (thường đắt hơn rất nhiều) chỉ để phục vụ cho 3% tài liệu ngoại lai (outliers) là sai lầm nghiêm trọng về tối ưu chi phí kiến trúc."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Message Batches API & xử lý giới hạn context:",
+    "points": [
+      "Quản lý lỗi trong Batch API: Sử dụng `custom_id` để lọc các bản ghi thất bại và chỉ retry có mục tiêu (targeted retries) đối với những item cần xử lý lại.",
+      "Khi tài liệu vượt context window, chia nhỏ (chunking), trích xuất từng phần rồi tổng hợp kết quả."
+    ]
+  }
+}

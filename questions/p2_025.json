@@ -1,0 +1,56 @@
+{
+  "id": "ccar_f_p2_025",
+  "domain": "Information Extraction & Quality Assurance / Human-in-the-Loop (Đảm bảo chất lượng trích xuất & Cơ chế người duyệt)",
+  "topic": "Câu P2.25: Stratified Sampling to Measure High-Confidence Extraction Errors",
+  "question": "The system routes documents with extraction confidence below 85% to human review. A quarterly audit reveals that 12% of high-confidence extractions (>85%) also contain errors—cases where the model finds plausible-but-incorrect values. Error sources vary: comparison tables showing competitor specs, appendices referencing different product variants, and ambiguous phrasing the model misinterprets. You need a sustainable strategy to catch these high-confidence errors and measure whether improvements reduce the error rate over time.\nWhat approach is most effective?",
+  "options": {
+    "A": "Implement heuristic rules that flag documents containing comparison tables or appendices for review regardless of confidence score.",
+    "B": "Implement stratified random sampling reviewing a fixed percentage of high-confidence extractions weekly, enabling error rate measurement and novel pattern detection.",
+    "C": "Add a verification pass that re-extracts from each high-confidence document, flagging cases where the two extraction attempts produce different results.",
+    "D": "Lower the confidence threshold from 85% to 70%, routing a larger volume of extractions to human review."
+  },
+  "correct_answer": "B. Implement stratified random sampling reviewing a fixed percentage of high-confidence extractions weekly, enabling error rate measurement and novel pattern detection.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Đề bài đặt ra hai yêu cầu đồng thời:",
+    "key_facts": [
+      "Bắt được lỗi ở nhóm high-confidence, vốn có nguồn gốc đa dạng (bảng so sánh, phụ lục, câu mơ hồ) và có thể xuất hiện dạng lỗi mới.",
+      "Đo lường được tỷ lệ lỗi theo thời gian để biết các cải tiến có hiệu quả hay không.",
+      "Giải pháp phải bền vững (sustainable) về chi phí review của con người."
+    ],
+    "explanation": "Stratified random sampling (lấy mẫu ngẫu nhiên phân tầng, ví dụ theo loại tài liệu/nguồn/độ tin cậy) với tỷ lệ cố định mỗi tuần tạo ra một mẫu không thiên lệch (unbiased) của nhóm high-confidence. Đây là cơ chế duy nhất trong các phương án cho phép ước lượng tỷ lệ lỗi một cách thống kê và so sánh qua các kỳ.",
+    "points": [
+      "Đo lường: tỷ lệ lỗi trên mẫu ngẫu nhiên là ước lượng hợp lệ cho cả quần thể, tạo baseline để kiểm chứng mỗi cải tiến prompt/schema.",
+      "Phát hiện pattern mới: vì không lọc theo quy tắc định sẵn, reviewer sẽ gặp cả những dạng lỗi chưa ai nghĩ tới, sau đó có thể bổ sung few-shot examples hoặc sửa schema.",
+      "Bền vững: tỷ lệ review cố định, kiểm soát được khối lượng công việc của con người, phân tầng đảm bảo các nhóm tài liệu hiếm vẫn được đại diện."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Heuristic flag tài liệu có bảng so sánh hoặc phụ lục):",
+        "trap": "Bẫy chỉ bắt lỗi đã biết (Known-pattern-only trap)",
+        "explanation": "Heuristic chỉ bao phủ các nguồn lỗi đã biết, bỏ sót \"ambiguous phrasing\" và mọi dạng lỗi mới. Mẫu được chọn có chủ đích (biased) nên không thể dùng để đo tỷ lệ lỗi tổng thể theo thời gian."
+      },
+      "C": {
+        "title": "C sai (Trích xuất lại lần hai và so sánh khác biệt):",
+        "trap": "Bẫy nhất quán ≠ chính xác (Self-consistency fallacy trap)",
+        "explanation": "Lỗi \"plausible-but-incorrect\" thường mang tính hệ thống: cùng một model, cùng prompt sẽ lặp lại cùng giá trị sai (ví dụ luôn lấy spec của đối thủ trong bảng so sánh), nên hai lần trích xuất khớp nhau mà vẫn sai. Phương án này còn tăng gấp đôi chi phí và không cung cấp ground truth để đo tỷ lệ lỗi."
+      },
+      "D": {
+        "title": "D sai (Hạ ngưỡng confidence từ 85% xuống 70%):",
+        "trap": "Bẫy điều chỉnh ngưỡng sai hướng (Threshold tweaking trap)",
+        "explanation": "Lỗi nằm ở nhóm >85%, nên hạ ngưỡng xuống 70% thực ra làm ÍT tài liệu bị review hơn, không chạm tới nhóm có vấn đề. Ngay cả khi hiểu là mở rộng review, đây vẫn không phải cơ chế đo lường và làm tăng chi phí con người mà không có mục tiêu."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Define success criteria & Develop test cases (Evaluation guidance):",
+    "points": [
+      "Anthropic khuyến nghị xây dựng đánh giá dựa trên dữ liệu thực tế có ground truth và đo lường liên tục để theo dõi hiệu quả của mỗi thay đổi prompt.",
+      "Confidence tự báo cáo của model không phải bảo chứng cho độ chính xác; cần cơ chế human review trên mẫu đại diện để hiệu chỉnh (calibrate) và phát hiện lỗi hệ thống."
+    ]
+  }
+}

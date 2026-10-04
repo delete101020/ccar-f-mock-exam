@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_057",
+  "domain": "Tool Design & Human-in-the-Loop (Thiết kế Tool & Cơ chế người duyệt)",
+  "topic": "Câu P2.57: Deterministic requires_review Flag with Tested Thresholds and Reasons",
+  "question": "Your document extraction tool uses ML models to extract invoice fields (vendor, amount, date). The models return confidence scores (0.0-1.0) for each extracted field. In production, you observe: (1) the agent proceeds with low-confidence extractions that are incorrect 23% of the time, and (2) the agent requests unnecessary human review for 31% of extractions that were actually correct.\nHow should you restructure the tool's output?",
+  "options": {
+    "A": "Return fields with their raw confidence scores and add detailed few-shot examples to your system prompt demonstrating how to interpret different confidence ranges and when to request human review.",
+    "B": "Compute an aggregate extraction quality score across all fields and return it alongside the extracted values. Include a text summary describing the overall extraction reliability.",
+    "C": "Return fields with confidence scores, plus a requires_review boolean computed using your tested confidence thresholds, along with a review_reasons array explaining which fields triggered review.",
+    "D": "Return fields organized into verified and needs_verification objects based on confidence thresholds."
+  },
+  "correct_answer": "C. Return fields with confidence scores, plus a requires_review boolean computed using your tested confidence thresholds, along with a review_reasons array explaining which fields triggered review.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Bài toán có hai lỗi đối xứng cần giải quyết:",
+    "points": [
+      "Agent vừa tiến hành với extraction độ tin cậy thấp (sai 23%), vừa yêu cầu review không cần thiết (31% các extraction đúng). Nguyên nhân gốc rễ là agent phải tự diễn giải confidence score thô — một quyết định ngưỡng mà LLM làm không nhất quán.",
+      "Tính requires_review trong code bằng các ngưỡng đã được kiểm thử (tested thresholds, có thể khác nhau theo từng field) biến quyết định review thành tất định và đã được hiệu chỉnh trên dữ liệu thực.",
+      "Mảng review_reasons chỉ rõ field nào gây ra review, giúp agent/người duyệt tập trung đúng chỗ, trong khi vẫn giữ confidence score cho mục đích audit và minh bạch."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Giữ confidence thô và thêm few-shot hướng dẫn diễn giải):",
+        "trap": "Bẫy giao quyết định ngưỡng cho LLM (LLM threshold interpretation trap)",
+        "explanation": "Few-shot chỉ cải thiện xác suất, agent vẫn diễn giải ngưỡng không nhất quán. Đã có ngưỡng được kiểm thử thì nên áp dụng trong code thay vì hy vọng mô hình bắt chước đúng."
+      },
+      "B": {
+        "title": "B sai (Điểm chất lượng tổng hợp kèm tóm tắt văn bản):",
+        "trap": "Bẫy gộp mất thông tin (Aggregation masking trap)",
+        "explanation": "Điểm tổng hợp có thể che giấu một field quan trọng (ví dụ amount) có độ tin cậy thấp dưới các field khác cao. Agent vẫn phải tự quyết dựa trên điểm số, và tóm tắt văn bản không cho biết field nào cần review."
+      },
+      "D": {
+        "title": "D sai (Chia thành verified và needs_verification):",
+        "trap": "Bẫy mất ngữ cảnh quyết định (Missing decision rationale trap)",
+        "explanation": "Phân nhóm theo ngưỡng là bước đi đúng hướng, nhưng thiếu cờ quyết định cấp extraction rõ ràng và thiếu lý do review; bỏ confidence score cũng làm mất thông tin cho audit. Nhãn \"verified\" còn gây hiểu nhầm vì chưa có ai thực sự xác minh."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – \"Writing effective tools for agents\" & guidance về human-in-the-loop:",
+    "points": [
+      "Tool nên trả về thông tin có ý nghĩa, giàu tín hiệu, giúp agent hành động trực tiếp thay vì phải diễn giải dữ liệu thô kỹ thuật.",
+      "Các quyết định có thể quy về quy tắc tất định (như ngưỡng đã hiệu chỉnh) nên được thực hiện trong code; LLM nên được dùng cho các phán đoán thực sự cần suy luận."
+    ]
+  }
+}

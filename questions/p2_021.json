@@ -1,0 +1,57 @@
+{
+  "id": "ccar_f_p2_021",
+  "domain": "Conversation Design & Context Injection (Thiết kế hội thoại & Chèn ngữ cảnh động)",
+  "topic": "Câu P2.21: Injecting Asynchronous Webhook Updates into the Next User Turn",
+  "question": "During a conversation about order tracking, your external system receives a webhook indicating the user's package has shipped. The user is actively chatting and will likely send a follow-up message soon. You want the assistant to naturally incorporate this status change in its next response.\nWhat's the most effective approach?",
+  "options": {
+    "A": "Immediately send an API request with the update as a synthetic user message, generating an unsolicited assistant response.",
+    "B": "Append the status update as a prefix to the next user message before calling the API.",
+    "C": "Configure the assistant to call a get_order_status tool at the start of every response.",
+    "D": "Add the current shipping status to the system prompt before the next API call."
+  },
+  "correct_answer": "B. Append the status update as a prefix to the next user message before calling the API.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Bài toán có các dữ kiện quan trọng:",
+    "key_facts": [
+      "Sự kiện (webhook \"package shipped\") đến bất đồng bộ, ngoài luồng hội thoại.",
+      "User đang chat và sắp gửi tin nhắn tiếp theo — không cần chủ động \"đẩy\" phản hồi.",
+      "Mục tiêu: assistant lồng ghép thông tin một cách tự nhiên (naturally) ở lượt trả lời kế tiếp."
+    ],
+    "explanation": "Messages API là stateless: ứng dụng tự quyết định nội dung gửi lên ở mỗi request. Cách tự nhiên nhất để đưa một sự kiện mới vào hội thoại là chèn nó vào đúng vị trí thời gian (temporal position) của nó — tức là ngay trong lượt user kế tiếp, ví dụ một khối được đánh dấu rõ `<system_update>Order #123 has shipped</system_update>` đặt trước nội dung câu hỏi của user.",
+    "points": [
+      "Đúng ngữ cảnh thời gian: Claude thấy cập nhật như một sự kiện \"vừa xảy ra\" ngay trước câu hỏi mới, nên sẽ tự nhiên đề cập (\"Tin vui, đơn hàng của bạn vừa được giao cho đơn vị vận chuyển...\").",
+      "Không phá vỡ cấu trúc hội thoại: không tạo lượt assistant tự phát, không làm thay đổi system prompt (giữ nguyên prefix ổn định cho prompt caching).",
+      "Chi phí bằng 0 về latency và tool call: dữ liệu đã có sẵn từ webhook, chỉ cần ghép vào request vốn sẽ được gửi."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Gửi ngay synthetic user message để sinh phản hồi tự phát):",
+        "trap": "Bẫy phản hồi không được yêu cầu (Unsolicited response trap)",
+        "explanation": "Tạo một lượt user giả và một câu trả lời assistant mà user không hỏi có thể chen ngang lúc user đang gõ, gây race condition với tin nhắn sắp tới và làm hội thoại rời rạc. Đề bài muốn cập nhật xuất hiện \"in its next response\", không phải một tin nhắn đẩy riêng."
+      },
+      "C": {
+        "title": "C sai (Gọi get_order_status ở đầu mọi phản hồi):",
+        "trap": "Bẫy polling lãng phí (Wasteful polling trap)",
+        "explanation": "Ép gọi tool ở mọi lượt tốn thêm round-trip, latency và token cho cả những lượt không liên quan. Hệ thống đã nhận được thông tin qua webhook (push), nên quay lại cơ chế pull/polling là thừa và không giải quyết gì thêm."
+      },
+      "D": {
+        "title": "D sai (Thêm trạng thái giao hàng vào system prompt):",
+        "trap": "Bẫy lạm dụng system prompt cho dữ liệu động (Dynamic state in system prompt trap)",
+        "explanation": "System prompt dành cho chỉ dẫn và bối cảnh ổn định. Nhét trạng thái thay đổi theo thời gian vào đó làm mất thông tin \"khi nào\" sự kiện xảy ra so với các lượt hội thoại, khiến Claude khó nhận ra đây là thay đổi mới cần chủ động thông báo; đồng thời mỗi lần sửa system prompt sẽ làm vô hiệu cache của toàn bộ prefix."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Messages API (multi-turn conversations) & Prompt Caching:",
+    "points": [
+      "Messages API là stateless: ứng dụng gửi toàn bộ lịch sử hội thoại ở mỗi request và có toàn quyền bổ sung nội dung vào lượt user.",
+      "Prompt engineering guidance khuyến nghị dùng XML tags để phân tách rõ dữ liệu ngữ cảnh (ví dụ cập nhật hệ thống) khỏi nội dung người dùng nhập.",
+      "Prompt caching hoạt động trên prefix (tools → system → messages); thay đổi system prompt làm mất cache cho toàn bộ phần phía sau."
+    ]
+  }
+}

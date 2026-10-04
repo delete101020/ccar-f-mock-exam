@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_056",
+  "domain": "Tool Design & Error Handling (Thiết kế Tool & Xử lý lỗi)",
+  "topic": "Câu P2.56: In-Tool Retry for Timeouts, Immediate Validation Errors for Syntax",
+  "question": "Production monitoring shows your search_catalog tool fails 12% of the time: 8% are network timeouts that succeed when immediately retried, while 4% are query syntax errors from malformed user-provided filters that never succeed regardless of retry attempts. Currently, both error types are returned to the agent identically, causing it to waste turns retrying syntax errors and telling users to \"try again later\" for timeouts.\nHow should you modify the tool's error handling?",
+  "options": {
+    "A": "Apply exponential backoff retry logic to all errors uniformly, returning a generic \"service temporarily unavailable\" message after max retries are exhausted.",
+    "B": "Return all errors with a retryable boolean flag and error type details.",
+    "C": "Implement automatic retry with backoff for network timeouts inside the tool; return syntax errors immediately with parameter validation details.",
+    "D": "Add few-shot examples to your system prompt demonstrating how to distinguish network errors from syntax errors and handle each case appropriately."
+  },
+  "correct_answer": "C. Implement automatic retry with backoff for network timeouts inside the tool; return syntax errors immediately with parameter validation details.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Bài toán đưa ra các dữ kiện quan trọng:",
+    "points": [
+      "8% lỗi là network timeout, thành công ngay khi retry: đây là lỗi transient mà code có thể xử lý tất định bằng retry kèm backoff bên trong tool, agent thậm chí không cần biết lỗi đã xảy ra.",
+      "4% lỗi là query syntax error từ filter do người dùng cung cấp: retry không bao giờ thành công. Tool cần trả về ngay với chi tiết validation tham số (ví dụ trường nào sai, cú pháp hợp lệ là gì) để agent sửa filter hoặc hỏi lại người dùng.",
+      "Kết quả: agent không còn lãng phí lượt retry lỗi syntax và không còn nói \"try again later\" với lỗi timeout, vì timeout đã được giải quyết trước khi tới agent."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Retry exponential backoff cho mọi lỗi, trả thông báo chung chung):",
+        "trap": "Bẫy retry đồng loạt và che lỗi (Uniform retry & masking trap)",
+        "explanation": "Retry syntax error là vô ích; và sau khi hết retry, thông báo \"service temporarily unavailable\" khiến agent tiếp tục bảo người dùng thử lại sau — chính là hành vi sai cho lỗi syntax."
+      },
+      "B": {
+        "title": "B sai (Trả mọi lỗi kèm cờ retryable và loại lỗi):",
+        "trap": "Bẫy đẩy việc cơ học cho agent (Delegating mechanical retries trap)",
+        "explanation": "Metadata có cấu trúc là cải tiến, nhưng agent vẫn phải tự retry timeout bằng các lượt gọi tool (tốn turn, token, độ trễ) cho một việc code có thể làm tự động. Cờ retryable cũng không cung cấp chi tiết validation để sửa filter."
+      },
+      "D": {
+        "title": "D sai (Thêm few-shot hướng dẫn phân biệt lỗi):",
+        "trap": "Bẫy dùng prompt cho vấn đề của tool (Prompt-patching tool design trap)",
+        "explanation": "Hai loại lỗi hiện được trả về giống hệt nhau, nên agent không có tín hiệu nào để phân biệt dù có few-shot. Vấn đề nằm ở thiết kế output lỗi của tool, phải sửa ở tool."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Documentation – Tool Use (tool errors, is_error) & \"Writing effective tools for agents\":",
+    "points": [
+      "Trả về lỗi cho Claude với `is_error: true` và thông báo cụ thể, có thể hành động để Claude điều chỉnh tham số hoặc cách tiếp cận.",
+      "Logic tất định như retry lỗi mạng tạm thời nên được đặt trong code của tool, giảm số lượt agent phải tiêu tốn."
+    ]
+  }
+}

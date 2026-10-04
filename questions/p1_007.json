@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_007",
+  "domain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
+  "topic": "Câu P1.7: Mitigating Inconsistent Answers in Extended Sessions via Scratchpad File",
+  "question": "During testing, you observe that in extended exploration sessions (30+ minutes), the agent starts giving inconsistent answers about code structure it discussed earlier. Engineers report having to repeat context about modules they've already explored.\nWhat's the most effective approach to address this?",
+  "options": {
+    "A": "Create summaries of all source files before exploration begins, loading only these compressed representations into context.",
+    "B": "Switch to a higher-capacity model tier to provide more context window space for accumulated exploration data.",
+    "C": "Implement automatic context clearing every 15 minutes to ensure the agent starts with fresh, uncontaminated context.",
+    "D": "Have the agent maintain a scratchpad file that records key findings, referencing it for subsequent questions."
+  },
+  "correct_answer": "D. Have the agent maintain a scratchpad file that records key findings, referencing it for subsequent questions.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Bản chất suy giảm chú ý trong phiên dài và mẫu bộ nhớ ngoài:",
+    "points": [
+      "Hiện tượng suy giảm trí nhớ trong phiên dài (Context Drift & Attention Dilution): Trong các phiên kéo dài 30+ phút, lịch sử hội thoại chứa lượng token khổng lồ từ logs, mã nguồn thô và tool calls, khiến mô hình bị phân tán chú ý và quên các cấu trúc đã thảo luận ở phần đầu phiên.",
+      "Mẫu kiến trúc Scratchpad File / External Memory: Giải pháp bền vững theo chuẩn Anthropic là duy trì một file ghi chú ngoài (scratchpad file) ghi lại các phát hiện cốt lõi. Khi gặp câu hỏi tiếp theo, agent đọc lại file này thay vì lục lọi trong lịch sử chat dài.",
+      "Hiệu quả thực tế: Giữ câu trả lời luôn nhất quán, loại bỏ việc kỹ sư phải gõ lại ngữ cảnh thủ công, đồng thời tiết kiệm đáng kể token đầu vào."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Tóm tắt trước toàn bộ file mã nguồn):",
+        "trap": "Bẫy xử lý trước không thực tế (Impractical pre-processing trap)",
+        "explanation": "Codebase thực tế có hàng trăm nghìn files. Tóm tắt toàn bộ file trước khi biết kỹ sư muốn khám phá module nào là cực kỳ tốn kém token/thời gian, và bản tóm tắt tĩnh sẽ mất đi các chi tiết kỹ thuật sâu mà quá trình debug đòi hỏi."
+      },
+      "B": {
+        "title": "B sai (Đổi sang tier model có context window lớn hơn):",
+        "trap": "Bẫy mở rộng context cơ học (Context capacity fallacy trap)",
+        "explanation": "Tăng dung lượng context không giải quyết được hiện tượng Lost in the Middle hay suy giảm chú ý khi lịch sử hội thoại quá dài và lộn xộn. Nó chỉ làm tăng chi phí token và độ trễ phản hồi mà không ngăn được câu trả lời thiếu nhất quán."
+      },
+      "C": {
+        "title": "C sai (Tự động clear context mỗi 15 phút):",
+        "trap": "Bẫy cắt đứt mạch làm việc (Arbitrary context truncation trap)",
+        "explanation": "Tự động xóa sạch context theo chu kỳ thời gian sẽ phá vỡ hoàn toàn luồng suy luận liên tục của kỹ sư, ép họ phải cung cấp lại context từ đầu sau mỗi 15 phút."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Nguyên tắc chung (nên đối chiếu thêm tài liệu chính thức của Anthropic):",
+    "points": [
+      "Ghi các phát hiện chính vào file ghi chú ngoài (scratchpad) để agent đọc lại thay vì phụ thuộc vào lịch sử chat dài.",
+      "Cách này giữ câu trả lời nhất quán trong phiên dài mà không phải xóa context hay đổi model."
+    ]
+  }
+}

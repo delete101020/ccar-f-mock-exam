@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p1_027",
+  "domain": "Information Extraction & Quality Assurance / Human-in-the-Loop (Đảm bảo chất lượng trích xuất & Cơ chế người duyệt)",
+  "topic": "Câu P1.27: Stratified Accuracy Analysis Before Automating High-Confidence Extractions",
+  "question": "Your system has been operating with 100% human review for 3 months. Analysis shows that extractions with model confidence >90% have 97% accuracy overall. To reduce reviewer workload, you plan to automate high-confidence extractions\nBefore deploying, what validation step is most critical?",
+  "options": {
+    "A": "Analyze accuracy by document type and field to verify high-confidence extractions perform consistently across all segments, not just in aggregate.",
+    "B": "Compare accuracy at different confidence thresholds (85%, 90%, 95%) to find the optimal cutoff that maximizes automation while minimizing errors.",
+    "C": "Verify that 97% accuracy meets requirements for all downstream systems that consume the extracted data.",
+    "D": "Run a two-week pilot routing 25% of high-confidence extractions directly to downstream systems and monitor error reports."
+  },
+  "correct_answer": "A. Analyze accuracy by document type and field to verify high-confidence extractions perform consistently across all segments, not just in aggregate.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Rủi ro ẩn sau con số 97% accuracy tổng thể (aggregate):",
+    "points": [
+      "Con số 97% là trung bình gộp trên mọi loại tài liệu và mọi trường. Một giá trị trung bình cao có thể che giấu các phân khúc (segments) có độ chính xác rất thấp — ví dụ hóa đơn đạt 99% nhưng hợp đồng viết tay chỉ đạt 70%, hoặc trường ngày tháng chính xác nhưng trường số tiền thường sai.",
+      "Khi tự động hóa, các lỗi tập trung ở một phân khúc sẽ đi thẳng vào downstream mà không còn người duyệt chặn lại. Đây là hiện tượng Simpson's paradox / aggregate masking điển hình trong đánh giá mô hình.",
+      "Phân tích accuracy theo từng document type và từng field (stratified analysis) là bước kiểm chứng then chốt: nó xác nhận rằng confidence > 90% thực sự đáng tin cậy ở mọi phân khúc, và cho phép giữ human review cho những phân khúc yếu.",
+      "Dữ liệu 3 tháng 100% human review đã có sẵn ground truth, nên phân tích này có thể thực hiện ngay mà không tốn thêm chi phí thu thập dữ liệu."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (So sánh các ngưỡng confidence 85/90/95%):",
+        "trap": "Bẫy tối ưu ngưỡng trên dữ liệu gộp (Aggregate threshold tuning trap)",
+        "explanation": "Tinh chỉnh ngưỡng vẫn dựa trên accuracy gộp, nên vẫn có thể bỏ sót các phân khúc có hiệu năng kém ở bất kỳ ngưỡng nào. Đây là bước tối ưu hóa hữu ích nhưng thứ yếu — phải xác nhận tính nhất quán theo phân khúc trước."
+      },
+      "C": {
+        "title": "C sai (Xác nhận 97% đáp ứng yêu cầu của mọi hệ thống downstream):",
+        "trap": "Bẫy tin vào con số trung bình (Trusting the average trap)",
+        "explanation": "Kiểm tra này ngầm giả định 97% là đúng cho mọi dữ liệu. Nếu một phân khúc cụ thể chỉ đạt 70%, việc so sánh con số 97% với yêu cầu downstream là vô nghĩa. Cần biết accuracy thực tế theo từng phân khúc trước khi so sánh với yêu cầu."
+      },
+      "D": {
+        "title": "D sai (Pilot 2 tuần đưa 25% extraction thẳng vào downstream):",
+        "trap": "Bẫy thử nghiệm trên production khi chưa phân tích offline (Premature production pilot trap)",
+        "explanation": "Pilot đẩy dữ liệu chưa được duyệt vào hệ thống thật, chấp nhận rủi ro lỗi trong khi đã có sẵn 3 tháng dữ liệu có nhãn để phân tích offline. Hơn nữa, dựa vào error reports từ downstream là tín hiệu chậm và không đầy đủ — nhiều lỗi sẽ không được phát hiện hoặc báo cáo."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Docs – Define success criteria & Develop test cases (Evaluation); nguyên tắc human-in-the-loop.",
+    "points": [
+      "Anthropic khuyến nghị xây dựng bộ đánh giá bao phủ các edge case và các loại dữ liệu khác nhau, thay vì chỉ dựa vào một chỉ số tổng hợp.",
+      "Trước khi giảm mức độ giám sát của con người, cần chứng minh hiệu năng ổn định trên từng phân khúc dữ liệu quan trọng."
+    ]
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p3_030",
+  "domain": "Agentic Architectures & Orchestration Guarantees (Kiến trúc Agent & Đảm bảo ở tầng điều phối)",
+  "topic": "Câu P3.30: Orchestration-Layer Fallback Escalation After max_turns Exhaustion",
+  "question": "Production logs show that when the agent handles complex billing disputes requiring 6+ tool calls, it sometimes exhausts its max_turns limit after gathering data and before completing resolution or escalating. The team's goal is to guarantee that every customer interaction ends with either a completed resolution or a human escalation, regardless of how the agent loop terminates.\nWhich approach achieves this guarantee?",
+  "options": {
+    "A": "Add orchestration-layer code that checks the agent's outcome after each loop termination - if the loop ended without a completed resolution or escalation, programmatically call escalate_to_human with the accumulated conversation context and tool results.",
+    "B": "Implement a pre-tool-use hook that counts tool invocations and terminates the loop with an automatic escalation once the agent reaches 80% of its remaining actions.",
+    "C": "Add system prompt instructions telling the agent to call escalate_to_human with a summary of its findings whenever it determines it cannot resolve the dispute.",
+    "D": "Split the workflow into two sequential agent invocations — a first agent gathers information via get_customer and lookup_order, then the second agent uses that data and handles process_refund or escalate_to_human, each with separate turn budgets."
+  },
+  "correct_answer": "A. Add orchestration-layer code that checks the agent's outcome after each loop termination - if the loop ended without a completed resolution or escalation, programmatically call escalate_to_human with the accumulated conversation context and tool results.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Từ khóa: 'guarantee ... regardless of how the agent loop terminates':",
+    "points": [
+      "Khi agent chạm max_turns, vòng lặp kết thúc và mô hình không còn cơ hội hành động nữa. Mọi giải pháp nằm bên trong vòng lặp (prompt, hook trong loop) đều không thể đảm bảo kết cục khi chính vòng lặp đã dừng.",
+      "Code ở tầng orchestration chạy sau mỗi lần vòng lặp kết thúc, bất kể lý do (hoàn thành, max_turns, lỗi). Nó kiểm tra kết quả một cách tất định: nếu chưa có resolution hoặc escalation, tự động gọi escalate_to_human kèm context và tool results đã thu thập.",
+      "Nhờ truyền dữ liệu đã thu thập, nhân viên tiếp nhận không phải bắt đầu lại từ đầu - đây là mẫu 'deterministic safety net' bao quanh một agent xác suất."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (PreToolUse hook đếm lượt và dừng ở 80%):",
+        "trap": "Bẫy heuristic ngưỡng mong manh (Arbitrary threshold trap)",
+        "explanation": "Ngưỡng 80% là tùy ý: có thể cắt ngang những case sắp giải quyết xong, và vẫn không bao phủ các kiểu kết thúc khác (lỗi, mô hình dừng bằng text không gọi tool). Hook chỉ chạy khi có tool call, nên không đảm bảo 'regardless of how the loop terminates'."
+      },
+      "C": {
+        "title": "C sai (Chỉ dẫn system prompt gọi escalate_to_human):",
+        "trap": "Bẫy dựa vào prompt cho yêu cầu bảo đảm (Probabilistic guarantee trap)",
+        "explanation": "Mô hình không biết mình sắp hết lượt, và chỉ dẫn prompt là xác suất. Khi max_turns bị chạm, mô hình không còn lượt nào để làm theo chỉ dẫn."
+      },
+      "D": {
+        "title": "D sai (Chia thành hai agent với ngân sách lượt riêng):",
+        "trap": "Bẫy tái cấu trúc không giải quyết gốc rễ (Restructuring without guarantee trap)",
+        "explanation": "Agent thứ hai vẫn có thể hết lượt trước khi refund/escalate, nên vẫn không có bảo đảm. Việc chia cứng còn giảm khả năng thích ứng khi agent cần thu thập thêm dữ liệu giữa chừng."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Agent SDK documentation (max_turns, result messages) & Anthropic 'Building Effective Agents':",
+    "points": [
+      "Agent SDK trả về kết quả với subtype cho biết lý do kết thúc (ví dụ error_max_turns), cho phép code ứng dụng xử lý tất định sau vòng lặp.",
+      "Building Effective Agents: dùng stopping conditions và guardrails ở tầng hệ thống, giữ con người trong vòng lặp cho các trường hợp agent không thể hoàn thành."
+    ]
+  }
+}

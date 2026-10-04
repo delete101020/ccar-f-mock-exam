@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_048",
+  "domain": "Claude Code Exploration Strategies & Context Management (Chiến lược duyệt mã nguồn & Quản lý Context)",
+  "topic": "Câu P2.48: Locating an Error Source by Grepping Distinctive Message Text",
+  "question": "An engineer sees an unfamiliar error message \"SYNC_CONFLICT: entity version mismatch detected\" in production logs but doesn't know which of the 12 services in the codebase generates it. They ask the agent to help locate the source code.\nWhat exploration approach will most efficiently find the responsible code?",
+  "options": {
+    "A": "Use Grep to search for distinctive text from the error message (like \"SYNC_CONFLICT\" or \"entity version mismatch\"), then Read the matching files to understand context.",
+    "B": "Use Glob to find files in directories commonly associated with error handling (such as errors/, exceptions/, or handlers/) across services, then Read each matching file.",
+    "C": "Use Grep to find all files that import the project's error handling module, then Read those files to locate custom error definitions.",
+    "D": "Read the project's README and service configuration files to understand the architecture, then systematically Read source files in service directory."
+  },
+  "correct_answer": "A. Use Grep to search for distinctive text from the error message (like \"SYNC_CONFLICT\" or \"entity version mismatch\"), then Read the matching files to understand context.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Bài toán đưa ra các dữ kiện quan trọng:",
+    "points": [
+      "Thông báo lỗi \"SYNC_CONFLICT: entity version mismatch detected\" chứa chuỗi rất đặc trưng (distinctive literal): mã lỗi SYNC_CONFLICT và cụm từ \"entity version mismatch\". Những chuỗi này gần như chắc chắn xuất hiện nguyên văn trong source code nơi lỗi được định nghĩa hoặc ném ra.",
+      "Grep tìm nội dung trực tiếp trên toàn bộ 12 service trong một lệnh, trả về đúng file/dòng chứa chuỗi. Sau đó chỉ cần Read các file khớp để hiểu ngữ cảnh — tiết kiệm tối đa context.",
+      "Đây là chiến lược \"search before read\": thu hẹp phạm vi bằng tìm kiếm có mục tiêu, chỉ đọc những gì liên quan, thay vì đọc rộng theo cấu trúc thư mục."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Glob các thư mục errors/, exceptions/, handlers/ rồi Read từng file):",
+        "trap": "Bẫy giả định cấu trúc thư mục (Directory convention assumption trap)",
+        "explanation": "Lỗi có thể được định nghĩa ngay trong service logic (ví dụ module đồng bộ), không nằm trong thư mục errors/. Đọc tất cả file trong các thư mục đó trên 12 service tốn nhiều context mà không đảm bảo tìm thấy."
+      },
+      "C": {
+        "title": "C sai (Grep các file import error module rồi Read để tìm định nghĩa):",
+        "trap": "Bẫy tìm kiếm gián tiếp (Indirect search trap)",
+        "explanation": "Rất nhiều file import module xử lý lỗi chung, nên kết quả sẽ rộng và phải đọc nhiều file. Hơn nữa lỗi có thể không dùng module chung. Grep trực tiếp chuỗi lỗi chính xác và rẻ hơn nhiều."
+      },
+      "D": {
+        "title": "D sai (Đọc README, config rồi Read tuần tự source từng service):",
+        "trap": "Bẫy duyệt toàn bộ (Exhaustive reading trap)",
+        "explanation": "Đọc có hệ thống toàn bộ source của 12 service là cách chậm và tốn context nhất, dễ làm cạn context window trước khi tìm ra file cần thiết, trong khi đã có một chuỗi tìm kiếm cực kỳ đặc trưng."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – Built-in tools (Grep, Glob, Read) & context management best practices:",
+    "points": [
+      "Grep tìm kiếm nội dung file theo regex trên toàn codebase; Glob tìm file theo pattern tên/đường dẫn; Read đọc nội dung file cụ thể.",
+      "Nguyên tắc quản lý context: dùng tìm kiếm có mục tiêu để xác định vị trí liên quan trước, chỉ Read những file cần thiết thay vì đọc rộng."
+    ]
+  }
+}

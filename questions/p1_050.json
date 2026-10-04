@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p1_050",
+  "domain": "Customer Support Agent Design & Human Escalation (Thiết kế Agent CSKH & Cơ chế chuyển giao cho người - Human Handoff)",
+  "topic": "Câu P1.50: Defining Reliable Escalation Criteria for escalate_to_human",
+  "question": "You're implementing the escalation logic for when the agent should call escalate_to_human. Your team proposes four different approaches for triggering escalation.\nWhich approach will most reliably identify cases that genuinely require human intervention?",
+  "options": {
+    "A": "Configure the agent to escalate after three consecutive tool calls that fail to resolve the customer's stated issue, ensuring a reasonable attempt before involving a human.",
+    "B": "Instruct the agent to escalate when the customer requests a human, when the issue requires policy exceptions, or when the agent cannot make meaningful progress.",
+    "C": "Implement sentiment analysis that monitors for frustration indicators (negative language, repeated questions, exclamation marks) and trigger escalation when the frustration score exceeds a configured threshold.",
+    "D": "Build a rules engine that maps specific issue types, customer segments, and product categories to escalation decisions, removing the need for model judgment calls."
+  },
+  "correct_answer": "B. Instruct the agent to escalate when the customer requests a human, when the issue requires policy exceptions, or when the agent cannot make meaningful progress.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why B is correct)",
+    "intro": "Câu hỏi đòi hỏi tiêu chí xác định đúng những trường hợp THỰC SỰ cần con người:",
+    "points": [
+      "Ba tiêu chí trong phương án B bám sát bản chất của escalation: (1) khách hàng yêu cầu gặp người – tôn trọng ý muốn tường minh; (2) vấn đề cần ngoại lệ chính sách – vượt thẩm quyền của agent; (3) agent không thể tiến triển có ý nghĩa – vượt năng lực của agent.",
+      "Các tiêu chí này mô tả nguyên nhân thực sự khiến cần con người, thay vì dựa vào tín hiệu gián tiếp (số lần gọi tool, cảm xúc) hay danh mục cứng.",
+      "Viết tiêu chí rõ ràng, cụ thể trong system prompt là cách Anthropic khuyến nghị để model đưa ra phán đoán nhất quán; model có khả năng đánh giá ngữ cảnh mà luật tĩnh không làm được."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Escalate sau ba tool call liên tiếp không giải quyết được):",
+        "trap": "Bẫy ngưỡng đếm tùy ý (Arbitrary counter threshold trap)",
+        "explanation": "Số lượng tool call không phản ánh việc có cần con người hay không: có vấn đề cần 5 lookup hợp lệ, có vấn đề (yêu cầu ngoại lệ chính sách) cần escalate ngay từ đầu. Ngưỡng cố định vừa escalate thừa vừa escalate thiếu."
+      },
+      "C": {
+        "title": "C sai (Sentiment analysis với ngưỡng frustration):",
+        "trap": "Bẫy dùng tín hiệu gián tiếp (Proxy signal trap)",
+        "explanation": "Khách bực bội không đồng nghĩa với việc vấn đề cần con người – nhiều trường hợp agent vẫn giải quyết được ngay. Ngược lại, khách bình tĩnh vẫn có thể cần ngoại lệ chính sách. Sentiment là proxy kém tin cậy."
+      },
+      "D": {
+        "title": "D sai (Rules engine ánh xạ loại vấn đề/phân khúc/sản phẩm):",
+        "trap": "Bẫy luật cứng nhắc (Rigid rules engine trap)",
+        "explanation": "Ma trận luật không bao phủ được các tình huống mới hoặc ngữ cảnh cụ thể (ví dụ khách yêu cầu gặp người ở một loại vấn đề \"không cần escalate\"). Bỏ hoàn toàn phán đoán của model làm mất khả năng xử lý linh hoạt."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic – Customer support agent guidance & Prompt engineering: Be clear and direct:",
+    "points": [
+      "Định nghĩa tiêu chí escalation rõ ràng, tường minh trong system prompt: yêu cầu của khách, ngoại lệ chính sách, không thể tiến triển.",
+      "Tiêu chí cụ thể giúp model ra quyết định nhất quán thay vì dựa vào heuristics gián tiếp."
+    ]
+  }
+}

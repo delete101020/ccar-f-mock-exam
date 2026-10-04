@@ -1,0 +1,56 @@
+{
+  "id": "ccar_f_p2_023",
+  "domain": "Conversation Design & Ambiguity Handling (Thiết kế hội thoại & Xử lý yêu cầu mơ hồ)",
+  "topic": "Câu P2.23: Balancing Clarifying Questions with Explicit Assumptions",
+  "question": "Users frequently send ambiguous requests like \"book a venue for the party\" without specifying date, guest count, or budget. Your evaluation shows the assistant asks an average of 4.2 clarifying questions before taking any action, causing 35% of users to abandon mid-conversation. However, when you reduce questions, users sometimes receive recommendations that don't match their preferences.\nWhat's the most effective approach to improve this trade-off?",
+  "options": {
+    "A": "Instruct the assistant to state explicit assumptions based on conversation history, proceed with recommendations while inviting corrections, and reserve clarifying questions only for irreversible actions like confirming bookings.",
+    "B": "Configure the assistant to proceed with reasonable defaults (medium-sized venue, next weekend, moderate budget) without explicitly stating these assumptions, allowing users to provide corrections if results don't match expectations.",
+    "C": "Implement a structured intake form that collects all required parameters (date, guest count, budget, venue type) upfront before the assistant begins providing any recommendations.",
+    "D": "Configure the assistant to consolidate all clarifying questions into a single compound question (e.g., \"What date, guest count, and budget are you considering?\") to reduce the total number of conversational turns."
+  },
+  "correct_answer": "A. Instruct the assistant to state explicit assumptions based on conversation history, proceed with recommendations while inviting corrections, and reserve clarifying questions only for irreversible actions like confirming bookings.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why A is correct)",
+    "intro": "Bài toán có hai lực kéo ngược chiều:",
+    "key_facts": [
+      "Hỏi quá nhiều (trung bình 4.2 câu) → 35% user bỏ ngang.",
+      "Hỏi quá ít → gợi ý không khớp sở thích.",
+      "Hành động cuối cùng (đặt venue) là hành động không thể đảo ngược (irreversible), còn việc gợi ý thì rẻ và dễ sửa."
+    ],
+    "explanation": "Giải pháp tối ưu là phân loại theo mức độ rủi ro của hành động: với bước rẻ, có thể sửa (đưa ra gợi ý), assistant nên tiến lên ngay nhưng minh bạch giả định (\"Mình giả định khoảng 30 khách, cuối tuần tới, ngân sách tầm trung — bạn chỉnh giúp nếu khác nhé\"); với bước tốn kém, không đảo ngược được (xác nhận đặt chỗ), mới dừng lại để hỏi/xác nhận.",
+    "points": [
+      "Giảm ma sát: user nhận giá trị ngay ở lượt đầu tiên, giảm tỷ lệ bỏ ngang.",
+      "Giữ độ chính xác: giả định được nêu rõ nên user dễ phát hiện và sửa sai lệch chỉ bằng một câu, thay vì phải đoán vì sao gợi ý không khớp.",
+      "Tận dụng conversation history để giả định có căn cứ, và giữ human-in-the-loop đúng chỗ — trước hành động có hậu quả thật."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "B": {
+        "title": "B sai (Dùng default hợp lý nhưng không nói ra giả định):",
+        "trap": "Bẫy giả định ngầm (Silent assumptions trap)",
+        "explanation": "Đây chính là kịch bản \"reduce questions\" đã thất bại: user nhận gợi ý lệch mà không biết assistant đã giả định gì, nên khó sửa và mất niềm tin. Thiếu tính minh bạch là điểm khác biệt mấu chốt so với A."
+      },
+      "C": {
+        "title": "C sai (Form nhập liệu bắt buộc trước khi gợi ý):",
+        "trap": "Bẫy dồn ma sát lên đầu (Upfront friction trap)",
+        "explanation": "Form bắt buộc chỉ đổi 4.2 câu hỏi thành 4 ô nhập liệu — vẫn là rào cản trước khi user thấy bất kỳ giá trị nào, và làm mất tính hội thoại linh hoạt. Nó không giải quyết gốc rễ của tỷ lệ bỏ ngang."
+      },
+      "D": {
+        "title": "D sai (Gộp tất cả câu hỏi vào một câu hỏi ghép):",
+        "trap": "Bẫy tối ưu số lượt thay vì trải nghiệm (Turn-count optimization trap)",
+        "explanation": "Giảm số lượt nhưng vẫn bắt user trả lời đủ mọi tham số trước khi nhận được gì; câu hỏi ghép dài còn dễ bị trả lời thiếu. Assistant vẫn đứng yên chờ thay vì chủ động tiến lên với giả định có thể sửa."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Research \"Building Effective Agents\" & Prompt engineering guidance:",
+    "points": [
+      "Agent nên tự tiến hành khi đủ thông tin hợp lý và dừng lại để lấy phản hồi của con người tại các checkpoint hoặc trước các hành động có rủi ro/không đảo ngược được.",
+      "Prompt engineering guidance: chỉ dẫn rõ ràng cho Claude về khi nào nên hành động trực tiếp và khi nào nên hỏi lại, kèm yêu cầu nêu rõ giả định để người dùng có thể điều chỉnh."
+    ]
+  }
+}

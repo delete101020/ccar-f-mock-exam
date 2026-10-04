@@ -1,0 +1,51 @@
+{
+  "id": "ccar_f_p2_007",
+  "domain": "Model Context Protocol (MCP) & Tool Selection / Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "topic": "Câu P2.7: Accessing Standard Jira Data via an Existing Jira MCP Server",
+  "question": "This currently requires manually copy-pasting content into conversations. The team wants the agent to access this standard Jira ticket data directly.\nWhat's the most effective approach?",
+  "options": {
+    "A": "Export Jira tickets to markdown files in the repository that the agent accesses using the Read tool.",
+    "B": "Build a custom MCP server wrapping Jira's API with tools designed specifically for this team's code review workflow.",
+    "C": "Integrate an existing Jira MCP server that exposes tickets, comments, and metadata through discoverable tool interfaces.",
+    "D": "Use the Bash tool with curl to call Jira's REST API, including authentication headers and parsing JSON responses inline."
+  },
+  "correct_answer": "C. Integrate an existing Jira MCP server that exposes tickets, comments, and metadata through discoverable tool interfaces.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why C is correct)",
+    "intro": "Từ khóa quan trọng của đề bài: dữ liệu là “standard Jira ticket data” và hiện đang phải copy-paste thủ công:",
+    "points": [
+      "Với một hệ thống phổ biến như Jira và nhu cầu dữ liệu chuẩn (tickets, comments, metadata), tích hợp một MCP server đã có sẵn là giải pháp ít công sức nhất, đã được kiểm thử và được cộng đồng/nhà cung cấp bảo trì.",
+      "MCP server cung cấp tool interfaces có thể khám phá (discoverable): agent tự biết có những tool nào, tham số ra sao, và truy cập dữ liệu trực tiếp, theo thời gian thực — loại bỏ hoàn toàn bước copy-paste.",
+      "Cấu hình đơn giản: thêm server vào `.mcp.json` (project scope, chia sẻ cho cả team qua version control) hoặc user scope; credentials quản lý qua biến môi trường thay vì nhúng vào prompt hay lệnh.",
+      "Nguyên tắc chọn giải pháp tương xứng (proportionate): chỉ build MCP server tùy chỉnh khi nhu cầu thực sự đặc thù mà server có sẵn không đáp ứng."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (Export Jira tickets ra markdown trong repo):",
+        "trap": "Bẫy dữ liệu tĩnh lỗi thời (Stale snapshot trap)",
+        "explanation": "Bản export là snapshot tĩnh, nhanh chóng lỗi thời khi ticket được cập nhật, cần quy trình đồng bộ thủ công/định kỳ và làm phình repo. Đây chỉ là biến thể tự động hơn của copy-paste, không phải truy cập trực tiếp."
+      },
+      "B": {
+        "title": "B sai (Build custom MCP server riêng cho workflow):",
+        "trap": "Bẫy tự xây lại thứ đã có (Reinventing the wheel trap)",
+        "explanation": "Đề bài nói rõ là dữ liệu Jira tiêu chuẩn — không có yêu cầu đặc thù nào biện minh cho chi phí phát triển, bảo trì và bảo mật của một server tự viết. Custom server chỉ hợp lý khi server có sẵn thiếu chức năng cần thiết."
+      },
+      "D": {
+        "title": "D sai (Dùng Bash + curl gọi Jira REST API):",
+        "trap": "Bẫy tích hợp ad-hoc thiếu cấu trúc (Ad-hoc shell integration trap)",
+        "explanation": "Agent phải tự xây request, xử lý authentication headers (dễ lộ token trong lệnh/log), phân trang và parse JSON inline mỗi lần — mong manh, tốn token, khó tái sử dụng và không có tool interface rõ ràng, có thể khám phá."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Claude Code Documentation – MCP (Connect Claude Code to tools via MCP) & Model Context Protocol overview:",
+    "points": [
+      "Claude Code có thể kết nối với các MCP server có sẵn cho nhiều dịch vụ phổ biến (issue trackers, databases, monitoring...) để truy cập dữ liệu trực tiếp.",
+      "MCP server có thể cấu hình theo scope local, project (`.mcp.json` chia sẻ cho team) hoặc user."
+    ]
+  }
+}

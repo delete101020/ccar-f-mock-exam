@@ -1,0 +1,50 @@
+{
+  "id": "ccar_f_p2_055",
+  "domain": "Tool Design & Error Handling (Thiết kế Tool & Xử lý lỗi)",
+  "topic": "Câu P2.55: Eliminating Race Conditions with an Atomic Find-and-Book Tool",
+  "question": "Your scheduling agent uses get_available_slots(date, provider_id) to retrieve open appointment times, then book_appointment(provider_id, slot_time, patient_id) to reserve a slot. tickets show that 15% of booking attempts fall with \"slot no longer available\" because another user booked the slot between the availability check and the booking call.\nHow should you refactor these tools?",
+  "options": {
+    "A": "Modify book_appointment to return detailed failure information including currently available alternative slots when the requested slot is unavailable, enabling the agent to retry with a different time.",
+    "B": "Keep both tools but add retry logic to the agent's system prompt, instructing it to call get_available_slots again and select a different time if booking fails.",
+    "C": "Add a hold_slot(provider_id, slot_time) tool that creates a 60 second temporary reservation, requiring the agent to call it between checking availability and booking.",
+    "D": "Combine both tools into a single find_and_book_appointment that atomically checks availability and books, returning either the confirmed booking or available alternatives."
+  },
+  "correct_answer": "D. Combine both tools into a single find_and_book_appointment that atomically checks availability and books, returning either the confirmed booking or available alternatives.",
+  "technical_reason": {
+    "section_title": "1. Bản chất kỹ thuật (Why D is correct)",
+    "intro": "Bản chất lỗi \"slot no longer available\":",
+    "points": [
+      "Đây là race condition kiểu TOCTOU (time-of-check to time-of-use): giữa lúc agent gọi get_available_slots và book_appointment có một khoảng thời gian (bao gồm cả thời gian suy luận của LLM) để người dùng khác đặt mất slot.",
+      "Gộp thành một tool find_and_book_appointment thực hiện kiểm tra và đặt chỗ nguyên tử (atomic) ở phía server (ví dụ trong một transaction) loại bỏ hoàn toàn khoảng hở đó. Đây là sửa lỗi ở gốc rễ bằng thiết kế cấu trúc, không phụ thuộc hành vi của agent.",
+      "Khi thất bại, tool trả về các slot thay thế, giúp agent đề xuất ngay cho người dùng mà không cần thêm lệnh gọi. Thiết kế này cũng giảm số lượt gọi tool, phù hợp nguyên tắc thiết kế tool theo workflow thay vì bọc từng API endpoint."
+    ]
+  },
+  "distractor_analysis": {
+    "section_title": "2. Tại sao các phương án khác bị loại?",
+    "options": {
+      "A": {
+        "title": "A sai (book_appointment trả về slot thay thế khi thất bại):",
+        "trap": "Bẫy xử lý triệu chứng (Symptom mitigation trap)",
+        "explanation": "Cách này giúp phục hồi nhanh hơn sau thất bại, nhưng race condition vẫn còn: lần thử lại với slot thay thế cũng có thể bị đặt mất. Tỷ lệ 15% lỗi không được loại bỏ."
+      },
+      "B": {
+        "title": "B sai (Thêm hướng dẫn retry vào system prompt):",
+        "trap": "Bẫy dựa vào prompt cho vấn đề đồng thời (Prompt-based concurrency fix trap)",
+        "explanation": "Retry theo hướng dẫn prompt chỉ lặp lại cùng chuỗi check-then-book không nguyên tử, vẫn có thể thất bại, đồng thời tốn thêm lượt và token. Vấn đề đồng thời không thể giải quyết bằng instruction."
+      },
+      "C": {
+        "title": "C sai (Thêm tool hold_slot giữ chỗ 60 giây):",
+        "trap": "Bẫy thêm bước phụ thuộc agent (Extra fragile step trap)",
+        "explanation": "Vẫn còn khoảng hở giữa check và hold; agent có thể quên gọi hold_slot, hoặc suy luận quá 60 giây khiến hold hết hạn. Thêm tool làm workflow phức tạp hơn và vẫn phụ thuộc agent tuân thủ đúng trình tự."
+      }
+    }
+  },
+  "references": {
+    "section_title": "3. Nguồn tài liệu đối chiếu (Anthropic References)",
+    "source": "Anthropic Engineering – \"Writing effective tools for agents\" & Tool Use documentation:",
+    "points": [
+      "Thiết kế tool nên phản ánh workflow thực tế: hợp nhất các thao tác thường đi cùng nhau thành một tool có mục đích rõ ràng, thay vì expose từng API endpoint riêng lẻ.",
+      "Tính đúng đắn (như tính nguyên tử) nên được đảm bảo trong code của tool, không phải phụ thuộc vào việc agent gọi các tool theo đúng trình tự."
+    ]
+  }
+}
