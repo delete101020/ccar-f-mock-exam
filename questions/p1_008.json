@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_008",
-  "domain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
   "topic": "Câu P1.8: Improving Adoption of MCP Refactoring Tools via Enhanced Descriptions",
   "question": "After adding an MCP server with specialized code refactoring tools (extract_function, rename_variable, inline_function), you notice the agent still uses basic text manipulation via Write and Bash sed commands for refactoring tasks. The MCP server is connected and working. Examining the configuration, you find each MCP tool has a minimal description like \"extract_function: extracts a function from code.\"\nWhat's the most effective way to improve adoption of the MCP refactoring tools?",
   "options": {

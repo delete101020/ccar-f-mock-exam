@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_016",
-  "domain": "Information Extraction & Long Context Optimization (Trích xuất thông tin & Tối ưu ngữ cảnh dài)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Information Extraction & Long Context Optimization (Trích xuất thông tin & Tối ưu ngữ cảnh dài)",
   "topic": "Câu P3.16: Adding a Pre-Extraction Summarization Step for Long Meandering Transcripts",
   "question": "Evaluation shows 94% extraction accuracy on short meeting transcripts (<30 minutes) but only 68% on longer transcripts (>60 minutes) where discussions meander and key information is scattered throughout. Transcripts of both lengths fit within the model's context window.\nWhat pattern most effectively improves accuracy on complex, lengthy documents?",
   "options": {

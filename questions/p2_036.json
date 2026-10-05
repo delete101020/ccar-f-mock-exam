@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_036",
-  "domain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Review code dạng agentic)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Review code dạng agentic)",
   "topic": "Câu P2.36: Turn-Limited Agentic Code Review for Cross-File Bugs",
   "question": "Your pipeline reviews every PR using a single API call with a static prompt containing the diff and full text of each changed file — unchanged files are not included. Reviews are posted asynchronously and don't block PR creation. Developers report that reviews consistently miss bugs involving cross-file interactions — for example, a PR renames a function's parameters but the review doesn't flag callers in unchanged files that still use the old argument order. Evaluation shows cross-file bugs account for 35% of production incidents from reviewed PRs.\nWhat is the most effective change to your review design?",
   "options": {

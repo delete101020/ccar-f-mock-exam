@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_024",
-  "domain": "Prompt Engineering & Few-Shot Examples (Kỹ thuật Prompt & Ví dụ minh họa Few-shot)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Prompt Engineering & Few-Shot Examples (Kỹ thuật Prompt & Ví dụ minh họa Few-shot)",
   "topic": "Câu P2.24: Replacing Verbose Proficiency Guidelines with Few-Shot Examples",
   "question": "Your conversational AI tutor has a 2,800-token system prompt containing teaching methodology, persona guidelines, and detailed written instructions for adapting explanations to different proficiency levels. User testing reveals that in conversations exceeding 12 turns (approximately 4,000 tokens of conversation history), the assistant increasingly ignores the proficiency-adaptation guidelines, defaulting to intermediate-level explanations regardless of the learner's stated level.\nWhat's the most effective approach to ensure consistent adherence to these guidelines throughout extended conversations?",
   "options": {

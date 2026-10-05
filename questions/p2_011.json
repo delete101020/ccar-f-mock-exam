@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_011",
-  "domain": "Information Extraction & Pipeline Validation (Trích xuất thông tin & Kiểm thực pipeline)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Information Extraction & Pipeline Validation (Trích xuất thông tin & Kiểm thực pipeline)",
   "topic": "Câu P2.11: Reducing Manual Review via Validation-Error Feedback Retry Loop",
   "question": "Your invoice extraction uses tool use with strict JSON schemas. JSON syntax errors never occur, but 12% of extractions fail semantic validation--for example, line Item amounts don't extracted total, or vendor IDs don't match valid formats. These failures currently route to manual review.\nWhat's the most effective approach to reduce manual review volume while maintaining accuracy?",
   "options": {

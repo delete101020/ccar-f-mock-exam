@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_013",
-  "domain": "Tool Design & Human-in-the-Loop (Thiết kế Tool & Cơ chế xác nhận của người dùng)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Design & Human-in-the-Loop (Thiết kế Tool & Cơ chế xác nhận của người dùng)",
   "topic": "Câu P3.13: Disambiguating Similar CRM Records Before Deletion with Single-Click Confirmation",
   "question": "Your CRM agent's delete_contact tool handles requests like \"delete the duplicate entry for Acme Corp.\" The database contains similarly named records (e.g., \"Acme Corp,\" \"Acme Corporation,\" \"ACME Corp Inc.\"), and analytics show 8% of deletions are reversed within 24 hours due to misidentified records. Users have also complained that the current multi-step confirmation flow adds too much friction to routine cleanup tasks.\nWhich approach most effectively reduces the error rate while maintaining workflow efficiency?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_013",
-  "domain": "Context Management & Code Exploration (Quản lý ngữ cảnh & Chiến lược khám phá mã nguồn lớn)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Context Management & Code Exploration (Quản lý ngữ cảnh & Chiến lược khám phá mã nguồn lớn)",
   "topic": "Câu P1.13: Exploring Large Caching Layer via Interface-First Pattern",
   "question": "An engineer asks the agent to understand how the caching layer works before adding a new cache invalidation trigger. The engineer is unfamiliar with the layer and wants to understand its overall design, not just locate existing invalidation calls. After initial Grep searches, the agent has identified that caching logic spans 15 files including decorators, middleware, and service classes (~8,000 lines total).\nWhat's the most effective next step for building understanding while managing context constraints?",
   "options": {

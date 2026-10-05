@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_007",
-  "domain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
   "topic": "Câu P1.7: Mitigating Inconsistent Answers in Extended Sessions via Scratchpad File",
   "question": "During testing, you observe that in extended exploration sessions (30+ minutes), the agent starts giving inconsistent answers about code structure it discussed earlier. Engineers report having to repeat context about modules they've already explored.\nWhat's the most effective approach to address this?",
   "options": {

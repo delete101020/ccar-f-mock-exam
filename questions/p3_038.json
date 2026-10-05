@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_038",
-  "domain": "Prompt Engineering & Few-Shot Prompting (Kỹ thuật Prompt & Ví dụ mẫu Few-shot)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Prompt Engineering & Few-Shot Prompting (Kỹ thuật Prompt & Ví dụ mẫu Few-shot)",
   "topic": "Câu P3.38: Annotated Few-Shot Examples to Generalize Code Review Judgment",
   "question": "After deploying automated code review, developers report that approximately 35% of flagged findings are false positives falling into consistent patterns: style suggestion contradicting team conventions, security warnings for patterns safe in your deployment context, and performance suggestions that would degrade your specific use case. You want to reduce false positives while maintaining the ability to catch genuine issues.\nWhich approach best enables the model to generalize its judgment to novel code patterns it hasn't seen before?",
   "options": {

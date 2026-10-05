@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_045",
-  "domain": "Multi-Agent Orchestration & Source Provenance (Điều phối đa Agent & Bảo toàn nguồn trích dẫn)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Multi-Agent Orchestration & Source Provenance (Điều phối đa Agent & Bảo toàn nguồn trích dẫn)",
   "topic": "Câu P1.45: Separating Content Summaries from Source Metadata in Agent Outputs",
   "question": "The synthesis agent receives summarized findings from the web search and document analysis agents, then passes a consolidated summary to the report generator. During testing, you discover the generated reports make factual claims without proper citations–the report generator cannot attribute statements to their original sources because that metadata was lost during the summarization steps.\nWhat's the most effective approach to ensure proper source attribution in the final reports?",
   "options": {

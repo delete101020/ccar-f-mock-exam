@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_052",
-  "domain": "Tool Error Handling & Agent Resilience (Xử lý lỗi Tool & Khả năng phục hồi của Agent)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Error Handling & Agent Resilience (Xử lý lỗi Tool & Khả năng phục hồi của Agent)",
   "topic": "Câu P1.52: Graceful Degradation When process_refund Times Out",
   "question": "During a billing dispute resolution, your agent successfully retrieves customer info via get_customer and order details via lookup_order, but when attempting to process the refund via process_refund, the tool returns a timeout error. The agent has enough information to explain the billing, confirm the refund eligibility, and verify refund eligibility, but cannot actually process the refund due to the backend failure.\nWhat approach best balances first-contact resolution with appropriate error handling?",
   "options": {

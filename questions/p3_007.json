@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_007",
-  "domain": "Claude Code CLI & Session Management (Quản lý phiên làm việc & Phân nhánh phiên)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Claude Code CLI & Session Management (Quản lý phiên làm việc & Phân nhánh phiên)",
   "topic": "Câu P3.7: Forking an Analysis Session to Develop Two Testing Strategies Independently",
   "question": "\"You're the Lead Data Scientist/Engineer on a critical project. Something is not completely right with technical details or the data, and it negative impacts expected outputs. They need to independently develop both approaches to evaluation data... \nHow do you manage this scenario?\"",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_010",
-  "domain": "Multi-Agent Orchestration & Context Passing (Điều phối đa agent & Truyền ngữ cảnh cho Subagent)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Multi-Agent Orchestration & Context Passing (Điều phối đa agent & Truyền ngữ cảnh cho Subagent)",
   "topic": "Câu P3.10: Passing Complete Findings Directly into the Synthesis Subagent Prompt",
   "question": "After the web search and document analysis subagents complete their tasks, the coordinator needs to spawn the synthesis subagent to synthesize the findings.\nWhat is the correct approach for providing the synthesis subagent with the information it needs?",
   "options": {

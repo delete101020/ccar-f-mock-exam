@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_001",
-  "domain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Phân rã tác vụ - Task Decomposition)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Phân rã tác vụ - Task Decomposition)",
   "topic": "Câu P1.1: Task Decomposition cho Intermittent 500 Error Investigation",
   "question": "A developer asks the agent to investigate why a specific API endpoint intermittently returns 500 responses. The codebase has 200+ files and the developer doesn't know which components are involved. The agent must trace the error through routing, middleware, business logic, and database layers.\nWhat task decomposition approach would be most effective?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_015",
-  "domain": "Information Extraction & Pipeline Validation (Trích xuất thông tin & Kiểm thực pipeline)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Information Extraction & Pipeline Validation (Trích xuất thông tin & Kiểm thực pipeline)",
   "topic": "Câu P2.15: Recovering from Pydantic Validation Failures via Error-Feedback Follow-up Request",
   "question": "Monitoring shows 12% of extractions fall Pydantic validation with specific errors like \"expected float for quantity, got '2 to 3\". Retrying these requests without modification produces failures.\nWhat's the most effective approach to recover from these validation failures?",
   "options": {

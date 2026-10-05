@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_019",
-  "domain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
   "topic": "Câu P2.19: Replacing a Sliding Window with Hybrid Summarization Plus Recent Verbatim Messages",
   "question": "Users report that during extended conversations, the AI loses track of specific topics, examples, and preferences they mentioned earlier in the session. Your current implementation uses a sliding window that keeps only the most recent 25 message pairs to stay within context limits.\nWhat's the most effective approach to maintain awareness of earlier conversation content while managing context size?",
   "options": {

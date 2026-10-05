@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_005",
-  "domain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
   "topic": "Câu P2.5: Structured MCP Error Responses with errorCategory and isRetryable Metadata",
   "question": "Production logs reveal inconsistent error handling: when lookup_order fails, the agent sometimes retries 5+ times (wasteful when the order ID doesn't exist), sometimes escalates immediately (premature for temporary network issues), and sometimes asks users for clarification (inappropriate when the issue is a backend permission error). Investigation shows your MCP tool returns uniform error responses: {\"isError\": true, \"content\": [{\"type\": \"text\", \"text\": \"Operation failed\"}]}. The agent cannot distinguish between error types.\nWhat's the most effective improvement?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_033",
-  "domain": "Multi-Agent Systems & Structured Handoffs (Hệ thống đa Agent & Chuẩn hóa dữ liệu bàn giao)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Multi-Agent Systems & Structured Handoffs (Hệ thống đa Agent & Chuẩn hóa dữ liệu bàn giao)",
   "topic": "Câu P1.33: Including Data Dates in Subagent Structured Outputs for Temporal Reasoning",
   "question": "When researching \"renewable energy adoption,\" the web search agent returns recent statistics (2024: 35% adoption) while the document analysis agent extracts data from internal reports (2022: 18% adoption). The synthesis agent incorrectly flags these as contradictory sources rather than recognizing the data shows growth over time. What change would best enable the synthesis agent to correctly interpret such temporal differences?",
   "options": {

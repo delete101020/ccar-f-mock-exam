@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_035",
-  "domain": "Multi-Agent Systems & Synthesis Quality (Hệ thống đa Agent & Chất lượng tổng hợp - Uncertainty Handling)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Multi-Agent Systems & Synthesis Quality (Hệ thống đa Agent & Chất lượng tổng hợp - Uncertainty Handling)",
   "topic": "Câu P1.35: Separating Confirmed Findings from Contested Analysis in Synthesis",
   "question": "Production reviews reveal inconsistent handling of uncertainty in final reports. Sometimes conflicting subagent findings are synthesized into a single confident statement (losing other times reports over hedge with excessive qualifications (becoming unhelpful). When the web search agent returns \"Industry analysts estimate $50B market size (methodolo the document analysis agent returns \"peer-reviewed study estimates $358 (1578, 95% CI),\" the coordinator either picks one arbitrarily or produces vague statements like \"the ma 6358-6508 depending on factors.\" What systematic approach best addresses this?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_056",
-  "domain": "Agent SDK Hooks & Deterministic Guardrails (Hook trong Agent SDK & Rào chắn tất định)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Agent SDK Hooks & Deterministic Guardrails (Hook trong Agent SDK & Rào chắn tất định)",
   "topic": "Câu P1.56: Enforcing the $500 Refund Escalation Rule with a Tool-Call Hook",
   "question": "Compliance requires that refunds exceeding $500 must automatically escalate to a human agent–this rule cannot be left to model discretion. Despite clear system prompt instructions, production logs show the agent occasionally processes high-value refunds directly (3% failure rate).\nHow should you achieve guaranteed compliance?",
   "options": {

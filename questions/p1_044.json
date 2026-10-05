@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_044",
-  "domain": "Agentic Architectures & Multi-Agent Orchestration (Kiến trúc Agent & Điều phối đa Agent - Coordinator/Subagent)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Agentic Architectures & Multi-Agent Orchestration (Kiến trúc Agent & Điều phối đa Agent - Coordinator/Subagent)",
   "topic": "Câu P1.44: Dynamic Coordinator-Based Routing for Evolving Query Distributions",
   "question": "In production, you're distributing complex queries to specialized subagents. The query distribution is uneven and evolving as users discover new applications.\nWhat's the most effective approach to optimize for query complexity?",
   "options": {

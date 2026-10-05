@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_053",
-  "domain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
   "topic": "Câu P1.53: Structured MCP Error Responses with retryable Flag",
   "question": "Production logs reveal inconsistent error responses when lookup_order fails. The agent sometimes retries (wasting 3-4 turns) before concluding on the error. Your MCP tool currently returns only a plain text error message to Claude.\nWhat's the most effective improvement?",
   "options": {

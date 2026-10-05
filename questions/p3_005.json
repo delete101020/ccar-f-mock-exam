@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_005",
-  "domain": "Model Context Protocol (MCP) & Error Handling (Giao thức ngữ cảnh mô hình & Xử lý lỗi)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Model Context Protocol (MCP) & Error Handling (Giao thức ngữ cảnh mô hình & Xử lý lỗi)",
   "topic": "Câu P3.5: Classifying Protocol Errors vs Tool Execution Errors in MCP",
   "question": "Your MCP server implements a check_availability tool that queries an external calendar API. During testing, you encounter three error conditions: (1) the tool is called with a malformed request, missing the required user_email parameter (2) the calendar API returns a 404 because the specified user doesn't exist in the calendar system (3) the calendar API returns a 503 because the service is temporarily unavailable.\nHow should each error be reported according to MCP's error handling design?",
   "options": {

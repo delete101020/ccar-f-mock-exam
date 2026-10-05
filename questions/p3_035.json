@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_035",
-  "domain": "Tool Design & Tool Definitions (Thiết kế Tool & Định nghĩa tham số)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Design & Tool Definitions (Thiết kế Tool & Định nghĩa tham số)",
   "topic": "Câu P3.35: Clear Parameter Descriptions for update_user_profile",
   "question": "Your update_user_profile tool accepts a user_id (required) and an optional fields_to_update object. In testing, Claude frequently omits user_id or passes incorrectly structured data.\nWhat is most critical for helping Claude understand what parameter values to provide?",
   "options": {

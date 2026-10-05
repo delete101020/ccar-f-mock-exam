@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_003",
-  "domain": "Claude Agent SDK & Multi-Agent Orchestration (Claude Agent SDK & Điều phối đa agent)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Claude Agent SDK & Multi-Agent Orchestration (Claude Agent SDK & Điều phối đa agent)",
   "topic": "Câu P2.3: Silent Delegation Failure Caused by Missing Task Tool in allowedTools",
   "question": "The coordinator agent has AgentDefinitions configured for all four specialized subagents, each with appropriate descriptions, prompts, and tool restrictions. During testing, you notice the coordinator correctly reasons about when to delegate — it generates messages like \"I'll ask the web search agent to find sources on this topic\" — but no subagent execution ever occurs. The coordinator then proceeds as if the delegation happened and continues with incomplete information. Logs show no errors.\nWhat is the most likely cause?",
   "options": {

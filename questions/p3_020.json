@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_020",
-  "domain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
   "topic": "Câu P3.20: Structurally Eliminating Tool Overlap by Merging Compensation and Tracking Tools",
   "question": "After expanding the agent's MCP tools with delivery-specific capabilities [apply_promo_code, update_delivery_address, reconcile_delivery], the total tool count has grown from 1 to 7. We have observed that the agent now shows tool selection accuracy has dropped from 86% to 71%. Log analysis reveals the majority of errors involve the agent selecting between semantically overlapping tools — calling issue_credit when process_refund was correct, and calling check_delivery_status when looking order_allready_returns_the_needed_data.\nWhich approach structurally eliminates the semantic overlap identified in the error source?",
   "options": {

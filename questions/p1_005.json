@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_005",
-  "domain": "Context Management & Context Degradation (Suy giảm chất lượng ngữ cảnh & Quản lý subagent)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Context Management & Context Degradation (Suy giảm chất lượng ngữ cảnh & Quản lý subagent)",
   "topic": "Câu P1.5: Mitigating Context Saturation via Distillation and Sub-agents",
   "question": "Your agent has spent 25 minutes exploring a game engine's rendering subsystem–reading shader code, buffer management, and frame synchronization logic. An engineer now asks it to understand how the physics engine integrates with rendering for collision debug overlays. You notice recent responses reference \"typical rendering patterns\" rather than the specific VulkanPipeline and FrameGraph classes it discovered earlier.\nWhat's the most effective approach?",
   "options": {

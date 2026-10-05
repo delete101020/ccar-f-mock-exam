@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_051",
-  "domain": "Customer Support Agent Design & Human Escalation (Thiết kế Agent CSKH & Cơ chế chuyển giao cho người - Human Handoff)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Customer Support Agent Design & Human Escalation (Thiết kế Agent CSKH & Cơ chế chuyển giao cho người - Human Handoff)",
   "topic": "Câu P1.51: Mid-Process Escalation with a Structured Handoff",
   "question": "Your agent is handling a billing dispute. After calling get_customer and lookup_order, it identifies that the dispute involves a promotional pricing error requiring manager approval–beyond the agent's authorization level.\nHow should the workflow handle this mid-process escalation?",
   "options": {

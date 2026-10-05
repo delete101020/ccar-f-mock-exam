@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_040",
-  "domain": "Conversation Design & Ambiguity Handling (Thiết kế hội thoại & Xử lý yêu cầu mơ hồ)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Conversation Design & Ambiguity Handling (Thiết kế hội thoại & Xử lý yêu cầu mơ hồ)",
   "topic": "Câu P2.40: Asking One Targeted Clarifying Question for an Ambiguous Intent",
   "question": "A new user's first message is \"Set up my focus music,\" This could mean configure preferences, create a playlist, or play music immediately. Your system supports all three actions.\nWhat's the effective approach?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_050",
-  "domain": "Customer Support Agent Design & Human Escalation (Thiết kế Agent CSKH & Cơ chế chuyển giao cho người - Human Handoff)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Customer Support Agent Design & Human Escalation (Thiết kế Agent CSKH & Cơ chế chuyển giao cho người - Human Handoff)",
   "topic": "Câu P1.50: Defining Reliable Escalation Criteria for escalate_to_human",
   "question": "You're implementing the escalation logic for when the agent should call escalate_to_human. Your team proposes four different approaches for triggering escalation.\nWhich approach will most reliably identify cases that genuinely require human intervention?",
   "options": {

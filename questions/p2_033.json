@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_033",
-  "domain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
   "topic": "Câu P2.33: Structured Error Metadata in MCP Tool Responses",
   "question": "Production logs reveal inconsistent error handling: when tool_code fails, the agent sometimes retries 5 times (even if the tool_id doesn't exist), sometimes escalates immediately (premature for temporary network issues), and sometimes adds user-friendly explanation (inappropriate when the issue is a backend permission error). Investigation shows four MCP tool returns uniform error responses: {\"status\": \"error\", \"content\": \"{\"type\": \"Error\", \"message\": \"Operation failed.\"}\"}.\nThe agent learns different types. What's the most effective improvement?",
   "options": {

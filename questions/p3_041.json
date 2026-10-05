@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_041",
-  "domain": "Prompt Engineering & System Prompt Design (Kỹ thuật Prompt & Thiết kế System Prompt)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Prompt Engineering & System Prompt Design (Kỹ thuật Prompt & Thiết kế System Prompt)",
   "topic": "Câu P3.41: Defining Persistent Behavioral Guidelines in the System Prompt",
   "question": "Your music discovery assistant should consistently maintain an enthusiastic tone, explain its reasoning for each recommendation, and ask clarifying questions to better understand user preferences. You want this behavior to persist reliably across all user interactions.\nWhere should you define these behavioral guidelines?",
   "options": {

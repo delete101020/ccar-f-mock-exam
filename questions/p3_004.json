@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_004",
-  "domain": "Tool Design & Response Optimization (Thiết kế Tool & Tối ưu phản hồi)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Design & Response Optimization (Thiết kế Tool & Tối ưu phản hồi)",
   "topic": "Câu P3.4: Cursor-Based Pagination for a Product Search Tool",
   "question": "Your search products tool queries an external catalog API that returns paginated results (50 items per request). Production logs show queries frequently match 200+ products, and the design that auto-fetches all pages causes 15-20 second delays.\nHow should you redesign the pagination handling?",
   "options": {

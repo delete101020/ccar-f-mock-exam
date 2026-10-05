@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_007",
-  "domain": "Model Context Protocol (MCP) & Tool Selection / Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Model Context Protocol (MCP) & Tool Selection / Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
   "topic": "Câu P2.7: Accessing Standard Jira Data via an Existing Jira MCP Server",
   "question": "This currently requires manually copy-pasting content into conversations. The team wants the agent to access this standard Jira ticket data directly.\nWhat's the most effective approach?",
   "options": {

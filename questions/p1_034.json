@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_034",
-  "domain": "Context Management & Subagent State Recovery (Quản lý Context & Phục hồi trạng thái Subagent)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Context Management & Subagent State Recovery (Quản lý Context & Phục hồi trạng thái Subagent)",
   "topic": "Câu P1.34: Structured Reports for Crash Recovery in Multi-Agent Pipelines",
   "question": "Your multi-agent research pipeline crashed after processing 12 of 28 documents. The web search agent had identified relevant sources, the document analysis agent had partially completed extraction, and the synthesizer had begun pattern identification.\nYou need to resume processing without repeating work or losing fidelity of prior findings.\nWhat state management approach best balances information fidelity with context efficiency when restoring agent state?",
   "options": {

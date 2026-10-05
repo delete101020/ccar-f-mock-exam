@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_032",
-  "domain": "Agent SDK & Multi-Agent Orchestration (Agent SDK & Điều phối đa Agent - Subagent Delegation)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Agent SDK & Multi-Agent Orchestration (Agent SDK & Điều phối đa Agent - Subagent Delegation)",
   "topic": "Câu P1.32: Coordinator Fails to Delegate Because Task Tool Is Not Allowed",
   "question": "The coordinator agent has AgentFunctions configured for all four specialized subagents, each with appropriate descriptions and restrictions. During testing, you find the coordinator sometimes fails to delegate—it writes \"I'll ask the web search agent to find sources\" without actually invoking it.\nWhat is the most likely cause?",
   "options": {

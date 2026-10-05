@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_025",
-  "domain": "Information Extraction & Quality Assurance / Human-in-the-Loop (Đảm bảo chất lượng trích xuất & Cơ chế người duyệt)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Information Extraction & Quality Assurance / Human-in-the-Loop (Đảm bảo chất lượng trích xuất & Cơ chế người duyệt)",
   "topic": "Câu P2.25: Stratified Sampling to Measure High-Confidence Extraction Errors",
   "question": "The system routes documents with extraction confidence below 85% to human review. A quarterly audit reveals that 12% of high-confidence extractions (>85%) also contain errors—cases where the model finds plausible-but-incorrect values. Error sources vary: comparison tables showing competitor specs, appendices referencing different product variants, and ambiguous phrasing the model misinterprets. You need a sustainable strategy to catch these high-confidence errors and measure whether improvements reduce the error rate over time.\nWhat approach is most effective?",
   "options": {

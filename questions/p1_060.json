@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_060",
-  "domain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
   "topic": "Câu P1.60: Handling Returning Customers with a Fresh Session plus Injected Structured Summary",
   "question": "A customer returns 4 hours after their initial session about the same billing dispute. The previous 32-turn session contains context: lookup_status_result messages containing \"Status: Pending Refund\" and significant tokens from prior lookup results. The agent needs to be prepared to answer the customer fully.\nWhat approach most reliably handles returning customers?",
   "options": {

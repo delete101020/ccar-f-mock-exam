@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_027",
-  "domain": "Information Extraction & Quality Assurance / Human-in-the-Loop (Đảm bảo chất lượng trích xuất & Cơ chế người duyệt)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Information Extraction & Quality Assurance / Human-in-the-Loop (Đảm bảo chất lượng trích xuất & Cơ chế người duyệt)",
   "topic": "Câu P1.27: Stratified Accuracy Analysis Before Automating High-Confidence Extractions",
   "question": "Your system has been operating with 100% human review for 3 months. Analysis shows that extractions with model confidence >90% have 97% accuracy overall. To reduce reviewer workload, you plan to automate high-confidence extractions\nBefore deploying, what validation step is most critical?",
   "options": {

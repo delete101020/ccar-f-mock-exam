@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_002",
-  "domain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ)",
   "topic": "Câu P3.2: Preserving Critical Facts While Compacting a Long Conversation",
   "question": "After a 40-minute session helping plan a dinner party, the conversation has grown to 78,000 tokens. The history includes: (1) the user mentioning a guest has a severe shellfish allergy, (2) measurements for scaling recipes to 8 servings, (3) the user's clarification that \"room temperature butter\" means 68°F in their kitchen, and (4) general back-and-forth about meal timing and presentation. You need to implement context management before the window limit is reached.\nWhat approach best balances information preservation with token reduction?",
   "options": {

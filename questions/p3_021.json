@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_021",
-  "domain": "Anthropic API Tool Use & Tool Schema Design (Sử dụng Tool trong Anthropic API & Thiết kế Schema tham số)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Anthropic API Tool Use & Tool Schema Design (Sử dụng Tool trong Anthropic API & Thiết kế Schema tham số)",
   "topic": "Câu P3.21: Splitting a Unified Order Tool into Operation-Specific Tools for Parameter Accuracy",
   "question": "Your order management system requires tools for three distinct operations: issuing refunds (requires amount and reason), canceling orders (requires reason), and res (requires shipping address). Each operation shares an order id parameter but has different additional requirements. You notice during testing that with your current frequently omits required parameters or includes irrelevant ones.\nWhat design change will most effectively improve parameter accuracy?",
   "options": {

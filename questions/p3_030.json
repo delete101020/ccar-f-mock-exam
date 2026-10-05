@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_030",
-  "domain": "Agentic Architectures & Orchestration Guarantees (Kiến trúc Agent & Đảm bảo ở tầng điều phối)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Agentic Architectures & Orchestration Guarantees (Kiến trúc Agent & Đảm bảo ở tầng điều phối)",
   "topic": "Câu P3.30: Orchestration-Layer Fallback Escalation After max_turns Exhaustion",
   "question": "Production logs show that when the agent handles complex billing disputes requiring 6+ tool calls, it sometimes exhausts its max_turns limit after gathering data and before completing resolution or escalating. The team's goal is to guarantee that every customer interaction ends with either a completed resolution or a human escalation, regardless of how the agent loop terminates.\nWhich approach achieves this guarantee?",
   "options": {

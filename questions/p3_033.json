@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_033",
-  "domain": "Agentic Workflow Patterns & Task Complexity (Mẫu workflow Agent & Độ phức tạp tác vụ)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Agentic Workflow Patterns & Task Complexity (Mẫu workflow Agent & Độ phức tạp tác vụ)",
   "topic": "Câu P3.33: Multi-Phase Workflow Benefits Open-Ended Error Handling More Than a Rename",
   "question": "An engineer submits two requests: • Request A: \"Rename the getUserData function to fetchUserProfile everywhere it's used.\" • Request B: \"Improve error handling throughout the data processing module—add try/catch blocks, meaningful error messages, and ensure failures don't silently corrupt data.\"\nFor which request does specifying an explicit multi-phase workflow (such as analyze propose implement with review) most improve outcome quality?",
   "options": {

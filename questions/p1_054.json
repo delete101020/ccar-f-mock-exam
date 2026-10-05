@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_054",
-  "domain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Vòng lặp Agentic Loop)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Vòng lặp Agentic Loop)",
   "topic": "Câu P1.54: How the Agentic Loop Decides the Next Tool Call",
   "question": "When the agent calls lookup_order and receives order details showing the item was purchased 45 days ago, how does the agentic loop determine whether to call process_refund or escalate_to_human next?",
   "options": {

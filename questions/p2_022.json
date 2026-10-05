@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_022",
-  "domain": "Prompt Engineering & Response Style Control (Kỹ thuật Prompt & Kiểm soát văn phong phản hồi)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Prompt Engineering & Response Style Control (Kỹ thuật Prompt & Kiểm soát văn phong phản hồi)",
   "topic": "Câu P2.22: Removing Repetitive Affirmation Openers via System Prompt Instructions",
   "question": "Users report that responses feel repetitive across turns—each message begins with phrases like \"Certainly!\" or \"I'd be happy to help!\" even deep into conversations. You want responses to feel more natural, without these repetitive openers.\nWhat's the most effective approach?",
   "options": {

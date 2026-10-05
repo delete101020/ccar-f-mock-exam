@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_018",
-  "domain": "Conversation State Management & Messages API (Quản lý trạng thái hội thoại & Messages API)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Conversation State Management & Messages API (Quản lý trạng thái hội thoại & Messages API)",
   "topic": "Câu P2.18: Persona Guidelines Lost After Early Turns Because the System Prompt Is Sent Only Once",
   "question": "Your home renovation planning assistant uses a system prompt defining an expert contractor persona with specific guidelines: always ask about budget, suggest alternatives at multiple price points, and confirm timeline requirements. During testing, responses follow these guidelines for turns 1-4, but by turn 7, the assistant gives generic advice without asking about budget or timeline. The conversation totals only 2,500 tokens.\nWhat is the most likely cause?",
   "options": {

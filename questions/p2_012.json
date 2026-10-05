@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_012",
-  "domain": "Information Extraction & Structured Output (Trích xuất thông tin & Đầu ra có cấu trúc)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Information Extraction & Structured Output (Trích xuất thông tin & Đầu ra có cấu trúc)",
   "topic": "Câu P2.12: Reliable Schema-Compliant JSON via Tool Use with Target Schema as input_schema",
   "question": "Your system must extract event details from calendar invitations and output JSON that strictly conforms to a schema with fields for title, date, time, location, and attendees. Downstream reject any malformed or non- conformant JSON.\nWhat approach provides the most reliable schema compliance?",
   "options": {

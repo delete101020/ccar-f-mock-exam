@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_002",
-  "domain": "Tool Use & Claude Code File Manipulation",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Use & Claude Code File Manipulation",
   "topic": "Câu P1.2: Helper Function Insertion with Edit vs Write Tool",
   "question": "Your agent needs to insert a new helper function into the middle of a 150-line utility module, between two existing functions. The Edit tool fails because its old_string parameter cannot find unique text to match – the file has repetitive docstrings, variable names, and structural patterns.\nWhat's the most reliable way to complete this insertion?",
   "options": {

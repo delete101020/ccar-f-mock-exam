@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_017",
-  "domain": "Claude Code Workflows & Iterative Refinement (Quy trình làm việc với Claude Code & Tinh chỉnh lặp)",
+  "domain": "Claude Code Configuration & Workflows",
+  "subdomain": "Claude Code Workflows & Iterative Refinement (Quy trình làm việc với Claude Code & Tinh chỉnh lặp)",
   "topic": "Câu P3.17: Test-Driven Iteration for a Complex Graph Traversal Algorithm",
   "question": "You're implementing a complex graph traversal algorithm with specific performance requirements and edge cases to handle (disconnected nodes, cycles, weighted edges). You want to structure your workflow for efficient iterative refinement with Claude.\nWhat approach will most effectively enable progressive improvement across multiple iterations?",
   "options": {

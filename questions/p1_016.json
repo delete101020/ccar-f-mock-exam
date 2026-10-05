@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_016",
-  "domain": "Information Extraction & Structured Schema Design (Trích xuất thông tin & Thiết kế Schema có cấu trúc)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Information Extraction & Structured Schema Design (Trích xuất thông tin & Thiết kế Schema có cấu trúc)",
   "topic": "Câu P1.16: Handling Contract Amendments via Temporal / Multi-Value Schema Design",
   "question": "Your extraction pipeline processes contracts that frequently include amendments. When a contract contains both original terms and later amendments (e.g., original clause specifies \"30-day payment terms\" while Amendment 1 changes this to \"45 days\"), the model inconsistently extracts one value or the other with no indication of which applies.\nWhat's the most effective approach to improve extraction accuracy for documents with amendments?",
   "options": {

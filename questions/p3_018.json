@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_018",
-  "domain": "Claude Code Configuration & Memory Hierarchy (Cấu hình Claude Code & Phân cấp bộ nhớ CLAUDE.md)",
+  "domain": "Claude Code Configuration & Workflows",
+  "subdomain": "Claude Code Configuration & Memory Hierarchy (Cấu hình Claude Code & Phân cấp bộ nhớ CLAUDE.md)",
   "topic": "Câu P3.18: Path-Scoped Rules in .claude/rules for File-Type-Specific Conventions",
   "question": "Your infrastructure-as-code repository includes Terraform modules (/terraform/), Kubernetes manifests (/kubernetes/), and CI/CD pipeline scripts (/pipelines/). Each requires different conventions, but your single root CLAUDE.md has grown to 500+ lines. When developers work on Kubernetes files, Terraform-specific rules load into context unnecessarily, consuming tokens. \nWhat is the best approach to reorganize so only relevant guidance loads when editing specific file types?",
   "options": {

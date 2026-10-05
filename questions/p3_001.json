@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_001",
-  "domain": "Batch Processing & Cost Optimization (Xử lý hàng loạt & Tối ưu chi phí)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Batch Processing & Cost Optimization (Xử lý hàng loạt & Tối ưu chi phí)",
   "topic": "Câu P3.1: Deciding Batch API Suitability for Non-Blocking CI Security Reviews",
   "question": "Your CI pipeline performs security-focused code reviews on approximately 50 PRs daily, currently costing $150/day using the synchronous API. Reviews are non-blocking—developers merge after tests pass and address findings in follow-up commits. You're evaluating the Message Batches API for its 50% cost reduction.\nWhat factor most determines whether batch processing is appropriate for this use case?",
   "options": {

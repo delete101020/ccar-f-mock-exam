@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_037",
-  "domain": "Context Management & Conversation State (Quản lý ngữ cảnh & Trạng thái hội thoại)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Context Management & Conversation State (Quản lý ngữ cảnh & Trạng thái hội thoại)",
   "topic": "Câu P3.37: Structured Preference State Object Included in Each Request",
   "question": "Users frequently refine their search criteria mid-conversation. You notice a pattern: when users say things like \"Actually, let's raise the budget to $650K\" or \"I'd prefer a condo now instead of a house,\" the assistant sometimes continues referencing the original preferences in later responses—even though the updates are clearly present in the conversation history. Context usage is only at 35% capacity.\nWhich solution most reliably ensures the model uses the current preferences?",
   "options": {

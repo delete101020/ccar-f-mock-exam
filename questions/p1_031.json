@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_031",
-  "domain": "Tool Design & Multi-Agent Systems (Thiết kế Tool & Hệ thống đa Agent)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Design & Multi-Agent Systems (Thiết kế Tool & Hệ thống đa Agent)",
   "topic": "Câu P1.31: Splitting a Generic Tool into Purpose-Specific Tools with Defined Contracts",
   "question": "The document analysis agent has a single analyze_document tool that takes a document and a free-text instruction parameter. During evaluation, requests like \"extract the key financial metrics\" often return narrative summaries, while \"summarize the methodology\" sometimes returns raw data tables. The synthesis agent reports that 35% of analysis results require re-requests with clarified instructions.\nWhat's the most effective way to improve reliability?",
   "options": {

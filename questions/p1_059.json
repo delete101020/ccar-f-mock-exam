@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_059",
-  "domain": "Tool Error Handling & Agent Resilience (Xử lý lỗi Tool & Khả năng phục hồi của Agent)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Error Handling & Agent Resilience (Xử lý lỗi Tool & Khả năng phục hồi của Agent)",
   "topic": "Câu P1.59: Distinguishing Transient vs Permanent Refund Errors via Structured Responses",
   "question": "Your process_refund tool returns two types of errors: technical errors (\"503 Service Unavailable\", \"Connection timeout\") that are transient (5% of calls), and business errors (\"Order exceeds 30-day return window\", \"Item already refunded\") that are permanent (12% of calls). Monitoring shows the agent wastes 3-4 turns retrying business errors that can never succeed. Currently, both error types return only a plain text message to Claude.\nWhat's the most effective way to reduce wasted retries while improving customer-facing response quality?",
   "options": {

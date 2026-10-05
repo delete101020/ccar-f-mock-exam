@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_042",
-  "domain": "Claude Code Workflows & Plan Mode (Quy trình làm việc với Claude Code & Plan Mode)",
+  "domain": "Claude Code Configuration & Workflows",
+  "subdomain": "Claude Code Workflows & Plan Mode (Quy trình làm việc với Claude Code & Plan Mode)",
   "topic": "Câu P2.42: Direct Execution for a Simple Single-File Change",
   "question": "You need to add a date validation check ensuring event dates are in the future. This requires adding a conditional statement to one existing function in a single file.\nWhat is the most appropriate approach?",
   "options": {

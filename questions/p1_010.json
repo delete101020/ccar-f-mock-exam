@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_010",
-  "domain": "Claude Code CLI & Session Branching (Quản lý phiên làm việc & Phân nhánh phiên khám phá)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Claude Code CLI & Session Branching (Quản lý phiên làm việc & Phân nhánh phiên khám phá)",
   "topic": "Câu P1.10: Exploring Alternative Architecture Approaches via Session Forking",
   "question": "An engineer used the agent yesterday to analyze a legacy authentication module, identifying two distinct refactoring approaches: extracting a microservice versus refactoring in-place. Today, they want to explore both approaches in depth–having the agent propose specific code changes for each–before deciding which to implement.\nWhat's the most effective way to structure this exploration?",
   "options": {

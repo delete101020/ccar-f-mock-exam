@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_047",
-  "domain": "Anthropic API Tool Use & Output Limits (Sử dụng Tool trong Anthropic API & Giới hạn output)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Anthropic API Tool Use & Output Limits (Sử dụng Tool trong Anthropic API & Giới hạn output)",
   "topic": "Câu P2.47: Avoiding max_tokens Truncation by Splitting the Review",
   "question": "Your automated review calls the Claude API for each PR, using tool_use with a report_findings tool that returns a JSON array of finding objects (each with file_path, line_number, severity, category, and description). During testing on a large PR touching 30+ files, the response hits the max_tokens limit and the output is truncated mid-JSON, causing your pipeline's parser to fail.\nWhat is the most effective way to handle this?",
   "options": {

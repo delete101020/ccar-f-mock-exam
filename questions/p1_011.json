@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_011",
-  "domain": "Claude Code CLI & Session Management (Quản lý phiên làm việc & Phân nhánh phiên)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Claude Code CLI & Session Management (Quản lý phiên làm việc & Phân nhánh phiên)",
   "topic": "Câu P1.11: Branching Analysis Sessions for Independent Test Strategy Exploration",
   "question": "Your agent has analyzed a complex service module–reading 23 source files, tracing request flows, and identifying error handling patterns. A developer wants to compare two testing strategies before committing to one: end-to-end tests with mocked external services vs. snapshot tests capturing expected outputs. They need to independently develop both approaches to evaluate trade-offs.\nHow should you manage the sessions?",
   "options": {

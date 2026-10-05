@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_021",
-  "domain": "Conversation Design & Context Injection (Thiết kế hội thoại & Chèn ngữ cảnh động)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Conversation Design & Context Injection (Thiết kế hội thoại & Chèn ngữ cảnh động)",
   "topic": "Câu P2.21: Injecting Asynchronous Webhook Updates into the Next User Turn",
   "question": "During a conversation about order tracking, your external system receives a webhook indicating the user's package has shipped. The user is actively chatting and will likely send a follow-up message soon. You want the assistant to naturally incorporate this status change in its next response.\nWhat's the most effective approach?",
   "options": {

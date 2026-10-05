@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_022",
-  "domain": "Information Extraction & Hallucination Reduction (Trích xuất thông tin & Giảm thiểu Hallucination)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Information Extraction & Hallucination Reduction (Trích xuất thông tin & Giảm thiểu Hallucination)",
   "topic": "Câu P1.22: Reducing Fabricated Values with Explicit Null Instructions",
   "question": "Your system extracts event metadata (date, location, organizer, attendee_count) from news articles using a JSON schema with all nullable fields. During evaluation, you observe the model frequently generates plausible but incorrect values for fields not mentioned in the article–for example, outputting \"500\" for attendee_count when the source contains no attendance information.\nWhat's the most effective way to reduce these false extractions?",
   "options": {

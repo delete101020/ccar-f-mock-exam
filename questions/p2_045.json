@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_045",
-  "domain": "Claude Code Iterative Workflows (Quy trình làm việc lặp với Claude Code)",
+  "domain": "Claude Code Configuration & Workflows",
+  "subdomain": "Claude Code Iterative Workflows (Quy trình làm việc lặp với Claude Code)",
   "topic": "Câu P2.45: Iterating with Concrete Input/Output Test Cases",
   "question": "You've asked Claude to write a data migration script, but the initial output doesn't correctly handle records with null values in required fields.\nWhat's the most effective way to iterate toward a working solution?",
   "options": {

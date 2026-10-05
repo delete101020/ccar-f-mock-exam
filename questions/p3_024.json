@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_024",
-  "domain": "Claude Code Configuration & Project Memory (Cấu hình Claude Code & Bộ nhớ dự án CLAUDE.md)",
+  "domain": "Claude Code Configuration & Workflows",
+  "subdomain": "Claude Code Configuration & Project Memory (Cấu hình Claude Code & Bộ nhớ dự án CLAUDE.md)",
   "topic": "Câu P3.24: Reducing Low-Value Generated Tests via Testing Standards in CLAUDE.md",
   "question": "Your test generation produces unit tests for new code, but reviews show 55% are low-value: trivial assertions that only verify functions don't throw exceptions, tests duplicating existing coverage, or tests ignoring your team's fixture conventions.\nHow do you reduce the rate of low-value tests being generated in the first place?",
   "options": {

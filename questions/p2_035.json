@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_035",
-  "domain": "Anthropic API Tool Use & Orchestration (Sử dụng Tool trong Anthropic API & Điều phối luồng)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Anthropic API Tool Use & Orchestration (Sử dụng Tool trong Anthropic API & Điều phối luồng)",
   "topic": "Câu P2.35: Forcing extract_metadata First, Then Enrichment in Later Turns",
   "question": "Your pipeline uses a tool called extract_metadata with a JSON schema for paper details. You've also defined lookup_citations and verify_doi tools for enrichment. During testing, you notice that when users include requests like \"extract the metadata and tell me how cited it is,\" Claude sometimes calls lookup_citations first, which fails because it needs the DOI that extract_metadata would provide.\nWhat's the most effective way to ensure structured metadata extraction happens first?",
   "options": {

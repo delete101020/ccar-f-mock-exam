@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_058",
-  "domain": "Anthropic API Fundamentals & Conversation State (Nền tảng Messages API & Trạng thái hội thoại)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Anthropic API Fundamentals & Conversation State (Nền tảng Messages API & Trạng thái hội thoại)",
   "topic": "Câu P1.58: Agent Forgetting Earlier Turns Because Conversation History Is Not Resent",
   "question": "The agent verifies customer identity through a multi-step process before resetting passwords. During testing, you notice that after the customer answers the third verification question, the agent asks them to provide their name again, as if the earlier exchange never happened.\nWhat's the most likely cause of this behavior?",
   "options": {

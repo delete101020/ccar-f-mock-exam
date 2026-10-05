@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_037",
-  "domain": "Multi-Agent Systems & Synthesis Quality (Hệ thống đa Agent & Chất lượng tổng hợp - Output Formatting)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Multi-Agent Systems & Synthesis Quality (Hệ thống đa Agent & Chất lượng tổng hợp - Output Formatting)",
   "topic": "Câu P1.37: Content-Type-Aware Rendering in the Synthesis Agent",
   "question": "A user is expanding the research system beyond its single web search agent by adding specialized data sources. They add a financial API agent that returns structured JSON with revenue, margins, and growth rates; a news monitoring agent that returns prose summaries of recent developments; and a patent analysis agent that returns structured lists of technology areas. The synthesis agent combines these into executive briefings. Currently, it converts everything to bullet points, causing financial comparisons to lose tabular clarity and news summaries to lose narrative flow.\nWhat change would most improve briefing quality?",
   "options": {

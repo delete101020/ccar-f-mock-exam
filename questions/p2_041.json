@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_041",
-  "domain": "Prompt Engineering & Conversational Design (Kỹ thuật Prompt & Thiết kế hội thoại)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Prompt Engineering & Conversational Design (Kỹ thuật Prompt & Thiết kế hội thoại)",
   "topic": "Câu P2.41: Handling Ambiguous Requests via Stated Assumptions",
   "question": "Your conversational assistant frequently generates multiple clarifying questions when users make ambiguous requests. When a user asks \"Can you help me with the report?\", the assistant responds: \"I'd be happy to help! Could you tell me: 1) Which report? 2) What kind of help—drafting, reviewing, or formatting? 3) What's your deadline?\" User analytics show a 40% conversation abandonment rate after these multi-question responses.\nWhat's the most effective way to reduce friction while appropriately handling ambiguity?",
   "options": {

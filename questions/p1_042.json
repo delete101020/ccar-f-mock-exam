@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_042",
-  "domain": "Context Management & Multi-Agent Delegation (Quản lý Context & Phân nhánh Subagent)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Context Management & Multi-Agent Delegation (Quản lý Context & Phân nhánh Subagent)",
   "topic": "Câu P1.42: Context Passing to Report Generator: Synthesis Draft plus Structured Source Index",
   "question": "After the web search agent finds 25 sources (120K tokens of raw content), the document analysis agent extracts key insights (15K tokens), and the synthesis agent produces a coherent narrative draft (3K tokens), the coordinator must pass context to the report generation agent for the final output with proper source citations.\nWhat context-passing strategy provides the best balance of completeness and efficiency?",
   "options": {

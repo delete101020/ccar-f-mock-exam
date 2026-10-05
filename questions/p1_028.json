@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_028",
-  "domain": "Batch Processing & Cost Optimization (Xử lý hàng loạt & Tối ưu chi phí với Message Batches API)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Batch Processing & Cost Optimization (Xử lý hàng loạt & Tối ưu chi phí với Message Batches API)",
   "topic": "Câu P1.28: Choosing Batch Submission Frequency to Meet a 30-Hour SLA",
   "question": "Documents arrive continuously throughout business hours and need structured data extracted. To reduce costs, you want to use the Message Batches API (50% discount, up-to-24-hour processing window). Your SLA specifies that extraction results must be available within 30 hours of document arrival with 99.9% reliability.\nWhich batching strategy is most appropriate?",
   "options": {

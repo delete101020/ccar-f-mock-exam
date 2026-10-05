@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_017",
-  "domain": "Information Extraction & Quality Assurance / Human-in-the-Loop (Đảm bảo chất lượng trích xuất & Cơ chế người duyệt)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Information Extraction & Quality Assurance / Human-in-the-Loop (Đảm bảo chất lượng trích xuất & Cơ chế người duyệt)",
   "topic": "Câu P1.17: Allocating Human Review via Calibrated Field-Level Confidence Scores",
   "question": "After deployment, you find that 12% of extractions contain semantic errors that pass JSON schema validation (e.g., a duration like \"30 minutes\" incorrectly placed in an ingredient quantity field). Human reviewers have capacity to check only 20% of extractions.\nWhich approach most effectively allocates reviewer attention?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_006",
-  "domain": "Code Exploration & Refactoring Strategies (Chiến lược duyệt mã nguồn & Tái cấu trúc)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Code Exploration & Refactoring Strategies (Chiến lược duyệt mã nguồn & Tái cấu trúc)",
   "topic": "Câu P1.6: Identifying Function Callers Across Wrapper Modules and Aliases",
   "question": "An engineer asks the agent to find all callers of a function before removing it. The function is defined in a core library but is also exposed through wrapper modules that rename the function for domain-specific use (e.g., calculateTax in the library becomes computeOrderTax in the orders module).\nWhat exploration strategy will most reliably identify all callers?",
   "options": {

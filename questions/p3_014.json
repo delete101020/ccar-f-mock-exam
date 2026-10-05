@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_014",
-  "domain": "Batch Processing & Cost Optimization (Xử lý hàng loạt & Tối ưu chi phí)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Batch Processing & Cost Optimization (Xử lý hàng loạt & Tối ưu chi phí)",
   "topic": "Câu P3.14: Batch-First Extraction with Targeted Resubmission of Failed Contracts",
   "question": "Your team is extracting structured data from 50,000 legacy legal contracts under a two-week deadline. Initial testing with 500 sample documents shows 82% pass JSON schema first attempt, while the remaining 18% fall due to diverse issues—missing required fields, malformed dates, and incorrectly identified parties. Documents that fail typically need refinements targeting their specific failure modes before extraction succeeds.\nWhich batch processing strategy is the most cost-efficient while still meeting the deadline?",
   "options": {

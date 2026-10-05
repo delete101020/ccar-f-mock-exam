@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_015",
-  "domain": "Prompt Management & Conversation Consistency (Quản lý phiên bản System Prompt & Tính nhất quán hội thoại)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Prompt Management & Conversation Consistency (Quản lý phiên bản System Prompt & Tính nhất quán hội thoại)",
   "topic": "Câu P3.15: Versioning System Prompts per Conversation to Preserve Long-Running Session Consistency",
   "question": "After deploying an updated system prompt that improves response quality, users with multi-session conversations spanning several weeks report that the assistant now contradicts its earlier statements and has a noticeably different communication style. New users don't experience these issues.\nWhat's the best approach to resolve this?",
   "options": {

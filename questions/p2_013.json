@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_013",
-  "domain": "Context Window Management & Tool Definitions (Quản lý Context Window & Định nghĩa Tool)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Context Window Management & Tool Definitions (Quản lý Context Window & Định nghĩa Tool)",
   "topic": "Câu P2.13: Accuracy Drop on Near-Limit Documents Due to Tool Definitions Consuming Context",
   "question": "Your extraction system uses tool_use with a JSON schema containing 12 fields and detailed descriptions, totaling approximately 2,500 tokens for the complete tool definition. Processing documents under 150K tokens yields 98% accuracy. For documents between 175-190K tokens, accuracy drops to 71%, with information from the final third consistently missed. The model's context window is 200K tokens.\nWhat is the most likely cause?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_016",
-  "domain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
   "topic": "Câu P2.16: Preserving Prior-Session Conclusions via Progressive Summarization",
   "question": "After three months of weekly sessions, your conversation history has grown to 85,000 tokens. When users ask \"What did we conclude about the theme of isolation?\", the assistant provides generic literary analysis rather than referencing the group's specific insights from earlier sessions. Discussions often build on previous meetings' conclusions, so maintaining narrative context is important.\nWhat's the most effective approach?",
   "options": {

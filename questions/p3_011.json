@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_011",
-  "domain": "Claude Code Built-in Tools & Code Exploration (Công cụ tích hợp sẵn & Khám phá mã nguồn)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Claude Code Built-in Tools & Code Exploration (Công cụ tích hợp sẵn & Khám phá mã nguồn)",
   "topic": "Câu P3.11: Using Grep to Find All Imports of a Package Across a Monorepo",
   "question": "Developer Productivity An engineer asks the agent to find all files in the monorepo that import the @company/auth package to understand how authentication is used across services.\nWhich built-in tool is most appropriate for this task?",
   "options": {

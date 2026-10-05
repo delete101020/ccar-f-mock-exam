@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_030",
-  "domain": "Batch Processing & Cost Optimization (Xử lý hàng loạt & Tối ưu chi phí với Message Batches API)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Batch Processing & Cost Optimization (Xử lý hàng loạt & Tối ưu chi phí với Message Batches API)",
   "topic": "Câu P1.30: Routing by Latency Requirement: Batch API vs Real-time Messages API",
   "question": "Your extraction system processes two document types: standard monthly reports (archived after processing) and urgent exception reports (must trigger business alerts within 30 minutes of receipt). Both use the same JSON schema. You want to minimize API costs while meeting latency requirements.\nHow should you architect the processing pipeline?",
   "options": {

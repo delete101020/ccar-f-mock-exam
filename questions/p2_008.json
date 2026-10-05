@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_008",
-  "domain": "Claude Code Workflows & Plan Mode (Quy trình làm việc Claude Code & Plan Mode)",
+  "domain": "Claude Code Configuration & Workflows",
+  "subdomain": "Claude Code Workflows & Plan Mode (Quy trình làm việc Claude Code & Plan Mode)",
   "topic": "Câu P2.8: Direct Execution vs Plan Mode for a Production Bug with a Clear Stack Trace",
   "question": "A critical bug is affecting production users. Error logs show exceptions in the OrderProcessing module with a clear stack trace pointing to a specific area, but you haven't worked with this module before.\nWhat's the most effective approach?",
   "options": {

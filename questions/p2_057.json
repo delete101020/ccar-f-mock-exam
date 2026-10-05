@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_057",
-  "domain": "Tool Design & Human-in-the-Loop (Thiết kế Tool & Cơ chế người duyệt)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Tool Design & Human-in-the-Loop (Thiết kế Tool & Cơ chế người duyệt)",
   "topic": "Câu P2.57: Deterministic requires_review Flag with Tested Thresholds and Reasons",
   "question": "Your document extraction tool uses ML models to extract invoice fields (vendor, amount, date). The models return confidence scores (0.0-1.0) for each extracted field. In production, you observe: (1) the agent proceeds with low-confidence extractions that are incorrect 23% of the time, and (2) the agent requests unnecessary human review for 31% of extractions that were actually correct.\nHow should you restructure the tool's output?",
   "options": {

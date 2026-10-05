@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_020",
-  "domain": "Batch Processing & Context Window Optimization (Xử lý hàng loạt & Tối ưu hóa Context Window)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Batch Processing & Context Window Optimization (Xử lý hàng loạt & Tối ưu hóa Context Window)",
   "topic": "Câu P1.20: Handling context_length_exceeded Failures in Daily Batch Processing",
   "question": "After your daily batch of 10,000 documents completes, 300 documents (3%) failed with \"context_length_exceeded\" errors. The results file identifies each failure by custom_id.\nWhat's the most cost-effective approach to process these failures?",
   "options": {

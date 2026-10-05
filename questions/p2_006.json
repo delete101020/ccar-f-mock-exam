@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_006",
-  "domain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Vòng lặp phản hồi - Iterative Refinement)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Vòng lặp phản hồi - Iterative Refinement)",
   "topic": "Câu P2.6: Closing Research Gaps via Analysis-Driven Iterative Search Loop",
   "question": "Users report that final reports sometimes lack depth on specific subtopics. Investigation shows that the document analysis agent frequently identifies gaps—for instance, noting \"the retrieved sources discuss API authentication but lack details on token refresh patterns\"—but under the current strict pipeline, this insight isn't actionable since search has already completed.\nWhat's the most effective architectural change?",
   "options": {

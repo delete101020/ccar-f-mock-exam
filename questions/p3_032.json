@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_032",
-  "domain": "Model Context Protocol (MCP) & Tool Discovery (Giao thức ngữ cảnh mô hình & Khám phá Tool)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Model Context Protocol (MCP) & Tool Discovery (Giao thức ngữ cảnh mô hình & Khám phá Tool)",
   "topic": "Câu P3.32: Tools from Multiple MCP Servers Are Available Simultaneously",
   "question": "You've configured your Claude agent with three MCP servers: one for git operations, one for Jira ticket management, and one for documentation search.\nWhen a user asks the agent to \"create a branch for JIRA- 123 and add documentation links to the ticket,\" how does the agent access tools across these servers?",
   "options": {

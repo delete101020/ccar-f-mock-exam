@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_027",
-  "domain": "Context Management & RAG Optimization (Quản lý ngữ cảnh & Tối ưu RAG)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Context Management & RAG Optimization (Quản lý ngữ cảnh & Tối ưu RAG)",
   "topic": "Câu P3.27: Sliding Window for Accumulated RAG Results to Preserve Conversation History",
   "question": "Performance analysis reveals your context is composed of accumulated RAG results from all previous queries, which is crowding out conversation history and causing coherence degradation after 15+ turns.\nWhich approach best addresses this issue?",
   "options": {

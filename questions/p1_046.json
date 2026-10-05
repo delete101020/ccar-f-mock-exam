@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_046",
-  "domain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Model Context Protocol (MCP) & Tool Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
   "topic": "Câu P1.46: Reporting MCP Tool Errors via isError in Tool Results",
   "question": "When implementing your lookup_order MCP tool, the backend sometimes returns errors (e.g., \"Order not found\" or temporary database failures).\nWhat is the correct pattern for communicating these errors back to the agent?",
   "options": {

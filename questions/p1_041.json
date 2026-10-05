@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_041",
-  "domain": "Agentic Architectures & Multi-Agent Orchestration (Kiến trúc Agent & Điều phối đa Agent - Coordinator/Subagent)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Agentic Architectures & Multi-Agent Orchestration (Kiến trúc Agent & Điều phối đa Agent - Coordinator/Subagent)",
   "topic": "Câu P1.41: Reducing Follow-up Summary Latency by Avoiding Unnecessary Subagent Spawning",
   "question": "Production monitoring shows that follow-up queries like \"summarize what we learned about market trends\" consistently take 40+ seconds. Investigation reveals the coordinator spawns the synthesis subagent for each summarization request, passing 80K+ tokens of accumulated findings. The coordinator already has these findings in its context from orchestrating the research.\nWhat's the most effective way to improve response time for these follow-up summaries?",
   "options": {

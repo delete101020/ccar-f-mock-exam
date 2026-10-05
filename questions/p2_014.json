@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_014",
-  "domain": "Anthropic API Tool Use & Orchestration (Sử dụng Tool trong Anthropic API & Điều phối luồng)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Anthropic API Tool Use & Orchestration (Sử dụng Tool trong Anthropic API & Điều phối luồng)",
   "topic": "Câu P2.14: Guaranteed Structured Output Across Document Types via tool_choice any",
   "question": "The extraction pipeline receives documents of varying types—some are invoices, others are contracts, and some are receipts. You've defined separate extraction tools, each with its own schema tailored to the document type. During testing, you observe that with tool_choice: \"auto\", Claude sometimes returns conversational text instead of calling an extraction tool, causing downstream parsing failures. You need guaranteed structured output without knowing the document type in advance.\nWhat's the most effective approach?",
   "options": {

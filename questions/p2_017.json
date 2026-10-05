@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_017",
-  "domain": "Conversation State Management & Messages API (Quản lý trạng thái hội thoại & Messages API)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Conversation State Management & Messages API (Quản lý trạng thái hội thoại & Messages API)",
   "topic": "Câu P2.17: Lost Multi-Turn Preferences Because Prior Messages Are Not Sent in the messages Array",
   "question": "You're Implementing a feature where users refine their playlist preferences through multiple conversation turns. After deploying, you notice Claude's responses don't reflect what us earlier in the same conversation— for example, a user says they love jazz, but two messages later Claude asks what genres they enjoy.\nWhat is the most likely cause?",
   "options": {

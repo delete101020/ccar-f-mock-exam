@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_010",
-  "domain": "Tool Design & Safety Guardrails (Thiết kế Tool & Cơ chế an toàn)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Design & Safety Guardrails (Thiết kế Tool & Cơ chế an toàn)",
   "topic": "Câu P2.10: Enforcing Preview-Then-Confirm with Split Tools and Single-Use Confirmation Token",
   "question": "Your remove_team_member tool uses a dry_run: boolean parameter for previewing impacts before execution. Production monitoring shows the agent bypasses the preview step in 15% of calls by calling with dry_run=false directly. You need to ensure every removal is preceded by a preview that the user explicitly confirms.\nWhat is the most reliable approach?",
   "options": {

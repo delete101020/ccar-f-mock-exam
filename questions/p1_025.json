@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_025",
-  "domain": "Information Extraction & Structured Schema Design (Trích xuất thông tin & Thiết kế Schema có cấu trúc)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Information Extraction & Structured Schema Design (Trích xuất thông tin & Thiết kế Schema có cấu trúc)",
   "topic": "Câu P1.25: Strict Output Schema with Format Normalization Rules in Prompt",
   "question": "Your extraction pipeline processes restaurant menus and must output structured JSON with fields for item names, descriptions, prices, and dietary tags. Some menus use inconsistent formatting–prices as \"$12\" vs \"12.00\", dietary info as icons vs text.\nWhat's the most reliable approach?",
   "options": {

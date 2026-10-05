@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_040",
-  "domain": "Multi-Agent Orchestration & Source Provenance (Điều phối đa Agent & Bảo toàn nguồn trích dẫn)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Multi-Agent Orchestration & Source Provenance (Điều phối đa Agent & Bảo toàn nguồn trích dẫn)",
   "topic": "Câu P1.40: Preserving Citations via Structured Claim-Source Mappings",
   "question": "In production, final reports frequently contain claims without proper source attribution. Investigation shows that while the web search and document analysis agents correctly attach citations to their outputs, the synthesis agent loses track of which sources support which conclusions when combining findings.\nWhat's the most effective architectural change?",
   "options": {

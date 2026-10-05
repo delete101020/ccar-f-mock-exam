@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_051",
-  "domain": "Multi-Agent Orchestration & Subagents (Điều phối đa agent & Vòng lặp đánh giá)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Multi-Agent Orchestration & Subagents (Điều phối đa agent & Vòng lặp đánh giá)",
   "topic": "Câu P2.51: Coordinator Gap Evaluation and Targeted Re-delegation",
   "question": "The synthesis agent completes its initial pass but flags that three key research questions remain unanswered because the web search and document analysis agents didn't find relevant information on those specific subtopics. The coordinator currently proceeds directly to report generation, producing reports with incomplete coverage.\nWhat change would most effectively improve research completeness?",
   "options": {

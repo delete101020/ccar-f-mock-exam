@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_034",
-  "domain": "Claude Code CLI & CI/CD Automation (Claude Code CLI & Tự động hóa CI/CD)",
+  "domain": "Claude Code Configuration & Workflows",
+  "subdomain": "Claude Code CLI & CI/CD Automation (Claude Code CLI & Tự động hóa CI/CD)",
   "topic": "Câu P3.34: Per-Invocation Caps with --max-turns and --max-budget-usd in claude -p",
   "question": "During initial testing of the automated review pipeline, you notice that reviews on large PRs (50+ changed files) sometimes take over 20 minutes and cost $8-12 per run due to extensive agentic loops — Claude reads files, runs analysis tools, and iterates many times. Your team needs each invocation to abort once it reaches a fixed iteration count and a fixed dollar amount, enforced by Claude Code itself rather than the surrounding job runner.\nWhich configuration change directly enforces both of those per-invocation caps?",
   "options": {

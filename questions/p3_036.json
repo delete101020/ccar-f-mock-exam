@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_036",
-  "domain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Context Management & Memory Patterns (Quản lý ngữ cảnh dài & Mẫu thiết kế bộ nhớ ngoài)",
   "topic": "Câu P3.36: Retained Story Bible with Trimming Applied Only to Brainstorming",
   "question": "Your conversation history includes two types of content: persistent story elements (character backgrounds, plot structure, world rules) that must remain consistent throughout, and extensive brainstorming discussion that's mostly ephemeral. After 40+ turns, you're hitting context limits and users report the assistant \"forgets\" established character traits, breaking narrative consistency.\nWhich approach best ensures persistent story elements remain available to the model while reclaiming context space?",
   "options": {

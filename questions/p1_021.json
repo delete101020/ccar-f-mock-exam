@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_021",
-  "domain": "Information Extraction & Prompt Engineering (Trích xuất thông tin & Kỹ thuật Prompt - Few-shot Examples)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Information Extraction & Prompt Engineering (Trích xuất thông tin & Kỹ thuật Prompt - Few-shot Examples)",
   "topic": "Câu P1.21: Improving Field Consistency with Few-shot Examples",
   "question": "Your extraction system parses e-commerce product descriptions to extract specifications like dimensions, weight, and materials into JSON. Despite having a well-defined schema, the model inconsistently extracts the \"materials\" field–sometimes returning \"cotton blend\", other times \"Cotton/Polyester mix\", and occasionally omitting the field when material information is clearly present in the source.\nWhat's the most effective way to improve extraction consistency?",
   "options": {

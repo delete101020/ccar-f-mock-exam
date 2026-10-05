@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_037",
-  "domain": "Anthropic API Tool Use & Error Handling (Sử dụng Tool trong Anthropic API & Xử lý lỗi)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Anthropic API Tool Use & Error Handling (Sử dụng Tool trong Anthropic API & Xử lý lỗi)",
   "topic": "Câu P2.37: Surfacing a 503 Service Unavailable as an Explicit Tool Error",
   "question": "Your search Flights tool calls an external airline API that occasionally returns a 503 Service Unavailable error.\nWhat is the most effective way to handle this error in your tool implementation?",
   "options": {

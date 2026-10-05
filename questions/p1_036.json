@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_036",
-  "domain": "Multi-Agent Systems & Subagent Delegation (Hệ thống đa Agent & Ủy quyền cho Subagent)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Multi-Agent Systems & Subagent Delegation (Hệ thống đa Agent & Ủy quyền cho Subagent)",
   "topic": "Câu P1.36: Goal-Oriented Delegation Instead of Procedural Instructions",
   "question": "The coordinator provides detailed step-by-step instructions to the web search subagent, specifying exact search queries, source quality criteria (coverage breadth, source diversity), and content type classifications. The coordinator sometimes encounters challenges where instructions fail when the subagent encounters unexpected situations.\nWhat's the most effective way to improve subagent adaptability?",
   "options": {

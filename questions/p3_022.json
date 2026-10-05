@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_022",
-  "domain": "Prompt Engineering & System Prompt Design (Kỹ thuật Prompt & Thiết kế System Prompt)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Prompt Engineering & System Prompt Design (Kỹ thuật Prompt & Thiết kế System Prompt)",
   "topic": "Câu P3.22: Replacing Rigid Conditionals with a General Principle for Implicit Expertise Signals",
   "question": "Your fitness coaching assistant uses a system prompt with detailed conditional logic: \"If the user mentions being a beginner, provide step-by-step form instructions. If they use term 'progressive overload' or 'superset', respond concisely. If they ask about injury history, always recommend consulting a physician.\" During evaluation, you find the assistant correct explicit expertise declarations but struggles when users don't clearly state their level-often defaulting to overly detailed responses regardless of contextual cues like technical terms.\nWhich change to the system prompt would most directly address this failure to pick up on implicit expertise signals?",
   "options": {

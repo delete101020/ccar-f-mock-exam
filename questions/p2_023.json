@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_023",
-  "domain": "Conversation Design & Ambiguity Handling (Thiết kế hội thoại & Xử lý yêu cầu mơ hồ)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Conversation Design & Ambiguity Handling (Thiết kế hội thoại & Xử lý yêu cầu mơ hồ)",
   "topic": "Câu P2.23: Balancing Clarifying Questions with Explicit Assumptions",
   "question": "Users frequently send ambiguous requests like \"book a venue for the party\" without specifying date, guest count, or budget. Your evaluation shows the assistant asks an average of 4.2 clarifying questions before taking any action, causing 35% of users to abandon mid-conversation. However, when you reduce questions, users sometimes receive recommendations that don't match their preferences.\nWhat's the most effective approach to improve this trade-off?",
   "options": {

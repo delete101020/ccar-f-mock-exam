@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_032",
-  "domain": "Anthropic API Tool Use & Error Handling (Sử dụng Tool trong Anthropic API & Xử lý lỗi)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Anthropic API Tool Use & Error Handling (Sử dụng Tool trong Anthropic API & Xử lý lỗi)",
   "topic": "Câu P2.32: Instructive Error-Type-Specific tool_result Messages",
   "question": "Anthropic's tool use documentation states: \"Write instructive error messages. Instead of generic errors like 'failed', include what went wrong and what Claude should try next.\" A billing dispute agent uses lookup_order, which catches all exceptions and returns a tool_result with is_error: true and the message \"execution failed\". Monitoring shows two failure modes: the agent retries the identical call until hitting the turn limit, or it immediately calls escalate_to_human without trying alternative tools.\nWhich change follows the documented recommendation and gives Claude the information it needs to select the correct recovery action for each error type?",
   "options": {

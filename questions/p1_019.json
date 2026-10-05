@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_019",
-  "domain": "Anthropic API Tool Use & Orchestration (Sử dụng Tool trong Anthropic API & Điều phối luồng)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Anthropic API Tool Use & Orchestration (Sử dụng Tool trong Anthropic API & Điều phối luồng)",
   "topic": "Câu P1.19: Forcing Initial Metadata Extraction via Explicit tool_choice",
   "question": "Your pipeline uses a tool called extract_metadata with a JSON schema for paper details. During testing, the agent sometimes fails to call extract_metadata because it wants to provide direct answers.\nWhat's the most reliable way to ensure metadata extraction always happens first?",
   "options": {

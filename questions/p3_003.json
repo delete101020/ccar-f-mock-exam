@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_003",
-  "domain": "Tool Design & Human-in-the-Loop (Thiết kế Tool & Cơ chế xác nhận của người dùng)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Design & Human-in-the-Loop (Thiết kế Tool & Cơ chế xác nhận của người dùng)",
   "topic": "Câu P3.3: Returning Meaningful Context from a Resource Allocation Tool",
   "question": "Your resource allocation tool returns a simple acknowledgment message after provisioning is requested. Users frequently approve allocations and immediately ask \"how much did that cost?\" or \"which project was that?\" - indicating they confirmed without understanding the request.\nWhat tool design change would most effectively address this?",
   "options": {

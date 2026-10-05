@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_026",
-  "domain": "Information Extraction & Structured Schema Design (Trích xuất thông tin & Thiết kế Schema có cấu trúc)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Information Extraction & Structured Schema Design (Trích xuất thông tin & Thiết kế Schema có cấu trúc)",
   "topic": "Câu P1.26: Extensible Enum with \"other\" + Detail Field",
   "question": "Your extraction uses tool use with a JSON schema where property_type is defined as an enum: ['house', 'apartment', 'condo', 'townhouse']. After deployment, 8% of extractions fail schema validation. Investigation reveals listings mention many uncommon property types –\"studio\", \"loft\", \"duplex\", \"mobile home\", \"tiny house\", \"converted warehouse\"–and new types continue appearing regularly.\nWhat's the most effective long-term solution?",
   "options": {

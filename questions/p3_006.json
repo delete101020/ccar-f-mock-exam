@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_006",
-  "domain": "Information Extraction & Prompt Engineering (Trích xuất thông tin & Kỹ thuật Prompt)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Information Extraction & Prompt Engineering (Trích xuất thông tin & Kỹ thuật Prompt)",
   "topic": "Câu P3.6: Using Few-Shot Examples to Handle Informal Recipe Measurements",
   "question": "Your system has been running for 3 weeks and human reviewers have corrected 847 extractions. Analysis reveals a recurring pattern: when recipes use informal measurements like \"a handful\" or \"a splash,\" the model either invents specific amounts or leaves fields empty—accounting for 23% of all corrections.\nHow should you use this feedback to improve extraction accuracy?",
   "options": {

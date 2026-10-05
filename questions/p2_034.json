@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_034",
-  "domain": "Prompt Engineering & Review Criteria Design (Kỹ thuật Prompt & Thiết kế tiêu chí review)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Prompt Engineering & Review Criteria Design (Kỹ thuật Prompt & Thiết kế tiêu chí review)",
   "topic": "Câu P2.34: Explicit Branch Enumeration Instructions for Coverage-Gap Detection",
   "question": "Your code review prompts include both implementation changes and the corresponding test file, but the LLM's review comments fail to point out untested code paths. Analysis reveals the model correctly flags functions that have no tests at all, but fails to identify when conditional branches or error-handling paths within tested functions that have no tests at all, but fails to identify when conditional branches or error-handling paths within tested functio lack coverage.\nWhat's the most effective way to improve detection of branch-level coverage gaps without overcomplicating the pipeline?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_048",
-  "domain": "Claude Code Exploration Strategies & Context Management (Chiến lược duyệt mã nguồn & Quản lý Context)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Claude Code Exploration Strategies & Context Management (Chiến lược duyệt mã nguồn & Quản lý Context)",
   "topic": "Câu P2.48: Locating an Error Source by Grepping Distinctive Message Text",
   "question": "An engineer sees an unfamiliar error message \"SYNC_CONFLICT: entity version mismatch detected\" in production logs but doesn't know which of the 12 services in the codebase generates it. They ask the agent to help locate the source code.\nWhat exploration approach will most efficiently find the responsible code?",
   "options": {

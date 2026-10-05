@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_054",
-  "domain": "Tool Design & Error Handling (Thiết kế Tool & Xử lý lỗi)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Design & Error Handling (Thiết kế Tool & Xử lý lỗi)",
   "topic": "Câu P2.54: Partitioning Transient vs Non-Transient Error Handling",
   "question": "Your publish article tool calls an external CMS API that occasionally returns transient errors (network timeouts, 503s) and non-transient errors (403 permission denied, 422 validation failure). Currently, every error is returned directly to the agent, which leads to the agent retrying non-transient errors and wasting turns on failures that will never succeed.\nHow should you partition error-handling responsibility between the tool implementation and the agent?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_058",
-  "domain": "Tool Design & Error Handling (Thiết kế Tool & Xử lý lỗi)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Design & Error Handling (Thiết kế Tool & Xử lý lỗi)",
   "topic": "Câu P2.58: Replacing Ambiguous Parameters with game_id plus a Lookup Tool",
   "question": "Your agent includes an update_game_score tool that accepts game_date (string), home_team (string), and away_team (string) parameters. Production logs reveal recurring issues: the agent uses team nicknames instead of official names, applies inconsistent date formats, and selects the wrong game when teams have rematches in the same season.\nWhat tool interface change would effectively prevent these errors?",
   "options": {

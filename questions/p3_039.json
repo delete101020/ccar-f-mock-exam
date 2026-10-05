@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_039",
-  "domain": "Claude Code CLI & CI/CD Automation (Claude Code CLI & Tự động hóa CI/CD)",
+  "domain": "Claude Code Configuration & Workflows",
+  "subdomain": "Claude Code CLI & CI/CD Automation (Claude Code CLI & Tự động hóa CI/CD)",
   "topic": "Câu P3.39: Using --append-system-prompt to Preserve Built-in Tool Guidance",
   "question": "You are setting up a non-interactive automated code review pipeline using Claude Code. You want Claude to analyze a pulled Git diff (git diff) against the main branch and apply a custom set of code review instructions. However, you notice that when you run the pipeline, Claude only looks at the raw diff text itself and completely stops using its file-reading or code navigation tools. As a result, it fails to inspect the broader codebase repository context, which is critical because the diff modifies a core function called by many other external modules.\nWhich change to the CLI invocation will cause Claude to read related files in the repository while still successfully applying your custom review instructions?",
   "options": {

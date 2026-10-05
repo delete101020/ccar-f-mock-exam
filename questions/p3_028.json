@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_028",
-  "domain": "Claude Code Configuration & Skills (Cấu hình Claude Code & Skills / Slash Commands)",
+  "domain": "Claude Code Configuration & Workflows",
+  "subdomain": "Claude Code Configuration & Skills (Cấu hình Claude Code & Skills / Slash Commands)",
   "topic": "Câu P3.28: Sharing a /migrate-component Skill via Project .claude/skills",
   "question": "Your team frequently migrates React components to Vue. You've written a step-by-step workflow for Claude Code to follow during each migration, and you want every developer on the team to invoke it by typing /migrate-component. The workflow should stay in sync as the team iterates on it.\nWhere should you place the skill file?",
   "options": {

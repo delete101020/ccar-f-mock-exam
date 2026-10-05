@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_060",
-  "domain": "Claude Code Configuration & Memory (Cấu hình Claude Code & Hệ thống bộ nhớ CLAUDE.md)",
+  "domain": "Claude Code Configuration & Workflows",
+  "subdomain": "Claude Code Configuration & Memory (Cấu hình Claude Code & Hệ thống bộ nhớ CLAUDE.md)",
   "topic": "Câu P2.60: Diagnosing Inconsistent CLAUDE.md Adherence with /memory",
   "question": "You've documented API error handling conventions in a CLAUDE.md file at your project root, specifying that endpoint handlers should use a custom ApiError class. After several sessions, you notice Claude Code sometimes follows these conventions and sometimes uses generic try/catch blocks with string messages. The inconsistency appears random across different coding sessions.\nWhat's the most efficient first diagnostic step?",
   "options": {

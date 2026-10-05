@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_040",
-  "domain": "Claude Code Configuration & Project Memory (Cấu hình Claude Code & Bộ nhớ dự án CLAUDE.md)",
+  "domain": "Claude Code Configuration & Workflows",
+  "subdomain": "Claude Code Configuration & Project Memory (Cấu hình Claude Code & Bộ nhớ dự án CLAUDE.md)",
   "topic": "Câu P3.40: Generating Meaningful Tests via Testing Standards in CLAUDE.md",
   "question": "Your development team is using Claude Code to automate test generation across a large codebase. However, developers are frequently rejecting the generated test suites because Claude creates a high volume of trivial assertions or tests that merely maximize line coverage without validating meaningful behavioral logic or edge cases. You want to guide Claude to generate high-quality, production-ready tests directly without introducing high latency or modifying the core pipeline script.\nWhich strategy best ensures that high-quality, meaningful tests are generated in the first place?",
   "options": {

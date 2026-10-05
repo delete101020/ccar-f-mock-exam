@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_049",
-  "domain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Phân rã tác vụ - Task Decomposition)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Phân rã tác vụ - Task Decomposition)",
   "topic": "Câu P2.49: Prioritized, Adaptive Decomposition for Legacy Test Coverage",
   "question": "An engineer asks your agent to add comprehensive tests to a legacy codebase with 200 files and minimal existing test coverage. The engineer hasn't specified which modules to prioritize.\nHow should the agent decompose this open-ended task?",
   "options": {

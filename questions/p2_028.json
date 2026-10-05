@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_028",
-  "domain": "Claude Code Iterative Refinement (Tinh chỉnh lặp & Phối hợp phản hồi trong Claude Code)",
+  "domain": "Claude Code Configuration & Workflows",
+  "subdomain": "Claude Code Iterative Refinement (Tinh chỉnh lặp & Phối hợp phản hồi trong Claude Code)",
   "topic": "Câu P2.28: Providing Interacting Formatting Issues Together in One Message",
   "question": "You've asked Claude Code to build a PDF report generation feature. The initial implementation queries the database correctly, but the output has formatting issues: table columns are too narrow causing content truncation, dates display without proper formatting, and page break handling is incorrect. You've noticed these issues interact— changing column widths affects how dates render, and page breaks depend on content height.\nWhat's the most effective approach for iterating toward a working solution?",
   "options": {

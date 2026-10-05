@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_026",
-  "domain": "Tool Design & Structured Outputs (Thiết kế Tool & Đầu ra có cấu trúc)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Design & Structured Outputs (Thiết kế Tool & Đầu ra có cấu trúc)",
   "topic": "Câu P3.26: Primary Advantage of Structured JSON Tool Results",
   "question": "Your portfolio value tool returns the total value of a user's investment portfolio. You're deciding between returning a structured JSON object with explicit fields versus returning information as a formatted text string.\nWhat is the primary advantage of using structured output with defined fields?",
   "options": {

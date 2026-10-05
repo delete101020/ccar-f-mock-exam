@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_031",
-  "domain": "Information Extraction & Structured Schema Design (Trích xuất thông tin & Thiết kế Schema có cấu trúc)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Information Extraction & Structured Schema Design (Trích xuất thông tin & Thiết kế Schema có cấu trúc)",
   "topic": "Câu P2.31: Enforcing Resume Extraction Schema via Tool Use input_schema",
   "question": "The system needs to extract candidate information (name, contact details, skills, work experience, education) from uploaded resumes. The extracted data must strictly conform to a predefined JSON schema, as missing required fields or incorrect data types will cause downstream validation failures.\nWhat is the most reliable approach to ensure Claude's output consistently matches the schema?",
   "options": {

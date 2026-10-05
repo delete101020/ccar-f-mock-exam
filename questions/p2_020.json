@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_020",
-  "domain": "Prompt Engineering & Long-Conversation Consistency (Kỹ thuật Prompt & Duy trì hành vi trong hội thoại dài)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Prompt Engineering & Long-Conversation Consistency (Kỹ thuật Prompt & Duy trì hành vi trong hội thoại dài)",
   "topic": "Câu P2.20: Maintaining Guideline Adherence in Long Conversations via Reinforcement Reminders",
   "question": "During QA testing, you notice that Claude follows your system prompt guidelines consistently in the first 10- 15 turns, but by turn 25-30, responses begin deviating—using informal tone when formality was specified, occasionally skipping required formatting, or providing information types the guidelines restrict. Conversation length is well within context limits (typically 30,000 tokens out of 200,000 available).\nWhat's the most effective approach to maintain consistent behavior throughout extended conversations?",
   "options": {

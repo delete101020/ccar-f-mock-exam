@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_059",
-  "domain": "Multi-Agent Orchestration & Tool Scoping (Điều phối đa agent & Giới hạn phạm vi Tool)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Multi-Agent Orchestration & Tool Scoping (Điều phối đa agent & Giới hạn phạm vi Tool)",
   "topic": "Câu P2.59: Tool Overload as the Primary Cause of Poor Tool Selection",
   "question": "You've configured the system so that all four subagents have access to the complete set of 18 tools. During testing, agents frequently call tools outside their specialization—the synthesis agent attempts web searches, and the report generator tries to analyze documents.\nWhat is the primary cause of this poor tool selection behavior?",
   "options": {

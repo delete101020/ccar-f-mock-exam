@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_038",
-  "domain": "Multi-Agent Systems & Orchestrator-Worker Pattern (Hệ thống đa Agent & Mẫu Orchestrator-Worker)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Multi-Agent Systems & Orchestrator-Worker Pattern (Hệ thống đa Agent & Mẫu Orchestrator-Worker)",
   "topic": "Câu P1.38: Information Flow Between Subagents via the Coordinator",
   "question": "The web search agent has gathered several relevant sources for a research topic. The document analysis agent now needs to examine these sources.\nHow does information typically flow between these two specialized subagents?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_042",
-  "domain": "Model Context Protocol (MCP) & Claude Code Configuration (Giao thức ngữ cảnh mô hình & Cấu hình phạm vi MCP)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Model Context Protocol (MCP) & Claude Code Configuration (Giao thức ngữ cảnh mô hình & Cấu hình phạm vi MCP)",
   "topic": "Câu P3.42: Applying Project vs Personal MCP Server Scopes",
   "question": "Your team is configuring MCP servers in Claude Code. You want to add a shared venue lookup server that all team members should have access to, and you personally want to add an experimental music playlist server that only you are testing.\nWhich configuration approach correctly applies MCP server scopes?",
   "options": {

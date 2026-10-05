@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_004",
-  "domain": "Context Management & Subagent State Recovery (Quản lý Context & Phục hồi trạng thái Subagent)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Context Management & Subagent State Recovery (Quản lý Context & Phục hồi trạng thái Subagent)",
   "topic": "Câu P1.4: Resuming Interrupted Subagent After Minor Code Drift",
   "question": "An engineer's exploration subagent spent 30 minutes analyzing a legacy payment system, reading 47 files and documenting data flows. The session was interrupted when the engineer's connection dropped. While away, a teammate merged a PR that renamed two utility functions. The engineer wants to continue the same exploration.\nWhat's the most effective approach?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_056",
-  "domain": "Tool Design & Error Handling (Thiết kế Tool & Xử lý lỗi)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Design & Error Handling (Thiết kế Tool & Xử lý lỗi)",
   "topic": "Câu P2.56: In-Tool Retry for Timeouts, Immediate Validation Errors for Syntax",
   "question": "Production monitoring shows your search_catalog tool fails 12% of the time: 8% are network timeouts that succeed when immediately retried, while 4% are query syntax errors from malformed user-provided filters that never succeed regardless of retry attempts. Currently, both error types are returned to the agent identically, causing it to waste turns retrying syntax errors and telling users to \"try again later\" for timeouts.\nHow should you modify the tool's error handling?",
   "options": {

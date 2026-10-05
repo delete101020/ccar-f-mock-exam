@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_031",
-  "domain": "Code Review & Self-Evaluation Bias (Review mã nguồn & Thiên kiến tự đánh giá)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Code Review & Self-Evaluation Bias (Review mã nguồn & Thiên kiến tự đánh giá)",
   "topic": "Câu P3.31: Same-Session Self-Review Misses Bugs Caught by Independent CI Review",
   "question": "A developer uses Claude Code to refactor a function during their development session. Before committing, they ask the same Claude session to review the code for issues. Later, a separate automated CI review catches several bugs that the same-session review missed.\nWhat best explains this discrepancy?",
   "options": {

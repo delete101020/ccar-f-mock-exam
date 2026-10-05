@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_029",
-  "domain": "Claude Code Context Provisioning (Cung cấp ngữ cảnh trong Claude Code & @file references)",
+  "domain": "Claude Code Configuration & Workflows",
+  "subdomain": "Claude Code Context Provisioning (Cung cấp ngữ cảnh trong Claude Code & @file references)",
   "topic": "Câu P2.29: Using @References to Supply Concrete Pattern Examples for a One-Off Task",
   "question": "You're implementing a new payment processing module that must follow your project's established patterns for database transactions, error handling, and audit logging. You've identified three existing modules that exemplify these patterns: db_utils.py, error_handlers.py, and audit_logger.py. This is a one-off integration task—these patterns are well-documented in your team wiki and don't need additional project-level documentation.\nWhat's the most effective approach?",
   "options": {

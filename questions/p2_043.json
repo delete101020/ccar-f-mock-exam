@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_043",
-  "domain": "Claude Code Configuration & Hooks (Cấu hình Claude Code & Hooks tất định)",
+  "domain": "Claude Code Configuration & Workflows",
+  "subdomain": "Claude Code Configuration & Hooks (Cấu hình Claude Code & Hooks tất định)",
   "topic": "Câu P2.43: Enforcing Formatting Deterministically with a PostToolUse Hook",
   "question": "Your team's CLAUDE.md includes a rule: \"Use 4-space indentation and always run Prettier formatting.\" Despite this, code reviews reveal that roughly 30% of files Claude Code generates use inconsistent formatting — sometimes 2-space indentation, sometimes missing trailing commas. Adding emphasis (\"IMPORTANT: You MUST use Prettier formatting\") reduces violations to about 15%, but doesn't eliminate them.\nWhat is the most effective way to ensure all generated code is consistently formatted?",
   "options": {

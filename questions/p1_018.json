@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_018",
-  "domain": "Information Extraction & Pipeline Validation (Trích xuất thông tin & Kiểm thực pipeline)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Information Extraction & Pipeline Validation (Trích xuất thông tin & Kiểm thực pipeline)",
   "topic": "Câu P1.18: Invoice Line-Item Sum Reconciliation and Consistency Flags",
   "question": "Your extraction pipeline processes invoices and extracts line items, tax amounts, and grand totals. You discover that 8% of documents have extracted line item amounts that don't sum to the extracted grand total—the downstream accounting system has been detecting mismatches.\nWhat's the most effective improvement?",
   "options": {

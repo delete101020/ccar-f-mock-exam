@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_038",
-  "domain": "Tool Interface Design & Schema Constraints (Thiết kế giao diện Tool & Ràng buộc Schema)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Interface Design & Schema Constraints (Thiết kế giao diện Tool & Ràng buộc Schema)",
   "topic": "Câu P2.38: Splitting log_workout into Category-Specific Tools to Prevent Invalid Combinations",
   "question": "Your agent has a log_workout tool that accepts exercise_type (string), value (number), and measurement (string). Production monitoring shows the agent frequently passes mismatched combinations-using measurement: \"reps\" for cardio exercises like running, or measurement: \"miles\" for strength exercises like bench press. Your exercises naturally divide into two categories: cardio (measured in time or distance) and strength (measured in reps and sets). 23% of tool calls have invalid combinations.\nWhat approach would most effectively reduce these errors?",
   "options": {

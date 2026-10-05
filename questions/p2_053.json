@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_053",
-  "domain": "Tool Design & Dynamic Tool Discovery (Thiết kế Tool & Khám phá Tool động)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Design & Dynamic Tool Discovery (Thiết kế Tool & Khám phá Tool động)",
   "topic": "Câu P2.53: Dynamic Connector Discovery that Gates Tool Availability",
   "question": "Your agent has access to 50+ specialized API connectors for different external services. As the connector library grew, tool selection accuracy dropped to 58%. You design a search_connectors(description) tool that finds matching connectors, but in testing agents frequently skip searching and call connectors directly (often incorrectly), or search select wrong connectors from the filtered results.\nHow should you design the tool composition pattern to address both issues?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_055",
-  "domain": "Tool Design & Error Handling (Thiết kế Tool & Xử lý lỗi)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Design & Error Handling (Thiết kế Tool & Xử lý lỗi)",
   "topic": "Câu P2.55: Eliminating Race Conditions with an Atomic Find-and-Book Tool",
   "question": "Your scheduling agent uses get_available_slots(date, provider_id) to retrieve open appointment times, then book_appointment(provider_id, slot_time, patient_id) to reserve a slot. tickets show that 15% of booking attempts fall with \"slot no longer available\" because another user booked the slot between the availability check and the booking call.\nHow should you refactor these tools?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_023",
-  "domain": "Tool Use & Claude Code Built-in Tools (Sử dụng Tool & Công cụ tích hợp của Claude Code)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Use & Claude Code Built-in Tools (Sử dụng Tool & Công cụ tích hợp của Claude Code)",
   "topic": "Câu P3.23: Using Grep for Content Search of Dangerous eval() Calls",
   "question": "You're building a security scanning workflow. \nWhen engineers need to locate all occurrences of a dangerous function like eval() across a large codebase, which tool should your agent use for content search?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_024",
-  "domain": "Information Extraction & Pipeline Validation (Trích xuất thông tin & Validation-Retry Loop)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Information Extraction & Pipeline Validation (Trích xuất thông tin & Validation-Retry Loop)",
   "topic": "Câu P1.24: Limits of Retry-with-Error-Feedback for Missing Source Information",
   "question": "Your extraction system implements automatic retries when validation fails. On each retry, the specific validation error is appended to the prompt. This retry-with-error-feedback approach resolves most failures within 2-3 attempts\nFor which failure pattern would additional retries be LEAST effective?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_015",
-  "domain": "Model Context Protocol (MCP) & Tool Selection / Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Model Context Protocol (MCP) & Tool Selection / Design (Giao thức ngữ cảnh mô hình & Thiết kế Tool)",
   "topic": "Câu P1.15: Optimizing MCP Tool Descriptions to Prevent Grep Fallback for Code Analysis",
   "question": "After integrating a local MCP server providing code analysis tools (analyze_dependencies, find_dead_code, calculate_complexity), you notice the agent continues to use Grep to inspect dependencies even when users explicitly ask about \"code dependencies\". Tool definitions reveal: analyze_dependencies returns a dependency graph by analyzing imports.\nWhat's the most effective approach to improve the agent's selection of MCP tools?",
   "options": {

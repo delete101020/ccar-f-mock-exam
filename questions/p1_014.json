@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_014",
-  "domain": "Claude Code Exploration Strategies & Context Management (Chiến lược duyệt mã nguồn & Quản lý Context)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Claude Code Exploration Strategies & Context Management (Chiến lược duyệt mã nguồn & Quản lý Context)",
   "topic": "Câu P1.14: Incremental Code Exploration for Large Codebase Auth Architecture",
   "question": "An engineer who just joined the team asks the agent to help them understand the authentication and authorization architecture before making security improvements. The codebase has 800+ files across multiple services.\nWhat exploration strategy will most effectively build understanding, given Claude built-in tools and context limits?",
   "options": {

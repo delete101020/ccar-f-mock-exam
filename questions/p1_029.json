@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_029",
-  "domain": "Information Extraction & Prompt Engineering (Trích xuất thông tin & Kỹ thuật Prompt - Few-shot Examples)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Information Extraction & Prompt Engineering (Trích xuất thông tin & Kỹ thuật Prompt - Few-shot Examples)",
   "topic": "Câu P1.29: Few-shot Examples for Skills Array Granularity and Explicit-Mention Criteria",
   "question": "Your schema includes a skills: string[] field. Production monitoring reveals three consistency issues: (1) compound phrases like \"Python and SQL\" are sometimes kept as one entry, sometimes split; (2) implied but unstated skills occasionally appear in extractions; (3) similar documents produce wildly different array lengths (5-10 vs 40+ entries). Your prompt currently says \"Extract all skills mentioned.\"\nWhat's the most effective improvement?",
   "options": {

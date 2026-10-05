@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_025",
-  "domain": "Tool Design & Guardrails (Thiết kế Tool & Cơ chế kiểm soát tất định)",
+  "domain": "Tool Design & MCP Integration",
+  "subdomain": "Tool Design & Guardrails (Thiết kế Tool & Cơ chế kiểm soát tất định)",
   "topic": "Câu P3.25: Tamper-Proof $500 Approval Threshold Enforced Inside the Tool",
   "question": "Your expense reimbursement agent processes employee requests using a process reimbursement tool. Company policy requires that reimbursements above $500 must be approved before funds are disbursed. \nThe agent handles hundreds of requests daily, and you need the threshold enforcement to be tamper-proof regardless of how the agent is prompted ensures the $500 approval threshold cannot be bypassed?",
   "options": {

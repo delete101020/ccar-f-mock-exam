@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_009",
-  "domain": "Prompt Engineering & Automated Code Review (Kỹ thuật Prompt & Review code tự động)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Prompt Engineering & Automated Code Review (Kỹ thuật Prompt & Review code tự động)",
   "topic": "Câu P2.9: Improving Review Recall by Separating Coverage-Focused Finding from Thresholding",
   "question": "After deploying the automated review, you notice high precision but low recall — real bugs are slipping through undetected. Investigation reveals your review prompt instructs Claude to \"only report high- confidence issues you are certain about\" and \"err on the side of not commenting.\" Developers appreciate the low noise, but a race condition that caused a production outage was visible in a reviewed PR and went unreported. You need to substantially improve bug detection while keeping false positive rates manageable for your team.\nWhat is the most effective approach?",
   "options": {

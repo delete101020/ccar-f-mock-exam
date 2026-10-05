@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_008",
-  "domain": "Prompt Engineering & Multi-Pass Review Architecture (Kỹ thuật Prompt & Kiến trúc review nhiều lượt)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Prompt Engineering & Multi-Pass Review Architecture (Kỹ thuật Prompt & Kiến trúc review nhiều lượt)",
   "topic": "Câu P3.8: Splitting a Multi-Concern Code Review Prompt to Resolve Recall Trade-offs",
   "question": "Your automated reviewer uses a single prompt covering security issues, API design, and business logic correctness. Your evaluation suite shows strong recall findings (82%) but poor recall for business logic edge cases in quiz scoring (34%). When you add few-shot examples of logic bugs to the prompt, logic recall is 41% but API design recall drops to 68%. \nHow should you address this trade-off to improve detection across both categories?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_055",
-  "domain": "Customer Support Agent Design & Human Escalation (Thiết kế Agent CSKH & Cơ chế chuyển giao cho người - Human Handoff)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Customer Support Agent Design & Human Escalation (Thiết kế Agent CSKH & Cơ chế chuyển giao cho người - Human Handoff)",
   "topic": "Câu P1.55: Balancing Customer Frustration with an Immediately Resolvable Return",
   "question": "A customer writes: \"I've been going back and forth on this return for days. I just want to speak to someone who can actually help me.\" The agent has confirmed via lookup_order that the return is straightforward–within policy and eligible for immediate processing.\nWhat should the agent do?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_043",
-  "domain": "Agentic Architectures & Multi-Agent Orchestration (Kiến trúc Agent & Điều phối đa Agent - Coordinator/Subagent)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Agentic Architectures & Multi-Agent Orchestration (Kiến trúc Agent & Điều phối đa Agent - Coordinator/Subagent)",
   "topic": "Câu P1.43: Parallel Document Analysis Subagents Coordinated by the Orchestrator",
   "question": "When analyzing complex legal cases that cite multiple precedents, the document analysis subagent processes each sequentially. A landmark case citing 12 precedents takes over 3 minutes to analyze completely.\nWhat's the most effective way to reduce this latency while preserving the coordinator's ability to monitor and debug the system?",
   "options": {

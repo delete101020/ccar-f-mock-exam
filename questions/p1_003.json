@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_003",
-  "domain": "Claude Code CLI & Session Management (Quản lý phiên làm việc trong Claude Code)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Claude Code CLI & Session Management (Quản lý phiên làm việc trong Claude Code)",
   "topic": "Câu P1.3: Resuming Specific Named Session in Claude Code",
   "question": "An engineer used Claude Code yesterday to investigate authentication flows in a legacy monolith, building up significant context over a 2-hour session. Today she wants to continue that specific investigation. She's worked on three other codebases since then and knows the session was named \"auth-deep-dive\".\nHow should she resume?",
   "options": {

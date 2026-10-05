@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_004",
-  "domain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Định tuyến động - Dynamic Routing)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Định tuyến động - Dynamic Routing)",
   "topic": "Câu P2.4: Optimizing Variable Query Complexity via Coordinator-Driven Dynamic Subagent Selection",
   "question": "In production, you observe that simple fact-checking queries (e.g., \"What year was the Paris Climate Agreement signed?\") traverse all four subagents sequentially, consuming 40+ seconds and significant tokens per query. Complex comparative research benefits from the full pipeline. Your query distribution is diverse and evolving as users discover new applications.\nWhat's the most effective approach to optimize for varying query complexity?",
   "options": {

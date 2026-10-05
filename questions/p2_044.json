@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_044",
-  "domain": "Claude Code Iterative Workflows (Quy trình làm việc lặp với Claude Code)",
+  "domain": "Claude Code Configuration & Workflows",
+  "subdomain": "Claude Code Iterative Workflows (Quy trình làm việc lặp với Claude Code)",
   "topic": "Câu P2.44: Letting Claude Interview You to Surface Unknown Requirements",
   "question": "You're implementing a caching layer for API responses to speed up the /products endpoint. You have a rough idea—Redis with a 5-minute TTL—but you're new to production caching and aren't sure what other considerations a robust implementation requires.\nWhat's the most effective way to start your iterative workflow?",
   "options": {

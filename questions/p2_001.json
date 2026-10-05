@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_001",
-  "domain": "Information Extraction & Pipeline Validation (Trích xuất thông tin & Kiểm thực pipeline)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Information Extraction & Pipeline Validation (Trích xuất thông tin & Kiểm thực pipeline)",
   "topic": "Câu P2.1: Invoice Total Mismatch via calculated_total vs stated_total Consistency Check",
   "question": "Your extraction pipeline processes invoices and extracts line items, subtotals, tax amounts, and grand totals. During evaluation, you discover that in 18% of extractions, the sum of extracted line item amounts doesn't match the extracted grand total—sometimes due to OCR errors in the source document, sometimes due to extraction mistakes by the model. Downstream accounting systems reject records with mismatched totals.\nWhat's the most effective approach to improve extraction reliability?",
   "options": {

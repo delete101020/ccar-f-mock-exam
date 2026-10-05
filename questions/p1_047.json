@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_047",
-  "domain": "Customer Support Agent Design & Human Escalation (Thiết kế Agent CSKH & Cơ chế chuyển giao cho người - Human Handoff)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Customer Support Agent Design & Human Escalation (Thiết kế Agent CSKH & Cơ chế chuyển giao cho người - Human Handoff)",
   "topic": "Câu P1.47: Structured Handoff Summary for escalate_to_human",
   "question": "After investigating a billing dispute over 25+ turns, you've identified that duplicate charges occurred due to a payment gateway timeout triggering retry logic. The required refund ($847) exceeds your $500 authorization limit. You need to call escalate_to_human, and the human agent won't have access to your conversation transcript.\nWhat context should you pass to enable effective resolution?",
   "options": {

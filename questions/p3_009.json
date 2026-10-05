@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_009",
-  "domain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Phân rã tác vụ - Task Decomposition)",
+  "domain": "Agentic Architecture & Orchestration",
+  "subdomain": "Agentic Architectures & Workflow Patterns (Mẫu thiết kế Agent & Phân rã tác vụ - Task Decomposition)",
   "topic": "Câu P3.9: Choosing Prompt Chaining for a Fixed Three-Aspect Code Review Workflow",
   "question": "Your code review assistant needs to analyze pull requests and provide feedback on three aspects: code style compliance, potential security issues, and documentation completeness. Each aspect requires reading files, running analysis tools, and generating a report section. The review process follows the same three-step workflow for every PR.\nWhich task decomposition pattern is most appropriate for this workflow?",
   "options": {

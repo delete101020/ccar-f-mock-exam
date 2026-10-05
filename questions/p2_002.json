@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_002",
-  "domain": "Context Management & Multi-Agent Delegation (Quản lý Context & Phân nhánh Subagent)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Context Management & Multi-Agent Delegation (Quản lý Context & Phân nhánh Subagent)",
   "topic": "Câu P2.2: Context Degradation in Large Legacy Module Investigation via Subagent Delegation",
   "question": "An engineer asks your agent to identify untested code paths in a legacy payment processing module spanning 45 files. After reading the first 8 source files, the agent's responses are becoming noticeably less accurate — it's forgetting previously discussed code patterns and hasn't yet located all test files or traced critical payment flows.\nWhat's the most effective approach to complete this investigation?",
   "options": {

@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_039",
-  "domain": "Messages API Fundamentals & Conversation State (Nền tảng Messages API & Trạng thái hội thoại)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Messages API Fundamentals & Conversation State (Nền tảng Messages API & Trạng thái hội thoại)",
   "topic": "Câu P2.39: Stateless Messages API Requires Resending Conversation History",
   "question": "During initial testing, you notice that Claude doesn't seem to remember vocabulary words from earlier in the conversation. When a student asks \"Can you quiz me on those words?\", responds as if no words have been discussed.\nWhat is the most likely explanation?",
   "options": {

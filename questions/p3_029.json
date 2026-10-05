@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p3_029",
-  "domain": "Information Extraction & Structured Schema Design (Trích xuất thông tin & Thiết kế Schema có cấu trúc)",
+  "domain": "Prompt Engineering & Structured Output",
+  "subdomain": "Information Extraction & Structured Schema Design (Trích xuất thông tin & Thiết kế Schema có cấu trúc)",
   "topic": "Câu P3.29: Nullable Pros/Cons and an Unclear Sentiment Value to Prevent Fabrication",
   "question": "The system processes product reviews using tool use with a defined schema: rating (integer 1-5), pros (string array), cons (string array), and overall_sentiment (enum: positive, negative, mixed). Testing reveals two issues with brief or ambiguous reviews (~20% of the dataset): (1) for reviews like \"Great product!\", Claude fabricates specific pros and cons rather than indicating this information isn't explicitly stated, and (2) for sarcastic reviews like \"Well that was... interesting\", Claude picks sentiment arbitrarily since there's no option for ambiguous cases.\nWhat schema modification best addresses both issues?",
   "options": {

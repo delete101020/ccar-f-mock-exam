@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p2_030",
-  "domain": "Claude Code Configuration & CLAUDE.md Hierarchy (Cấu hình Claude Code & Phân cấp CLAUDE.md)",
+  "domain": "Claude Code Configuration & Workflows",
+  "subdomain": "Claude Code Configuration & CLAUDE.md Hierarchy (Cấu hình Claude Code & Phân cấp CLAUDE.md)",
   "topic": "Câu P2.30: Selective @Imports of Shared Standards per Package CLAUDE.md",
   "question": "Your monorepo contains shared coding standards in /docs/standards/security-rules.md (for services handling user data), testing-patterns.md (for all packages), and api-conventions.md (for API-facing services). Your 15 packages are organized by feature domain (/packages/auth/, /packages/billing/, /packages/notifications/, etc.) without naming conventions indicating which handle user data or expose APIs. Package maintainers are expected to configure their own local development settings, as they understand their package's domain requirements. Currently, all package CLAUDE.md files duplicate all three standards, applying irrelevant guidance.\nWhat's the most effective approach?",
   "options": {

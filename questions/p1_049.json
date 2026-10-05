@@ -1,6 +1,7 @@
 {
   "id": "ccar_f_p1_049",
-  "domain": "Customer Support Agent Design & Human Escalation (Thiết kế Agent CSKH & Cơ chế chuyển giao cho người - Human Handoff)",
+  "domain": "Context Management & Reliability",
+  "subdomain": "Customer Support Agent Design & Human Escalation (Thiết kế Agent CSKH & Cơ chế chuyển giao cho người - Human Handoff)",
   "topic": "Câu P1.49: Honoring Explicit Requests for a Human Agent Immediately",
   "question": "A customer sends: \"This is frustrating. I've explained my issue twice and nothing is being resolved. I want to talk to a real person NOW.\" The agent has not yet called any tools to investigate their account.\nWhat should the agent do?",
   "options": {
